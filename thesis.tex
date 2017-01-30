@@ -291,7 +291,8 @@ xleftmargin=1cm
 \newacronym{iot}{IoT}{Internet of Things}
 \newacronym{usb}{USB}{Universal Serial Bus}
 \newacronym{otg}{OTG}{On The Go}
-\newacronym{sim}{SIM}{sim card}
+\newacronym{sim}{SIM}{subscriber identity module}
+\newacronym{spi}{SPI}{Serial Peripheral Interface}
 
 
 %Glossary entries
@@ -490,12 +491,14 @@ and from cloud to clients that wish to listen the stream (to see ir camera).
 
 \chapter{Hardware Methods}
 \section{Android smart-phone}
-In order to send data to the cloud a path must be done. The first approach was connect the sensor to an Android smart-phone to use it as a router, letting the sensor access the \gls{3g} or the \gls{lte} network.
+In order to send data to the cloud a path must be done. The first approach was connect the sensor to an Android smart-phone to use it as a router, letting the sensor access the \gls{3g} or the \gls{lte} network.a
 
 This method requires to code an Android Application using Java and the Android framework, also requires a terminal which supports \gls{otg} \gls{usb}. For this purpose a library to read binary data from the \gls{usb} will be of great help. This is one open-source that can be used: \url{https://github.com/mik3y/usb-serial-for-android}
 
 \section{Lte module}
-lte modules work as a phone: The need a \gls{sim} card to connect to network, they can be integrated in a board.
+\gls{lte} modules work as a phone: They need a \gls{sim} card to connect to network, they can be integrated in a board. Typically these modules have a number of interfaces such as \gls{usb}, rs-232, \gls{spi}, etc to connect peripherals.
+
+In order to set a route between your device and a service on Internet or your own server, a piece of code must be provided, it depends on the module how can be done. For a project like this it is interesting that the module has its own tcp/ip stack.
 
 \section{Raspberry Pi and Lte dongle}
 
@@ -504,8 +507,10 @@ lte modules work as a phone: The need a \gls{sim} card to connect to network, th
 \section{UDP}
 
 \section{http/s}
+\cite{http-rfc}
 
 \section{Websockets}
+\cite[p.~30]{rfc6455}
 
 \chapter{Result}
 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
