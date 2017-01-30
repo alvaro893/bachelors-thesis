@@ -289,6 +289,9 @@ xleftmargin=1cm
 \newacronym{3g}{3G}{Third generation}
 \newacronym{ir}{IR}{Infrared}
 \newacronym{iot}{IoT}{Internet of Things}
+\newacronym{usb}{USB}{Universal Serial Bus}
+\newacronym{otg}{OTG}{On The Go}
+\newacronym{sim}{SIM}{sim card}
 
 
 %Glossary entries
@@ -478,15 +481,31 @@ xleftmargin=1cm
 \sloppy % enforce alignment to fully justified
 
 \chapter{Introduction}
-Streaming serial data (binary) from IR camera using android devices and LTE modules to cloud,
+Thermal images had a number of advantages over conventional light-based video camera images. These thermal images tell us not only there are living people or animals but also if there is any temperature anomaly on them. Temperature anomalies can be used to make assumptions about their physical state using image processing software
+
+Here is where \gls{iot} comes into play, Nowadays the Internet is very accessible and fast. Almost every imaginable device: phones, watches, television, speakers, cameras, etc can be connected, send and receive continuously a lot of data.
+
+Streaming serial data (binary) from IR camera using android devices and \gls{lte} modules to cloud,
 and from cloud to clients that wish to listen the stream (to see ir camera).
 
-\chapter{Theoretical Background}
-Usb protocol, serial protocol, streaming, caching, buffering, 
+\chapter{Hardware Methods}
+\section{Android smart-phone}
+In order to send data to the cloud a path must be done. The first approach was connect the sensor to an Android smart-phone to use it as a router, letting the sensor access the \gls{3g} or the \gls{lte} network.
 
-\chapter{Methods and materials}
-Android devices, Arduino, LTE module (IoT), IR sensor
-Internet: TCP/IP, Http, web Sockets
+This method requires to code an Android Application using Java and the Android framework, also requires a terminal which supports \gls{otg} \gls{usb}. For this purpose a library to read binary data from the \gls{usb} will be of great help. This is one open-source that can be used: \url{https://github.com/mik3y/usb-serial-for-android}
+
+\section{Lte module}
+lte modules work as a phone: The need a \gls{sim} card to connect to network, they can be integrated in a board.
+
+\section{Raspberry Pi and Lte dongle}
+
+\chapter{Connectivity Methods: protocols}
+
+\section{UDP}
+
+\section{http/s}
+
+\section{Websockets}
 
 \chapter{Result}
 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
