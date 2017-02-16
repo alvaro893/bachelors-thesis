@@ -36,7 +36,7 @@
 \def\thesislang{english} %change this depending on your language
 \author{Álvaro Bolaños Rodríguez}
 \def\thesis{Opinnäytetyö/Thesis}
-\def\alaotsikko{Subtitle}
+\def\alaotsikko{Creating a cloud based communication channel}
 
 %Finnish section
 \def\otsikko{Opinnäytetyön otsikko}
@@ -291,6 +291,7 @@ xleftmargin=1cm
 \newacronym{otg}{OTG}{On The Go}
 \newacronym{sim}{SIM}{subscriber identity module}
 \newacronym{spi}{SPI}{Serial Peripheral Interface}
+\newacronym{api}{API}{Application Program Interface}
 
 
 %Glossary entries
@@ -480,12 +481,21 @@ xleftmargin=1cm
 \sloppy % enforce alignment to fully justified
 
 \chapter{Introduction}
-Thermal images had a number of advantages over conventional light-based video camera images. These thermal images tell us not only there are living people or animals but also if there is any temperature anomaly on them. Temperature anomalies can be used to make assumptions about their physical state using image processing software
+The Question: How to create a effective communication channel between ir sensors and clients such as computers, laptops, etc?
 
-Here is where \gls{iot} comes into play, Nowadays the Internet is very accessible and fast. Almost every imaginable device: phones, watches, television, speakers, cameras, etc can be connected, send and receive continuously a lot of data.
+Thermal images had a number of advantages over conventional light-based video camera images. These thermal images tell us not only there are living people or animals but also if there is any temperature anomaly on them. They can be used to make assumptions about their physical state using image processing software.
 
-Streaming serial data (binary) from IR camera using android devices and \gls{lte} modules to cloud,
-and from cloud to clients that wish to listen the stream (to see ir camera).
+Here is where \gls{iot} comes into play, Nowadays the Internet is very accessible and fast. Almost every conceivable device: phones, watches, televisions, speakers, cameras, etc can be connected, send and receive continuously big amounts of data.
+
+Although with \gls{iot} it comes the inevitable process of define a communication channel between the \gls{iot} devices, visualize, store and distribute data from them. On this paper it is explained the steps of how to develop software solutions to these topics and all the alternatives that were tried, which ones and why were implemented at the end along all the tools and technologies which were used to carry out the project as smoothly as possible.
+
+The thesis motivation originates in a project I am doing in collaboration with a startup called Levitezer (\url{http://www.levitezer.com/}) where the methods and software I developed are being used to create an \gls{api} that connect \gls{ir} sensors together.
+
+This is an important project as it is a hot topic in the IT world. The process and method described on this thesis may help others with their \gls{iot} projects.
+
+
+%Streaming serial data (binary) from IR camera using android devices and \gls{lte} modules to cloud,
+%and from cloud to clients that wish to listen the stream (to see ir camera).
 
 \chapter{Hardware Methods}
 \section{Android smart-phone}
@@ -597,6 +607,4 @@ content here
 
 \clearpage
 \liite{3}
-\chapter{R examples}
-TODO
 \end{document}
