@@ -294,6 +294,7 @@ xleftmargin=1cm
 \newacronym{sim}{SIM}{subscriber identity module}
 \newacronym{spi}{SPI}{Serial Peripheral Interface}
 \newacronym{api}{API}{Application Program Interface}
+\newacronym{otg}{OTG}{USB On-The-Go}
 
 
 %Glossary entries
@@ -514,7 +515,6 @@ With the business challenge in mind, this study aims to answer the following que
 
 The outcome of this study is a full working communication Chanel using modern cloud technologies, client-side pieces of software able to read sensors; displaying data in form of images while receiving commands to change the sensor behavior, all in bidirectional full duplex communication, proposals to use it on health care institutions and use cases for image analysis
 This is an great project as it is a hot topic (\gls{iot} and cloud computing) in the IT world. Methods described on this thesis may help others with their projects.
-\section{Scope and structure of thesis}
 
 
 \chapter{Theoretical Background}
@@ -549,7 +549,11 @@ This is an great project as it is a hot topic (\gls{iot} and cloud computing) in
 %Describe the context in which the work was carried out (such as the overall project and its design, your specific task, work environment) and the workflow. Describe the methods and materials used (accurate details of data, software, materials, methods, techniques). Give a full account of exact test arrangements and measurements carried out, and accurate details of data analysis.
 %The issues included in this section depend on the nature of your project. Whatever the issues, describe them in sufficient detail and in logical sequence.
 
-This project started with a \gls{ir} sensor provided by Levitezer which delivers all infrared data in form of binary streams trough \gls{usb} as:
+
+\section{The sensor}
+This project started with a \gls{ir} sensor provided by Levitezer which delivers all infrared data in form of binary streams trough \gls{usb}.
+
+ In order to make the an image with some sort of programing language it is necessary to process the those streams. Every image or frame comes in 240 chunks or rows separated by a sequence of 3 bytes:
 
 \begin{equation}
 \label{eq:stream of data}
@@ -558,11 +562,28 @@ This project started with a \gls{ir} sensor provided by Levitezer which delivers
 \text {FF FF FF 02} \left\lbrace data \right\rbrace \dots
 \end{equation}
 
-In 3.1 every byte is seen in hexadecimal format containing an initial sequence "FF FF FF" is the between rows of typically 80 bytes of data. After this initial sequence a number identifies the row.
 
-\section{Hardware Methods}
+
+In 3.1 every byte is seen in hexadecimal format containing an sequence "FF FF FF" is the between rows of typically 80 bytes of data. After the sequence, the 4th byte is the number which identify the row.
+
+The 240th (F0 in hexadecimal) row provides meta-data about the frame
+
+\begin{equation}
+\label{eq:metadata row}
+\dots \text {FF FF FF F0} \left\lbrace data \right\rbrace
+\end{equation}
+
+% Description of the telemetry
+
+
+
+\section{Reading the sensor Methods}
+A number of reading methods were tried, some worked better than others
+
 \subsection{Android smart-phone}
-In order to send data to the cloud a path must be done. The first approach was connect the sensor to an Android smart-phone to use it as a router, letting the sensor access the \gls{3g} or the \gls{lte} network.a
+Most of Android smartphones have an \gls{otg} which allows to use usb peripherals in the phone with the correspondent \gls{otg} adaptator. This can be used to develop an Android application to receive the data from the sensor and send it through Internet using any protocol. This was tested using a \gls{php} file in a server on Metropolia UAS alongside an Android Application I developed to send all the data from the sensor to server, this application is available in GitHub on the following link. %link!!!
+ 
+In order to send data to the cloud a path must be done. The first approach was connect the sensor to an Android smart-phone to use it as a gateway to Internet, letting the sensor access the \gls{3g} or the \gls{lte} network
 
 This method requires to code an Android Application using Java and the Android framework, also requires a terminal which supports \gls{otg} \gls{usb}. For this purpose a library to read binary data from the \gls{usb} will be of great help. This is one open-source that can be used: \url{https://github.com/mik3y/usb-serial-for-android}
 
