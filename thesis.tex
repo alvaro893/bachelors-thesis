@@ -294,6 +294,11 @@ xleftmargin=1cm
 \newacronym{spi}{SPI}{Serial Peripheral Interface}
 \newacronym{api}{API}{Application Program Interface}
 \newacronym{otg}{OTG}{USB On-The-Go}
+\newacronym{ui}{UI}{User Interface}
+\newacronym{http}{http}{Hypertext Transfer Protocol}
+\newacronym{java}{Java}{Java language}
+\newacronym{javame}{Java ME}{Java Micro Edition}
+
 
 
 %Glossary entries
@@ -579,20 +584,96 @@ The 240th (F0 in hexadecimal) row provides meta-data about the frame
 \section{Reading the sensor Methods}
 A number of reading methods were tried, some worked better than others
 
-\subsection{Android smart-phone}
-Most of Android smartphones have an \gls{otg} which allows to use usb peripherals in the phone with the correspondent \gls{otg} adaptator. This can be used to develop an Android application to receive the data from the sensor and send it through Internet using any protocol. This was tested using a \gls{php} file in a server on Metropolia UAS alongside an Android Application I developed to send all the data from the sensor to server, this application is available in GitHub on the following link. %link!!!
+\subsection{Android smart-phone as Gateway}
+Most of Android smartphones have an \gls{otg} which allows to use usb peripherals in the phone with the correspondent \gls{otg} adaptator. This can be used to develop an Android application to receive the data from the sensor and send it through Internet using any protocol.
+
+
+This was tested using a \gls{php} file in a server on Metropolia UAS alongside an Android Application I developed to send all the data from the sensor to server, this application is available in GitHub on the following link. %link!!!
  
 In order to send data to the cloud a path must be done. The first approach was connect the sensor to an Android smart-phone to use it as a gateway to Internet, letting the sensor access the \gls{3g} or the \gls{lte} network
 
-This method requires to code an Android Application using Java and the Android framework, also requires a terminal which supports \gls{otg} \gls{usb}. For this purpose a library to read binary data from the \gls{usb} will be of great help. This is one open-source that can be used: \url{https://github.com/mik3y/usb-serial-for-android}
+This method requires to code an Android Application using Java and the Android framework, also requires a terminal which supports \gls{otg} \gls{usb}. For this purpose a library to read binary data from the \gls{usb} will be of great help. This is one open-source that can be accessed: \url{https://github.com/mik3y/usb-serial-for-android}
+
+A good thing about this approach is that we already have all the hardware to do the communication so that there is only need to focus on the software part.
+
+\subsubsection{Description of the Android Application}
+To create the Android application it is needed some things:
+\begin{itemize}
+	\item A minimal \gls{ui}
+	\item A network protocol and its implementation
+	\item A background process
+\end{itemize}
+
+The \gls{ui} let us start the reading and provide an address and a port to connect.
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=7.1cm]{android_screenshot}
+	\caption{\gls{ui} of the Android Application}
+	\label{fig:android-screentshot}
+\end{figure}
+
+As network protocol \gls{http} was chosen, although it is not the best for continuously sending data. Then an \gls{php} script processed the request and store the data in a file
+
+\begin{lstlisting}[language=PHP,basicstyle=\ttfamily,caption={PHP script on server},label=android_php_script]
+<?php
+$data = "";
+// get data only from post request
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	$data = ($_POST["data"]);
+}
+// write it to file
+$fileName = "data.txt";
+$file = fopen($fileName, "a");
+if($file){
+	fwrite($file, formatData($data).",");
+	fclose($file);
+	echo "OK";
+}
+
+function formatData($data){
+	$arr = unpack('H*', $data);
+	return strtoupper(implode(" ", $arr));
+}
+?>
+\end{lstlisting}\vspace{-17pt}
+
+Then using an Android service to keep reading in the background which is the usual approach to deal with long running operations on Android Applications.
+
+The usb-serial-for-android library provides all the necessary to read data from the mini-usb port. The figure shows an example of implementing the callback to receive data in Java
+
+\begin{lstlisting}[language=Java,basicstyle=\ttfamily,caption={Callback to receive data from sensor, the whole code can be accessed in \url{https://github.com/alvaro893/Android_serial_usb_communication}},label=android callback]
+// the parameter data is a binary string from the sensor
+@Override
+public void onNewData(final byte[] data) {
+	if(bufferFrames.isFull()){
+			callback.getBuffer(bufferFrames);
+			bufferFrames = new BufferFrames();
+	}else{
+			bufferFrames.addChunk(new Chunk(data));
+	}
+}
+\end{lstlisting}\vspace{-17pt}
+
+
 
 \subsection{Lte module}
 \gls{lte} modules work as a phone: They need a \gls{sim} card to connect to network, they can be integrated in a board. Typically these modules have a number of interfaces such as \gls{usb}, rs-232, \gls{spi}, etc to connect peripherals.
 
 In order to set a route between your device and a service on Internet or your own server, a piece of code must be provided, it depends on the module how can be done. For a project like this it is interesting that the module has its own tcp/ip stack.
 
+The module used is configured using the Hayes command set (also called AT commands) which are used typically on modems %reference%.
+This module can be programmed using \gls{javame} which is a \gls{java} edition for embedded devices \cite{javame}
+
+
+
+\subsection{Raspberry Pi}
+
 
 \chapter{Results}
+\section{android smart-phone gateway solution}
+This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as \gls{java}.
 
 
 
