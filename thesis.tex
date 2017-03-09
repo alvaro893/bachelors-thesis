@@ -113,7 +113,7 @@ Name, Title \newline
 \usepackage{totcount}
 %insert source code
 \usepackage{listings}
-\usepackage[justification=justified,singlelinecheck=false]{caption}
+\usepackage[justification=centering,singlelinecheck=false]{caption}
 \usepackage{color}
 %force the width of a table instead of column
 \usepackage{tabularx}
@@ -143,6 +143,21 @@ Name, Title \newline
 
 \newcommand\tn[1]{\textnormal{#1}} %use \tn instead of \textnormal
 \newcommand\reaction[1]{\begin{equation}\ce{#1}\end{equation}} %\reaction{} for chemical reactions
+
+%----------------------------------------------
+% CUSTOM COMMANDS
+%----------------------------------------------
+\newcommand{\putimage}[3][10] %[3]: 3 parameters, [10] default value for 1st parameter is 10
+{
+\begin{figure}[h]
+	\centering
+	\captionsetup{justification=centering}
+	\includegraphics[width=#1cm]{#2}
+	\caption{#3}
+	\label{fig:#2}
+\end{figure}
+}
+
 
 %NORMAL TEXT
 %all text, title, etc. in the same font: Arial
@@ -296,31 +311,24 @@ xleftmargin=1cm
 \newacronym{otg}{OTG}{USB On-The-Go}
 \newacronym{ui}{UI}{User Interface}
 \newacronym{http}{http}{Hypertext Transfer Protocol}
-\newacronym{java}{Java}{Java language}
-\newacronym{javame}{Java ME}{Java Micro Edition}
 
 
 
 %Glossary entries
-\newglossaryentry{part_key}{
-	name={partition key}, 
-	description={a column or set of columns from the same table whose consolidated value decide the partition for a given data}
-}
 \newglossaryentry{thesis}{
 	name=thesis, 
 	description={a written essay one submitted for a university degree},
 	plural=theses
 }
-\newglossaryentry{latex}
+\newglossaryentry{java}
 {
-    name=\LaTeX{},
-    description={Is a mark up language specially suited for scientific documents}
+    name=Java,
+    description={Programming language able to run on most of the Operative Systems}
 }
- 
-\newglossaryentry{maths}
+\newglossaryentry{javame}
 {
-    name=mathematics,
-    description={Mathematics is what mathematicians do}
+    name=Java ME,
+    description={Java Micro Edition: Java version for mobile or embedded devices}
 }
 
 %----------------------------------------------------------------------------------------
@@ -585,6 +593,9 @@ The 240th (F0 in hexadecimal) row provides meta-data about the frame
 A number of reading methods were tried, some worked better than others
 
 \subsection{Android smart-phone as Gateway}
+
+\putimage{android_otg}{Android smart-phone and sensor}
+
 Most of Android smartphones have an \gls{otg} which allows to use usb peripherals in the phone with the correspondent \gls{otg} adaptator. This can be used to develop an Android application to receive the data from the sensor and send it through Internet using any protocol.
 
 
@@ -606,13 +617,7 @@ To create the Android application it is needed some things:
 
 The \gls{ui} let us start the reading and provide an address and a port to connect.
 
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=7.1cm]{android_screenshot}
-	\caption{\gls{ui} of the Android Application}
-	\label{fig:android-screentshot}
-\end{figure}
+\putimage[7.1]{android_screenshot}{\gls{ui} of the Android Application}
 
 As network protocol \gls{http} was chosen, although it is not the best for continuously sending data. Then an \gls{php} script processed the request and store the data in a file
 
@@ -661,10 +666,29 @@ public void onNewData(final byte[] data) {
 \subsection{Lte module}
 \gls{lte} modules work as a phone: They need a \gls{sim} card to connect to network, they can be integrated in a board. Typically these modules have a number of interfaces such as \gls{usb}, rs-232, \gls{spi}, etc to connect peripherals.
 
+	\putimage[5]{lte_module}{ELS61-E chip size}
+
 In order to set a route between your device and a service on Internet or your own server, a piece of code must be provided, it depends on the module how can be done. For a project like this it is interesting that the module has its own tcp/ip stack.
 
-The module used is configured using the Hayes command set (also called AT commands) which are used typically on modems %reference%.
+
+
+\subsubsection{Gemalto Lte module}
+The module used was Gemalto ELS61-E which is configured using the Hayes command set (also called AT commands) which are used typically on modems %reference%.
+
+\begin{lstlisting}[basicstyle=\ttfamily,caption={AT commands},label=at_commands]
+AT^SMSO  # shutdown
+AT+COPS  # register to network command
+\end{lstlisting}\vspace{-17pt}
+
+
 This module can be programmed using \gls{javame} which is a \gls{java} edition for embedded devices \cite{javame}
+
+For a full list of features refer to \url{http://www.gemalto.com/brochures-site/download-site/Documents/M2M_ELS61_datasheet.pdf}
+
+\subsubsection{Gemalto Board}
+To do all the communication and configuration with the module there is a board where it can be attached proving micro-usb connectors, antenna, reset button, power among other things see figure~\ref{fig:lte_board}
+	\putimage{lte_board}{The board to program the module}
+
 
 
 
