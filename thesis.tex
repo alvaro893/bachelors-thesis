@@ -310,7 +310,12 @@ xleftmargin=1cm
 \newacronym{api}{API}{Application Program Interface}
 \newacronym{otg}{OTG}{USB On-The-Go}
 \newacronym{ui}{UI}{User Interface}
-\newacronym{http}{http}{Hypertext Transfer Protocol}
+\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
+\newacronym{https}{HTTPS}{HTTP over SSL}
+\newacronym{tcp}{TCP}{Transmission Control Protocol}
+\newacronym{udp}{UDP}{User Datagram Protocol}
+\newacronym{rtp}{RTP}{Real Time Transport Protocol}
+\newacronym{ws}{Websocket}{Websocket}
 
 
 
@@ -319,6 +324,16 @@ xleftmargin=1cm
 	name=thesis, 
 	description={a written essay one submitted for a university degree},
 	plural=theses
+}
+\newglossaryentry{tcpip}
+{
+    name=TCP/IP stack,
+    description={all the necessary layers to match the conceptual model of the Internet protocol suite}
+}
+\newglossaryentry{rs232}
+{
+    name=RS-232,
+    description={A standard for serial communications}
 }
 \newglossaryentry{java}
 {
@@ -329,6 +344,11 @@ xleftmargin=1cm
 {
     name=Java ME,
     description={Java Micro Edition: Java version for mobile or embedded devices}
+}
+\newglossaryentry{midlet}
+{
+    name=MIDlet,
+    description=A MIDlet is an application that uses the Mobile Information Device Profile (MIDP) on Java ME environment
 }
 
 %----------------------------------------------------------------------------------------
@@ -373,6 +393,8 @@ xleftmargin=1cm
 
 \begin{document}
 \counterwithout{lstlisting}{chapter}
+\lstdefinestyle{styleprogramming}{basicstyle=\ttfamily\small}
+%\lstdefinestyle{styleprogramming}{basicstyle=\ttfamily\small,numbers=none}
 
 %page number always on the top right, clear the "chapter/section" head
 \pagestyle{myheadings}
@@ -537,22 +559,18 @@ This is an great project as it is a hot topic (\gls{iot} and cloud computing) in
 %Streaming serial data (binary) from IR camera using android devices and \gls{lte} modules to cloud,
 %and from cloud to clients that wish to listen the stream (to see ir camera).
 
-
-
-\subsection{Raspberry Pi and Lte dongle}
-
+\section{Exchanging data between devices: Communication Channel}
+% Talk about what is know about communication systems, full stack development, etc
 \section{Connectivity Methods: protocols}
-
-\subsection{UDP}
-
+\subsection{\gls{udp}}
 \subsubsection{The NAT problem}
-
-\subsection{http/s}
+\subsection{\gls{rtp}}
+\subsection{\gls{http}}
 \cite{http-rfc}
-
-\subsection{Websockets}
+\subsection{\gls{ws}}
 \cite[p.~30]{rfc6455}
 
+\section{Uses in Medical situations}
 
 
 
@@ -585,7 +603,8 @@ The 240th (F0 in hexadecimal) row provides meta-data about the frame
 \dots \text {FF FF FF F0} \left\lbrace data \right\rbrace
 \end{equation}
 
-% Description of the telemetry
+% TODO: Description of the telemetry
+% TODO: Pictures of the sensors
 
 
 
@@ -621,7 +640,7 @@ The \gls{ui} let us start the reading and provide an address and a port to conne
 
 As network protocol \gls{http} was chosen, although it is not the best for continuously sending data. Then an \gls{php} script processed the request and store the data in a file
 
-\begin{lstlisting}[language=PHP,basicstyle=\ttfamily,caption={PHP script on server},label=android_php_script]
+\begin{lstlisting}[language=PHP,style=styleprogramming,caption={PHP script on server},label=android_php_script]
 <?php
 $data = "";
 // get data only from post request
@@ -648,7 +667,7 @@ Then using an Android service to keep reading in the background which is the usu
 
 The usb-serial-for-android library provides all the necessary to read data from the mini-usb port. The figure shows an example of implementing the callback to receive data in Java
 
-\begin{lstlisting}[language=Java,basicstyle=\ttfamily,caption={Callback to receive data from sensor, the whole code can be accessed in \url{https://github.com/alvaro893/Android_serial_usb_communication}},label=android callback]
+\begin{lstlisting}[language=Java,style=styleprogramming,caption={Callback to receive data from sensor, the whole code can be accessed in \url{https://github.com/alvaro893/Android_serial_usb_communication}},label=android callback]
 // the parameter data is a binary string from the sensor
 @Override
 public void onNewData(final byte[] data) {
@@ -668,32 +687,88 @@ public void onNewData(final byte[] data) {
 
 	\putimage[5]{lte_module}{ELS61-E chip size}
 
-In order to set a route between your device and a service on Internet or your own server, a piece of code must be provided, it depends on the module how can be done. For a project like this it is interesting that the module has its own tcp/ip stack.
+In order to set a route between your device and a service on Internet or your own server, a piece of code must be provided, it depends on the module how can be done. For a project like this it is interesting that the module has its own \gls{tcpip}.
 
 
 
 \subsubsection{Gemalto Lte module}
+This is not a simple modem that allows other machines to be connected to Internet, it has a complete \gls{tcpip} which means that protocols of the transport layer such as \gls{tcp} and \gls{udp} and application layer such as \gls{http} and \gls{https} can be used as well.
+
 The module used was Gemalto ELS61-E which is configured using the Hayes command set (also called AT commands) which are used typically on modems %reference%.
 
-\begin{lstlisting}[basicstyle=\ttfamily,caption={AT commands},label=at_commands]
+\begin{lstlisting}[style=styleprogramming,caption={AT commands},label=at_commands]
 AT^SMSO  # shutdown
 AT+COPS  # register to network command
 \end{lstlisting}\vspace{-17pt}
 
 
-This module can be programmed using \gls{javame} which is a \gls{java} edition for embedded devices \cite{javame}
+This module can be programmed using \gls{javame} which is a \gls{java} edition for embedded devices \cite{javame}. Application layer protocols and \gls{tcp}/\gls{udp} sockets can be used in a \gls{midlet} which allows to describe the life-cycle of a single application. With this tools we can control the \gls{usb}, \gls{spi} or \gls{rs232} ports and even send AT commands
 
-For a full list of features refer to \url{http://www.gemalto.com/brochures-site/download-site/Documents/M2M_ELS61_datasheet.pdf}
 
-\subsubsection{Gemalto Board}
-To do all the communication and configuration with the module there is a board where it can be attached proving micro-usb connectors, antenna, reset button, power among other things see figure~\ref{fig:lte_board}
+\begin{lstlisting}[language=Java,style=styleprogramming,caption={MIDlet application life-cycle example},label=midlet-example]
+import javax.microedition.midlet.*;
+
+public class HelloWorld extends MIDlet {
+	
+	public HelloWorld() {
+		System.out.println("Constructor");
+	}
+	
+	/** This is the main application entry point. */
+	public void startApp() throws MIDletStateChangeException {
+		System.out.println("startApp");
+		System.out.println("\nHello World\n");
+		destroyApp(true);
+	}
+	
+	/**  Called when the application has to be temporary paused. */
+	public void pauseApp() {
+		System.out.println("pauseApp()");
+	}
+	
+	/** Here we must clean up everything not handled by the garbage collector. */
+	public void destroyApp(boolean cond) {
+		System.out.println("destroyApp(" + cond + ")");
+		notifyDestroyed();
+	}
+}
+
+\end{lstlisting}\vspace{-17pt}
+
+
+For a full list of features of the module refer to \url{http://www.gemalto.com/brochures-site/download-site/Documents/M2M_ELS61_datasheet.pdf}
+
+
 	\putimage{lte_board}{The board to program the module}
+To do all the communication and configuration with the module there is a board where it can be attached proving micro-usb connectors, antenna, reset button, power among other things see figure~\ref{fig:lte_board}
+
 
 
 
 
 \subsection{Raspberry Pi}
 
+
+\section{Client Reader Methods}
+\subsection{\gls{udp} Lab View}
+\subsection{\gls{udp} Java client}
+\subsection{Websocket Python Client}
+\subsubsection{Reversing engineering a LabView Application}
+
+\section{Server Side Methods}
+\subsection{Communication sensor-client}
+	\putimage{communication_udp}{Diagram of the communication using the module and UDP}
+\subsection{Python Flask}
+\subsection{Node js Server Application}
+\subsubsection{Unit Testing}
+\subsubsection{Acceptance Testing: Robot Framework}
+
+\section{Cloud PaaS methods}
+\subsection{Google Cloud}
+\subsection{Open Shift and Docker}
+
+\section{Control Version}
+% show repository in gitgub
 
 \chapter{Results}
 \section{android smart-phone gateway solution}
