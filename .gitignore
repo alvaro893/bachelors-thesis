@@ -1,16 +1,12 @@
-*.acn
-*.aux
-*.bbl
-*.blg
-*.glo
-*.ist
-*.log
-*.out
-*.pdf
-*.synctex.gz
-*.synctex.gz(busy)
-*.toc
-*.alg
-*.glg
-*.gls
-*.acr
+#ignore all
+*
+#except
+!illustration
+!.gitignore
+!thesis.tex
+!innovation_project.tex
+!README.md
+!biblio.bib
+!LiberationSans*
+!vancouver_fi.bst
+!data.dat  # for a plot example in thesis_template

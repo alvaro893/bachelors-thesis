@@ -85,6 +85,7 @@ Name, Title \newline
 \usepackage{pgfplotstable}
 \usepackage{tikz} % mindmaps, flowcharts, piecharts, examples at http://www.texample.net/tikz/examples/
 \usepackage{csquotes}
+\usepackage{xparse}
 \usetikzlibrary{shapes.geometric, arrows}
 \numberwithin{equation}{chapter}
 
@@ -157,6 +158,26 @@ Name, Title \newline
 	\label{fig:#2}
 \end{figure}
 }
+% idea for this command from http://tex.stackexchange.com/questions/25597/wrapping-code-listings-verbatim-or-other-method-inside-a-newcommand
+\ExplSyntaxOn
+\NewDocumentCommand{\putcode}{m m O{} +v }
+{
+	\begin{figure}[h]
+		\centering
+		\captionsetup{justification=centering}
+		 \newlinechar=\endlinechar
+		 \exp_args:Nx \scantokens
+		 {
+		 	\string\begin{lstlisting}[\unexpanded{#3}]
+		 	#4
+		 	\string\end{lstlisting}
+		 }
+		\vspace{-17pt}
+		\caption{#2}
+		\label{fig:#1}
+	\end{figure}
+}
+\ExplSyntaxOff
 
 
 %NORMAL TEXT
@@ -393,7 +414,8 @@ xleftmargin=1cm
 
 \begin{document}
 \counterwithout{lstlisting}{chapter}
-\lstdefinestyle{styleprogramming}{basicstyle=\ttfamily\small}
+\lstdefinestyle{styleprogramming}{basicstyle=\ttfamily\small\captionsetup{labelformat=empty,labelsep=none}
+}
 %\lstdefinestyle{styleprogramming}{basicstyle=\ttfamily\small,numbers=none}
 
 %page number always on the top right, clear the "chapter/section" head
@@ -473,7 +495,7 @@ xleftmargin=1cm
 %\pagestyle{plain}
 
 %list of figure, tables comes here...
-
+\listoffigures
 
 %----------------------------------------------------------------------------------------
 %    Lyhenteet / Abbreviation
@@ -640,28 +662,30 @@ The \gls{ui} let us start the reading and provide an address and a port to conne
 
 As network protocol \gls{http} was chosen, although it is not the best for continuously sending data. Then an \gls{php} script processed the request and store the data in a file
 
-\begin{lstlisting}[language=PHP,style=styleprogramming,caption={PHP script on server},label=android_php_script]
+% more options for code https://www.sharelatex.com/learn/Code_listing#/Options_to_customize_code_listing_styles
+\putcode{label_php}{text}[language=PHP,style=styleprogramming,commentstyle=\ttfamily\color{violet}]^
 <?php
 $data = "";
 // get data only from post request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$data = ($_POST["data"]);
+    $data = ($_POST["data"]);
 }
 // write it to file
 $fileName = "data.txt";
 $file = fopen($fileName, "a");
 if($file){
-	fwrite($file, formatData($data).",");
-	fclose($file);
-	echo "OK";
+    fwrite($file, formatData($data).",");
+    fclose($file);
+    echo "OK";
 }
 
 function formatData($data){
-	$arr = unpack('H*', $data);
-	return strtoupper(implode(" ", $arr));
+    $arr = unpack('H*', $data);
+    return strtoupper(implode(" ", $arr));
 }
 ?>
-\end{lstlisting}\vspace{-17pt}
+^
+%$ this is to fix the color in Texstudio, ^ is the delimiter
 
 Then using an Android service to keep reading in the background which is the usual approach to deal with long running operations on Android Applications.
 
@@ -685,13 +709,15 @@ public void onNewData(final byte[] data) {
 \subsection{Lte module}
 \gls{lte} modules work as a phone: They need a \gls{sim} card to connect to network, they can be integrated in a board. Typically these modules have a number of interfaces such as \gls{usb}, rs-232, \gls{spi}, etc to connect peripherals.
 
-	\putimage[5]{lte_module}{ELS61-E chip size}
 
 In order to set a route between your device and a service on Internet or your own server, a piece of code must be provided, it depends on the module how can be done. For a project like this it is interesting that the module has its own \gls{tcpip}.
 
 
 
 \subsubsection{Gemalto Lte module}
+
+	\putimage[5]{lte_module}{ELS61-E chip size}
+
 This is not a simple modem that allows other machines to be connected to Internet, it has a complete \gls{tcpip} which means that protocols of the transport layer such as \gls{tcp} and \gls{udp} and application layer such as \gls{http} and \gls{https} can be used as well.
 
 The module used was Gemalto ELS61-E which is configured using the Hayes command set (also called AT commands) which are used typically on modems %reference%.
