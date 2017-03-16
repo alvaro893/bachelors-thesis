@@ -736,7 +736,7 @@ public class HelloWorld extends MIDlet {
 For a full list of features of the module refer to \url{http://www.gemalto.com/brochures-site/download-site/Documents/M2M_ELS61_datasheet.pdf}
 
 
-	\putimage{lte_board}{The board to program the module}
+	\putimage{lte_board}{Lte Module on top of the board to program it}
 To do all the communication and configuration with the module there is a board where it can be attached proving micro-usb connectors, antenna, reset button, power among other things see figure~\ref{fig:lte_board}
 
 
@@ -771,16 +771,23 @@ To do all the communication and configuration with the module there is a board w
 \section{android smart-phone gateway solution}
 This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as \gls{java}.
 
+\section{LTE module solution}
+\section{Raspberry Pi solution}
+\section{The final solution}
+
 
 
 \chapter{Discussion}
-
+\section{Use in Well-being environments}
+\section{Possible changes in the future}
 
 
 \chapter{Conclusions}
+\section{Technologies chosen and why}
+\section{What have I learned}
 
-
-
+\chapter{Acknowledgments}
+I want to thank to... 
 
 
 
@@ -832,20 +839,36 @@ This method was purely to test the sensors and to seek for a suitable network pr
 \makeoddhead{plain}{}{}{\appname \thechapter \\ \thepage\,(\stepcounter{appx#1}\total{appx#1})}}
 
 \liite{1}
-\chapter{Appendix}\label{appx:first}
-
+\chapter{LTE module}\label{appx:first}
 % Note that every appendix will be a chapter.
-
 % Sorry for the ugly hack on how to count the total pages per appendix.
-
-
 % Of course with section and subsection.
-
-\section{Appendix Section}
-
 % And you can cite \cite{tobias:book} stuff, it will go into the main bibliography.
 
-\subsection{With a Subsection}
+\section{Configuration}
+\putcode{configure_at_commands}{Configure and test an Internet connection}[style=styleprogramming]$
+//configure internet profile
+AT^sics?^ 
+AT^SICS=0,"conType","GPRS0"
+AT^SICS=0,"apn","otaniemi"
+AT^SICS=0,"inactTO", "20"
+AT^SICS=0,dns1,"8.8.8.8"
+AT^SICS=0,passwd,""
+AT^SICS=0,user,""
+
+//configure internet service
+AT^SISS=0,srvType,"Socket"
+at^siss=0,conId,0
+at^siss=0,address,"socketcp://8.8.8.8:80"
+
+// check internet
+AT^SICI?
+
+// make a ping to google
+AT^SISX="Ping",0,"8.8.8.8"
+$
+
+
 
 \clearpage % avoid that the last page of previous appendix get this header
 \liite{2}
