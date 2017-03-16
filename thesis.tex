@@ -1,35 +1,4 @@
 %----------------------------------------------------------------------------------------
-%	Metropolia Thesis LaTeX Template
-%----------------------------------------------------------------------------------------
-% License:
-% This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
-%
-% Authors:
-% Panu Leppäniemi, Patrik Luoto and Patrick Ausderau
-%
-% Credits:
-% Panu Leppäniemi: abstract, def, cleaning,...
-% Patrik Luoto: title page, abstract in Finnish, abbreviation, math,...
-% Patrick Ausderau: initial version, style, table of content, bibliography, figure, appendix, table, source code listing...
-%
-% Please:
-% If you find mistakes, improve this template and alike, please contribute by sharing your improvements and/or send us your feedback there: https://github.com/panunu/metropolia-thesis-latex
-% And of course, if you improve it, add yourself as an author.
-%
-% Compiler:
-% Use XeLaTeX as a compiler.
-
-%----------------------------------------------------------------------------------------
-%    ToDo
-%----------------------------------------------------------------------------------------
-% % % TÄRKEÄT
-% % Odotetaan 29.11.2013 asti äikänmaikkojen ja viestinnän mahdollisia kommentteja.
-%   %done?
-%
-% % % Vähemmän tärkeät
-
- 
-%----------------------------------------------------------------------------------------
 %	TITLE PAGE CONFIGURATION
 %----------------------------------------------------------------------------------------
 
@@ -412,10 +381,14 @@ xleftmargin=1cm
 \makeevenhead{abstract}{}{}{Abstract}
 \makeoddhead{abstract}{}{}{Abstract}
 
+% BEGIN OF DOCUMENT
 \begin{document}
 \counterwithout{lstlisting}{chapter}
-\lstdefinestyle{styleprogramming}{basicstyle=\ttfamily\small\captionsetup{labelformat=empty,labelsep=none}
+\lstdefinestyle{styleprogramming}{
+	basicstyle=\ttfamily\small\captionsetup{labelformat=empty,labelsep=none},
+	commentstyle=\ttfamily\color{violet}
 }
+%\lstdefinestyle{styleprogrammingcomments}{commmentstyle=\ttfamily\color{violet}}
 %\lstdefinestyle{styleprogramming}{basicstyle=\ttfamily\small,numbers=none}
 
 %page number always on the top right, clear the "chapter/section" head
@@ -663,7 +636,7 @@ The \gls{ui} let us start the reading and provide an address and a port to conne
 As network protocol \gls{http} was chosen, although it is not the best for continuously sending data. Then an \gls{php} script processed the request and store the data in a file
 
 % more options for code https://www.sharelatex.com/learn/Code_listing#/Options_to_customize_code_listing_styles
-\putcode{label_php}{text}[language=PHP,style=styleprogramming,commentstyle=\ttfamily\color{violet}]^
+\putcode{label_php}{PHP code in the server side}[language=PHP,style=styleprogramming]^
 <?php
 $data = "";
 // get data only from post request
@@ -691,19 +664,19 @@ Then using an Android service to keep reading in the background which is the usu
 
 The usb-serial-for-android library provides all the necessary to read data from the mini-usb port. The figure shows an example of implementing the callback to receive data in Java
 
-\begin{lstlisting}[language=Java,style=styleprogramming,caption={Callback to receive data from sensor, the whole code can be accessed in \url{https://github.com/alvaro893/Android_serial_usb_communication}},label=android callback]
+\putcode{android_gateway}{Android: Callback to receive data from sensor}[language=Java,style=styleprogramming]^
 // the parameter data is a binary string from the sensor
 @Override
 public void onNewData(final byte[] data) {
-	if(bufferFrames.isFull()){
-			callback.getBuffer(bufferFrames);
-			bufferFrames = new BufferFrames();
-	}else{
-			bufferFrames.addChunk(new Chunk(data));
-	}
+    if(bufferFrames.isFull()){
+        callback.getBuffer(bufferFrames);
+        bufferFrames = new BufferFrames();
+    }else{
+        bufferFrames.addChunk(new Chunk(data));
+    }
 }
-\end{lstlisting}\vspace{-17pt}
-
+^
+% end of code, delimiter is ^
 
 
 \subsection{Lte module}
@@ -721,45 +694,43 @@ In order to set a route between your device and a service on Internet or your ow
 This is not a simple modem that allows other machines to be connected to Internet, it has a complete \gls{tcpip} which means that protocols of the transport layer such as \gls{tcp} and \gls{udp} and application layer such as \gls{http} and \gls{https} can be used as well.
 
 The module used was Gemalto ELS61-E which is configured using the Hayes command set (also called AT commands) which are used typically on modems %reference%.
-
-\begin{lstlisting}[style=styleprogramming,caption={AT commands},label=at_commands]
+\putcode{at_commands_example}{AT commands}[style=styleprogramming]$
 AT^SMSO  # shutdown
 AT+COPS  # register to network command
-\end{lstlisting}\vspace{-17pt}
+$ % end of code, delimiter is $
 
 
 This module can be programmed using \gls{javame} which is a \gls{java} edition for embedded devices \cite{javame}. Application layer protocols and \gls{tcp}/\gls{udp} sockets can be used in a \gls{midlet} which allows to describe the life-cycle of a single application. With this tools we can control the \gls{usb}, \gls{spi} or \gls{rs232} ports and even send AT commands
 
 
-\begin{lstlisting}[language=Java,style=styleprogramming,caption={MIDlet application life-cycle example},label=midlet-example]
+\putcode{midlet-example}{MIDlet application life-cycle example}[language=Java,style=styleprogramming]^
 import javax.microedition.midlet.*;
 
 public class HelloWorld extends MIDlet {
-	
-	public HelloWorld() {
-		System.out.println("Constructor");
-	}
-	
-	/** This is the main application entry point. */
-	public void startApp() throws MIDletStateChangeException {
-		System.out.println("startApp");
-		System.out.println("\nHello World\n");
-		destroyApp(true);
-	}
-	
-	/**  Called when the application has to be temporary paused. */
-	public void pauseApp() {
-		System.out.println("pauseApp()");
-	}
-	
-	/** Here we must clean up everything not handled by the garbage collector. */
-	public void destroyApp(boolean cond) {
-		System.out.println("destroyApp(" + cond + ")");
-		notifyDestroyed();
-	}
+    
+    public HelloWorld() {
+        System.out.println("Constructor");
+    }
+    
+    /** This is the main application entry point. */
+    public void startApp() throws MIDletStateChangeException {
+        System.out.println("startApp");
+        System.out.println("\nHello World\n");
+        destroyApp(true);
+    }
+    
+    /**  Called when the application has to be temporary paused. */
+    public void pauseApp() {
+        System.out.println("pauseApp()");
+    }
+    
+    /** Here we must clean up everything not handled by the garbage collector. */
+    public void destroyApp(boolean cond) {
+        System.out.println("destroyApp(" + cond + ")");
+        notifyDestroyed();
+    }
 }
-
-\end{lstlisting}\vspace{-17pt}
+^ % end of code delimeter is ^
 
 
 For a full list of features of the module refer to \url{http://www.gemalto.com/brochures-site/download-site/Documents/M2M_ELS61_datasheet.pdf}
