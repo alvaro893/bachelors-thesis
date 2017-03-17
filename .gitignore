@@ -1,7 +1,7 @@
 #ignore all
-*
+/*
 #except
-!illustration
+!illustration/
 !.gitignore
 !thesis.tex
 !innovation_project.tex

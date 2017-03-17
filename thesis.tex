@@ -305,6 +305,8 @@ xleftmargin=1cm
 \newacronym{tcp}{TCP}{Transmission Control Protocol}
 \newacronym{udp}{UDP}{User Datagram Protocol}
 \newacronym{rtp}{RTP}{Real Time Transport Protocol}
+\newacronym{uml}{UML}{Unified Modeling Language}
+\newacronym{er}{ER Diagram}{Entity Relationship Diagram}
 \newacronym{ws}{Websocket}{Websocket}
 
 
@@ -339,6 +341,16 @@ xleftmargin=1cm
 {
     name=MIDlet,
     description=A MIDlet is an application that uses the Mobile Information Device Profile (MIDP) on Java ME environment
+}
+\newglossaryentry{js}
+{
+    name=Javascript,
+    description=Dynamic programming language used mostly in browsers although can be used in desktop and server applications.
+}
+\newglossaryentry{nodejs}
+{
+    name=Node.js,
+    description={Node.js is an open-source, cross-platform JavaScript runtime environment for developing server-side applications}
 }
 
 %----------------------------------------------------------------------------------------
@@ -767,13 +779,34 @@ To do all the communication and configuration with the module there is a board w
 \section{Control Version}
 % show repository in gitgub
 
-\chapter{Results}
-\section{android smart-phone gateway solution}
-This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as \gls{java}.
 
-\section{LTE module solution}
-\section{Raspberry Pi solution}
-\section{The final solution}
+\chapter{Results}
+
+\section{Discarded Methods}
+\subsection{android smart-phone gateway solution}
+This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as \gls{java}.
+\subsection{\gls{lte} module solution}
+
+\section{The communication channel}
+Sections 3.4 and 3.5 discuss where the channel logic is (aka the cloud) and what kind of application and technology could be used. Regardless what technology it is used for coding, build and maintain the cloud application, and before start coding it should define how different components are related between each other.
+Let’s start by defining the following entities:
+\begin{itemize}
+    \item Sensor: It represents a single sensor connected to a raspberry pi, although it could a normal computer. The sensor itself does not connect to networks, thus it needs a middle hardware but it is considered as whole “entity” here.
+    \item Client: A client can be anything that can connect to a sensor by \gls{http} request. A desktop computer, a smart-phone, etc. The client must create frames from sensor and send commands using a \gls{ws}.
+    \item Cloud: It is what holds all the sensor entities and their clients on it.
+    The channel should support an unlimited number of sensors which can hold an unlimited number of clients.
+\end{itemize}
+\putimage[15]{channel-er}{ER diagram}
+The channel should support an unlimited number of sensors which can hold an unlimited number of clients.
+The diagram in figure \ref{fig:channel-er} represents the general view of how entities are related to each other. This helps to develop a \gls{uml} Class Diagram which specifies how classes in an Object Orient Programming language are related to each other. In figure~\ref{fig:channel-uml} there is such diagram simplified.
+On the final implementation the server side application was written in \gls{js} which is the Language for \gls{nodejs} applications.
+\putimage[15]{channel-uml}{\gls{uml} diagram}
+
+\section{Sensor Reader Application}
+
+\section{Client Applications}
+\subsection{Python Desktop Application}
+\subsection{Android Smart-phone Application}
 
 
 
