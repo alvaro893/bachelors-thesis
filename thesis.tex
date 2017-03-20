@@ -56,7 +56,8 @@ Name, Title \newline
 \usepackage{csquotes}
 \usepackage{xparse}
 \usetikzlibrary{shapes.geometric, arrows}
-\numberwithin{equation}{chapter}
+%\numberwithin{equation}{chapter} % this add the chapter in the equation
+
 
 
 \renewcommand{\dateseparator}{.}
@@ -132,19 +133,19 @@ Name, Title \newline
 \NewDocumentCommand{\putcode}{m m O{} +v }
 {
 	\begin{figure}[h]
-		\centering
-		\captionsetup{justification=centering}
+%		\centering
+%		\captionsetup{justification=centering}
 		 \newlinechar=\endlinechar
 		 \exp_args:Nx \scantokens
 		 {
-		 	\string\begin{lstlisting}[\unexpanded{#3}]
+		 	\string\begin{lstlisting}[caption={#2},label={listing:#1},\unexpanded{#3}]
 		 	#4
 		 	\string\end{lstlisting}
 		 }
-		\vspace{-17pt}
-		\caption{#2}
-		\label{fig:#1}
-	\end{figure}
+
+%		\caption{#2}
+%		\label{fig:#1}
+	\end{figure}\vspace{-17pt}
 }
 \ExplSyntaxOff
 
@@ -308,6 +309,7 @@ xleftmargin=1cm
 \newacronym{uml}{UML}{Unified Modeling Language}
 \newacronym{er}{ER Diagram}{Entity Relationship Diagram}
 \newacronym{ws}{Websocket}{Websocket}
+\newacronym{paas}{PaaS}{Platform As A Service}
 
 
 
@@ -397,7 +399,7 @@ xleftmargin=1cm
 \begin{document}
 \counterwithout{lstlisting}{chapter}
 \lstdefinestyle{styleprogramming}{
-	basicstyle=\ttfamily\small\captionsetup{labelformat=empty,labelsep=none},
+	basicstyle=\ttfamily\small\captionsetup{justification=centering},
 	commentstyle=\ttfamily\color{violet}
 }
 %\lstdefinestyle{styleprogrammingcomments}{commmentstyle=\ttfamily\color{violet}}
@@ -480,7 +482,8 @@ xleftmargin=1cm
 %\pagestyle{plain}
 
 %list of figure, tables comes here...
-\listoffigures
+%\listoffigures
+% Sotavalta:Do not include a separate list of tables and/or figures in your thesis.
 
 %----------------------------------------------------------------------------------------
 %    Lyhenteet / Abbreviation
@@ -563,21 +566,21 @@ This is an great project as it is a hot topic (\gls{iot} and cloud computing) in
 %Discuss ideas in previous studies relevant to your topic (a brief introduction to the current state of knowledge and practice in your subject area). Identify a gap in the subject area and justify the purpose of your project, that is, the focus of your topic.
 
 
-%Streaming serial data (binary) from IR camera using android devices and \gls{lte} modules to cloud,
-%and from cloud to clients that wish to listen the stream (to see ir camera).
+% RAN https://en.wikipedia.org/wiki/Radio_access_network
+% NetLeap \cite{netleap}
 
 \section{Exchanging data between devices: Communication Channel}
 % Talk about what is know about communication systems, full stack development, etc
 \section{Connectivity Methods: protocols}
 \subsection{\gls{udp}}
 \subsubsection{The NAT problem}
+%% VPN as solution
 \subsection{\gls{rtp}}
 \subsection{\gls{http}}
 \cite{http-rfc}
 \subsection{\gls{ws}}
 \cite[p.~30]{rfc6455}
 
-\section{Uses in Medical situations}
 
 
 
@@ -593,7 +596,7 @@ This project started with a \gls{ir} sensor provided by Levitezer which delivers
  In order to make the an image with some sort of programing language it is necessary to process the those streams. Every image or frame comes in 240 chunks or rows separated by a sequence of 3 bytes:
 
 \begin{equation}
-\label{eq:stream of data}
+\label{eq:sensor-stream}
 \text {FF FF FF 00} \left\lbrace data \right\rbrace 
 \text {FF FF FF 01} \left\lbrace data \right\rbrace 
 \text {FF FF FF 02} \left\lbrace data \right\rbrace \dots
@@ -601,12 +604,12 @@ This project started with a \gls{ir} sensor provided by Levitezer which delivers
 
 
 
-In 3.1 every byte is seen in hexadecimal format containing an sequence "FF FF FF" is the between rows of typically 80 bytes of data. After the sequence, the 4th byte is the number which identify the row.
+In equation~\ref{eq:sensor-stream} every byte is seen in hexadecimal format containing an sequence "FF FF FF" is the between rows of typically 80 bytes of data. After the sequence, the 4th byte is the number which identify the row.
 
-The 240th (F0 in hexadecimal) row provides meta-data about the frame
+As equation~\ref{eq:telemetry-row} shows, The 240th (F0 in hexadecimal) and last row provides meta-data about the frame
 
 \begin{equation}
-\label{eq:metadata row}
+\label{eq:telemetry-row}
 \dots \text {FF FF FF F0} \left\lbrace data \right\rbrace
 \end{equation}
 
@@ -615,7 +618,7 @@ The 240th (F0 in hexadecimal) row provides meta-data about the frame
 
 
 
-\section{Reading the sensor Methods}
+\section{Sensor Reader Methods}
 A number of reading methods were tried, some worked better than others
 
 \subsection{Android smart-phone as Gateway}
@@ -631,7 +634,7 @@ In order to send data to the cloud a path must be done. The first approach was c
 
 This method requires to code an Android Application using Java and the Android framework, also requires a terminal which supports \gls{otg} \gls{usb}. For this purpose a library to read binary data from the \gls{usb} will be of great help. This is one open-source that can be accessed: \url{https://github.com/mik3y/usb-serial-for-android}
 
-A good thing about this approach is that we already have all the hardware to do the communication so that there is only need to focus on the software part.
+An advantage of this approach is that the smart-phone(including a \gls{sim} card) has all the hardware on it to make the communication. Hence there is only need to focus on the software part.
 
 \subsubsection{Description of the Android Application}
 To create the Android application it is needed some things:
@@ -645,10 +648,10 @@ The \gls{ui} let us start the reading and provide an address and a port to conne
 
 \putimage[7.1]{android_screenshot}{\gls{ui} of the Android Application}
 
-As network protocol \gls{http} was chosen, although it is not the best for continuously sending data. Then an \gls{php} script processed the request and store the data in a file
+As network protocol \gls{http} was chosen, although it is not the best for continuously sending data. Then an \gls{php} script processed the request and store the data in a file.
 
 % more options for code https://www.sharelatex.com/learn/Code_listing#/Options_to_customize_code_listing_styles
-\putcode{label_php}{PHP code in the server side}[language=PHP,style=styleprogramming]^
+\putcode{label-php}{PHP code in the server side}[language=PHP,style=styleprogramming]^
 <?php
 $data = "";
 // get data only from post request
@@ -671,6 +674,7 @@ function formatData($data){
 ?>
 ^
 %$ this is to fix the color in Texstudio, ^ is the delimiter
+
 
 Then using an Android service to keep reading in the background which is the usual approach to deal with long running operations on Android Applications.
 
@@ -712,7 +716,7 @@ AT+COPS  # register to network command
 $ % end of code, delimiter is $
 
 
-This module can be programmed using \gls{javame} which is a \gls{java} edition for embedded devices \cite{javame}. Application layer protocols and \gls{tcp}/\gls{udp} sockets can be used in a \gls{midlet} which allows to describe the life-cycle of a single application. With this tools we can control the \gls{usb}, \gls{spi} or \gls{rs232} ports and even send AT commands
+This module can be programmed using \gls{javame} which is a \gls{java} edition for embedded devices \cite{javame}. Application layer protocols and \gls{tcp}/\gls{udp} sockets can be used in a \gls{midlet} which allows to describe the life-cycle of a single application. With this tools the \gls{usb}, \gls{spi} or \gls{rs232} ports can be controlled and even send AT commands.
 
 
 \putcode{midlet-example}{MIDlet application life-cycle example}[language=Java,style=styleprogramming]^
@@ -736,7 +740,7 @@ public class HelloWorld extends MIDlet {
         System.out.println("pauseApp()");
     }
     
-    /** Here we must clean up everything not handled by the garbage collector. */
+    /** Here you must clean up everything not handled by the garbage collector. */
     public void destroyApp(boolean cond) {
         System.out.println("destroyApp(" + cond + ")");
         notifyDestroyed();
@@ -758,11 +762,12 @@ To do all the communication and configuration with the module there is a board w
 \subsection{Raspberry Pi}
 
 
-\section{Client Reader Methods}
+\section{Client Application Methods}
 \subsection{\gls{udp} Lab View}
 \subsection{\gls{udp} Java client}
 \subsection{Websocket Python Client}
 \subsubsection{Reversing engineering a LabView Application}
+\subsection{Android Client}
 
 \section{Server Side Methods}
 \subsection{Communication sensor-client}
@@ -772,15 +777,24 @@ To do all the communication and configuration with the module there is a board w
 \subsubsection{Unit Testing}
 \subsubsection{Acceptance Testing: Robot Framework}
 
-\section{Cloud PaaS methods}
+\section{Cloud \gls{paas} methods}
 \subsection{Google Cloud}
 \subsection{Open Shift and Docker}
+% url hooks to update
 
-\section{Control Version}
+\section{Other Tools used}
+\subsection{Control Version}
 % show repository in gitgub
-
+% url hooks to update
+%image of the git branches
+GitHub
+\subsection{Using Latex as edition tool}
+% What is latex, what is tex
+% reasons to use latex, abreviations, commands etc, show figures
+Latex
 
 \chapter{Results}
+%What was found/created/designed/produced?
 
 \section{Discarded Methods}
 \subsection{android smart-phone gateway solution}
@@ -811,8 +825,12 @@ On the final implementation the server side application was written in \gls{js} 
 
 
 \chapter{Discussion}
+%What do the results mean?
 \section{Use in Well-being environments}
 \section{Possible changes in the future}
+\subsection{3D \gls{ir} map using multiple sensors}
+\subsection{gls{html}5 application}
+\subsection{Using RTP to broadcast video to clients}
 
 
 \chapter{Conclusions}
