@@ -55,6 +55,7 @@ Name, Title \newline
 \usepackage{tikz} % mindmaps, flowcharts, piecharts, examples at http://www.texample.net/tikz/examples/
 \usepackage{csquotes}
 \usepackage{xparse}
+\usepackage{tabu}
 \usetikzlibrary{shapes.geometric, arrows}
 %\numberwithin{equation}{chapter} % this add the chapter in the equation
 
@@ -232,7 +233,7 @@ xleftmargin=1cm
 \renewcommand{\aftertoctitle}{\vspace*{-22pt}\afterchaptertitle}
 %spacing afer a chapter in toc
 \preto\section{%
-  \ifnum\value{section}=0\addtocontents{toc}{\vskip11pt}\fi
+  \ifnum\value{section}=0\addtocontents{toc}{\vskip9pt}\fi  % original was \vskip11pt
 }
 %spacing afer a section in toc
 \renewcommand{\cftsectionaftersnumb}{\vspace*{-3pt}}
@@ -310,6 +311,7 @@ xleftmargin=1cm
 \newacronym{er}{ER Diagram}{Entity Relationship Diagram}
 \newacronym{ws}{Websocket}{Websocket}
 \newacronym{paas}{PaaS}{Platform As A Service}
+\newacronym{cpu}{CPU}{Central Process Unit}
 
 
 
@@ -353,6 +355,11 @@ xleftmargin=1cm
 {
     name=Node.js,
     description={Node.js is an open-source, cross-platform JavaScript runtime environment for developing server-side applications}
+}
+\newglossaryentry{python}
+{
+    name=Python,
+    description={Dynamic typed interpreted programming language}
 }
 
 %----------------------------------------------------------------------------------------
@@ -416,6 +423,7 @@ xleftmargin=1cm
 
 \maketitle
 \newpage
+
 \LRCornerWallPaper{1}{footer}
 
 %----------------------------------------------------------------------------------------
@@ -589,11 +597,24 @@ This is an great project as it is a hot topic (\gls{iot} and cloud computing) in
 %Describe the context in which the work was carried out (such as the overall project and its design, your specific task, work environment) and the workflow. Describe the methods and materials used (accurate details of data, software, materials, methods, techniques). Give a full account of exact test arrangements and measurements carried out, and accurate details of data analysis.
 %The issues included in this section depend on the nature of your project. Whatever the issues, describe them in sufficient detail and in logical sequence.
 
+The aim of this project is to design methods to transmit data from one sensor to a client application and vice-versa. Also define a generalization to communicate from $N$ sensors to $M$ client applications, being either $N$ and $M$ arbitrary numbers. Note that the communication must be bidirectional since clients can send commands to sensors to perform operations such as calibration, delay between frames, etc. Then on this communication system there are 3 well differentiated parts:
+\begin{itemize}
+    \item sensor side: software that connects the sensor with the server side.
+    \item server side: software that connects sensors and clients together.
+    \item client side: software that connects the an user with the server side to access a sensor.
+\end{itemize}
+
+The figure~\ref{fig:communication-channel} shows this idea.
+
+\putimage{communication-channel}{A communication channel}
+
+This chapter will discuss about methods for each side of the communication system in detail.
+
 
 \section{The sensor}
-This project started with a \gls{ir} sensor provided by Levitezer which delivers all infrared data in form of binary streams trough \gls{usb}.
+The \gls{ir} sensor provided by Levitezer delivers all infrared data in form of binary streams trough \gls{usb}.
 
- In order to make the an image with some sort of programing language it is necessary to process the those streams. Every image or frame comes in 240 chunks or rows separated by a sequence of 3 bytes:
+ In order to make the an image it is necessary to process the those streams. Every image or frame comes in 240 chunks or rows separated by a delimiter of 3 bytes:
 
 \begin{equation}
 \label{eq:sensor-stream}
@@ -606,35 +627,154 @@ This project started with a \gls{ir} sensor provided by Levitezer which delivers
 
 In equation~\ref{eq:sensor-stream} every byte is seen in hexadecimal format containing an sequence "FF FF FF" is the between rows of typically 80 bytes of data. After the sequence, the 4th byte is the number which identify the row.
 
-As equation~\ref{eq:telemetry-row} shows, The 240th (F0 in hexadecimal) and last row provides meta-data about the frame
+As equation~\ref{eq:metadata-row} shows, The 240th (F0 in hexadecimal) and last row provides meta-data about the frame
 
 \begin{equation}
-\label{eq:telemetry-row}
-\dots \text {FF FF FF F0} \left\lbrace data \right\rbrace
+\label{eq:metadata-row}
+\dots \text {FF FF FF F0} \left\lbrace metadata \right\rbrace
+\end{equation}
+In table~\ref{table:metadata-row} are listed all information contained in the meta-data taking as byte '0' the one after the sequence "FF FF FF F0"
+
+\subsubsection{Meta-Data}
+\begin{table}[h]
+    \centering
+    \begin{tabu}{| l | c |}
+        \hline
+        \rowfont[c]{\bfseries} Meta-Data Parameter & Bytes (from 0 to 80) \\ \hline
+
+        Time counter & 4,3,1,0 \\
+        Frame counter & 10,9,7,6 \\
+        Frame Mean & 13,12 \\
+        Sensor temperature & 16,15 \\
+        Maximum temperature & 19,18 \\
+        Minimum temperature & 22,21 \\
+        Discarded packets count & 25,24 \\
+        Maximum temperature limit & 28,27 \\
+        Minimum temperature limit & 31,30 \\
+        AGC byte & 34 \\
+        Bit depth & 35 \\
+        Delay between frames & 37,36 \\
+        \hline
+    \end{tabu}
+    \caption{Meta-data and its position in the row}
+    \label{table:metadata-row}
+\end{table}
+
+Here is a short explanation about the meta-data values:
+\begin{itemize}
+    \item Time counter: Amount of seconds since the sensor was power on.
+    \item Frame counter: Amount of frames since the sensor was power on.
+    \item Frame mean:
+    \item Sensor temperature: temperature of the sensor itself.
+    \item Maximum temperature: maximum temperature registered the current frame.
+    \item Minimum temperature: minimum temperature registered the current frame.
+    \item Discarded packets: packets that were not read. a great number may tell that the application is not reading the sensor fast enough.
+    \item Maximum temperature limit: The limit set with the command for maximum limit.
+    \item Minimum temperature limit: same that previous but with minimum temperature.
+    \item AGC byte: tell if the limits are set or not (useful for implementing indicators).
+    \item Bit depth: bit depth of the image, it can be 0, 2 or 8 (default).
+    \item Delay between frames: if no delay is set (delay=0) then the delay is about 111 milliseconds (9 frames per second).
+\end{itemize}
+
+\subsubsection{Commands}
+% TODO: more Pictures of the sensors
+The commands are sent over the same serial \gls{usb} cable from which the frames are received.
+
+\begin{table}[h]
+    \centering
+    \begin{tabu}{| l | c | c |}
+        \hline
+        \rowfont[c]{\bfseries} Command Name & Command (ASCII byte) & Arguments \\ \hline
+        
+       Synchronize 		    & S & No      \\
+       Calibrate   		    & C & No      \\
+       Set Max Limit        & H & 2 bytes \\
+       Set Min Limit        & L & 2 bytes \\
+       Auto Max Limit       & A & No	  \\
+       Auto Min Limit       & a & No	  \\
+       Set Bit Depth        & B & 1 byte  \\
+       Set Frame Delay      & U & 2 bytes \\
+
+        \hline
+    \end{tabu}
+    \caption{Commands accepted by the sensor}
+    \label{table:commands}
+\end{table}
+
+The frame-rate is 9 frames per second at maximum, although the sensor can be configured with an arbitrary delay time between frames.
+
+\subsubsection{Creating the image}
+Every frame has a size of 160x120, but the image data comes in a matrix of 80x239 (240 is the meta-data row) as equation~\ref{eq:sensor-stream} and \ref{eq:metadata-row} shown before. Each byte of data can be seen as a pixel in a gray-scale image, but in order to generate the correct image the "data matrix" must be reshaped to 160x120 as show in the figure~\ref{fig:sensor-image}. Every 2 row in the data matrix make 1 row in the image.
+\putimage{sensor-image}{Reshaping data}
+
+I developed a simple solution to do this:
+
+For each data row (equation~\ref{eq:data}) let $n_j$ be the data current row number performing by the 4th byte in equation~\ref{eq:sensor-stream}, then for every $d_i$ value in the data row is possible to define every pixel $p_{ij}$ of the image matrix (equation~\ref{eq:image}) as a coordinate pair $(x,y)$ in the data matrix 
+\begin{equation}
+\label{eq:data}
+D_{i,j} = 
+\begin{pmatrix}
+n_1 & d_1 & d_2 & d_3 & \cdots & d_i\\
+n_2 & d_1 & d_2 & d_3 & \cdots & d_i\\
+\vdots & \vdots & \vdots& \vdots  & \ddots & \vdots  \\
+n_j & d_1 & d_2 & d_3 & \cdots & d_i\\
+\end{pmatrix}
 \end{equation}
 
-% TODO: Description of the telemetry
-% TODO: Pictures of the sensors
+\begin{equation}
+\label{eq:image}
+I_{i,j} = 
+\begin{pmatrix}
+    p_{1,1} & p_{1,2} & \cdots & p_{1,j} \\
+    p_{2,1} & p_{2,2} & \cdots & p_{2,j} \\
+    \vdots  & \vdots  & \ddots & \vdots  \\
+    p_{i,1} & p_{i,2} & \cdots & p_{i,j} 
+\end{pmatrix}
+\end{equation}
 
+\begin{equation}
+\label{eq:coordinate}
+x = n_j \backslash 2  \qquad y = n_j \bmod 80 + i
+\end{equation}
 
+\begin{equation}
+\label{eq:pixel}
+p_{ij} = d_{xy}
+\end{equation}
+
+As seen in equation~\ref{eq:pixel} any pixel value corresponds to a x,y pair define in equation~\ref{eq:coordinate} .
+
+Note the "\textbackslash" here is meant for integer division in equation~\ref{eq:coordinate}, it is \textbf{not} a normal division with rational or decimal numbers.
+
+As an example of a practical implementation in \gls{python} see the listing~\ref{listing:image-python} which function process{\_}data{\_}row is called for every data row
+
+\putcode{image-python}{Simplified example of creating a frame in Python}[language=Python,style=styleprogramming]$
+self.frame_arr[f_row][f_col]
+
+def process_data_row(self, row):
+    n_row = row[0]
+    
+    for indx, val in enumerate(row[1:]):
+        f_row = (n_row)/2
+        f_col = (n_row) % 2 * 80 + indx
+        self.frame_arr[f_row][f_col] = val
+$ 
+
+Also note that in order to fill the "self.frame{\_}arr" matrix the function is must be called 239 times
 
 \section{Sensor Reader Methods}
-A number of reading methods were tried, some worked better than others
+The sensor has been described in the previous section. Here different methods to read the sensor are discussed, some worked better than others, nevertheless all of what was tried is included.
 
 \subsection{Android smart-phone as Gateway}
+Most of Android smart-phones have an \gls{otg} which allows to use \gls{usb} peripherals in the phone with the correspondent \gls{otg} adapter This can be used to develop an Android application to receive the data from the sensor and send it through Internet using any protocol, in this sense the cellphone act as a gateway to Internet, letting the sensor access the \gls{3g} or the \gls{lte} network.
 
 \putimage{android_otg}{Android smart-phone and sensor}
 
-Most of Android smartphones have an \gls{otg} which allows to use usb peripherals in the phone with the correspondent \gls{otg} adaptator. This can be used to develop an Android application to receive the data from the sensor and send it through Internet using any protocol.
-
-
-This was tested using a \gls{php} file in a server on Metropolia UAS alongside an Android Application I developed to send all the data from the sensor to server, this application is available in GitHub on the following link. %link!!!
- 
-In order to send data to the cloud a path must be done. The first approach was connect the sensor to an Android smart-phone to use it as a gateway to Internet, letting the sensor access the \gls{3g} or the \gls{lte} network
-
-This method requires to code an Android Application using Java and the Android framework, also requires a terminal which supports \gls{otg} \gls{usb}. For this purpose a library to read binary data from the \gls{usb} will be of great help. This is one open-source that can be accessed: \url{https://github.com/mik3y/usb-serial-for-android}
-
 An advantage of this approach is that the smart-phone(including a \gls{sim} card) has all the hardware on it to make the communication. Hence there is only need to focus on the software part.
+
+This was tested using a \gls{php} file in a server on Metropolia UAS alongside an Android Application I developed to send all the data from the sensor to server.
+
+Note that this method requires  a terminal which supports \gls{usb} \gls{otg}.
 
 \subsubsection{Description of the Android Application}
 To create the Android application it is needed some things:
@@ -644,14 +784,14 @@ To create the Android application it is needed some things:
 	\item A background process
 \end{itemize}
 
-The \gls{ui} let us start the reading and provide an address and a port to connect.
+The \gls{ui} let us start the reading and provide an address and a port to connect. See figure~\ref{fig:android-screenshot}.
+\putimage[5]{android-screenshot}{\gls{ui} of the Android Application}
 
-\putimage[7.1]{android_screenshot}{\gls{ui} of the Android Application}
 
-As network protocol \gls{http} was chosen, although it is not the best for continuously sending data. Then an \gls{php} script processed the request and store the data in a file.
+As network protocol \gls{http} was chosen, although it is not the best for continuously sending data. Then an \gls{php} script processed the request and store the data in form of hexadecimal strings in a file as listing~\ref{listing:php-script} illustrates
 
 % more options for code https://www.sharelatex.com/learn/Code_listing#/Options_to_customize_code_listing_styles
-\putcode{label-php}{PHP code in the server side}[language=PHP,style=styleprogramming]^
+\putcode{php-script}{PHP code in the server side}[language=PHP,style=styleprogramming]^
 <?php
 $data = "";
 // get data only from post request
@@ -672,13 +812,12 @@ function formatData($data){
     return strtoupper(implode(" ", $arr));
 }
 ?>
-^
-%$ this is to fix the color in Texstudio, ^ is the delimiter
+^ %$ this is to fix the color in Texstudio, ^ is the delimiter
 
 
-Then using an Android service to keep reading in the background which is the usual approach to deal with long running operations on Android Applications.
+Then using an Android service to keep reading in the background which is the usual approach to deal with long running operations on Android Applications~\cite{android-services}.
 
-The usb-serial-for-android library provides all the necessary to read data from the mini-usb port. The figure shows an example of implementing the callback to receive data in Java
+The usb-serial-for-android library provides all the necessary to read data from the mini-usb port~\cite{usb-serial-for-android}. The listing~\ref{listing:android_gateway} shows an extract of my code implementing the callback to receive data in directly from the \gls{usb} port.
 
 \putcode{android_gateway}{Android: Callback to receive data from sensor}[language=Java,style=styleprogramming]^
 // the parameter data is a binary string from the sensor
@@ -693,6 +832,7 @@ public void onNewData(final byte[] data) {
 }
 ^
 % end of code, delimiter is ^
+Notice in line 3 that it is in reality quite simple to receive binary data in form of an byte array.
 
 
 \subsection{Lte module}
@@ -705,9 +845,10 @@ In order to set a route between your device and a service on Internet or your ow
 
 \subsubsection{Gemalto Lte module}
 
-	\putimage[5]{lte_module}{ELS61-E chip size}
 
-This is not a simple modem that allows other machines to be connected to Internet, it has a complete \gls{tcpip} which means that protocols of the transport layer such as \gls{tcp} and \gls{udp} and application layer such as \gls{http} and \gls{https} can be used as well.
+This is not a simple modem that allows other machines to be connected to Internet, it has a complete \gls{tcpip} which means that protocols of the transport layer such as \gls{tcp} and \gls{udp} and application layer such as \gls{http} and \gls{https} can be used as well all in very small compact chip as it is seen in figure~\ref{fig:lte_module}.
+
+	\putimage[5]{lte_module}{ELS61-E chip size}
 
 The module used was Gemalto ELS61-E which is configured using the Hayes command set (also called AT commands) which are used typically on modems %reference%.
 \putcode{at_commands_example}{AT commands}[style=styleprogramming]$
@@ -760,10 +901,25 @@ To do all the communication and configuration with the module there is a board w
 
 
 \subsection{Raspberry Pi}
+A Raspberry pi is a credit card sized computer and on its model 3B includes among other things 4 \gls{usb} ports multi-core \gls{cpu}~\ref{rpi3}. Considering that the raspberry comes with a Linux distribution the possibilities are unlimited, for the purposes of this project it is specially handy the possibility of using any programming language and a lot of software packets available.
 
+\putimage{raspberry}{Raspberry Pi Physical appearance}
+
+\subsubsection{The reader program}
+The programming language chosen to communicate with the sensor from the raspberry pi was \gls{python} %There is a number quite large of libraries available to use with python
+First I am going to point the necessary features for this application:
+\begin{itemize}
+    \item needs to communicate both ways trough \gls{usb}.
+    \item has to open a connection to the server/cloud continuously and be able to recover. automatically from failures on the network.
+    \item must do all this at same time taking advance of raspberry pi's multiple cores.
+    \item prioritize the sensor read task over the rest, this is the most critical part and must be have a higher priority
+    
+\end{itemize}
+
+In order to separate tasks it is possible to use multiple threads which are supported in \gls{python} and the multiprocessing package to have separate into several process and take advantage of the various \gls{cpu} cores~\cite{python-multi}. For controlling the priority the package "psutil" allow to control the "niceness" of the process~\cite{python-psutil}
 
 \section{Client Application Methods}
-\subsection{\gls{udp} Lab View}
+% mention Lab view client Lab View
 \subsection{\gls{udp} Java client}
 \subsection{Websocket Python Client}
 \subsubsection{Reversing engineering a LabView Application}
@@ -926,11 +1082,110 @@ $
 
 
 
-\chapter{Appendix 2}\label{appx:second}
+\chapter{Sensor reader listings}\label{appx:second}
 \addtocontents{toc}{\vspace{11pt}}
 
-content here 
+\begin{lstlisting}[label={listing:serial-reader},caption={Serial Reader Class},language=Python, style=styleprogramming]
+import thread
+import logging
+import psutil
+from multiprocessing import Process
+from serial import Serial, SerialException
+from Constants import VERY_HIGH_PRIORITY, HIGH_PRIORITY
 
+class Serial_reader(Serial):
+"""" This class read data from sensor in a Thread """
+    def __init__(self, pipe, port):
+        Serial.__init__(self, port=port, baudrate=115200)
+        self.pipe = pipe
+        self._start_process()
+    
+    def _start_process(self):
+        process = Process(name="SerialProcess", target=self._run, args=())
+        process.daemon = True
+        process.start()
+        try:
+            psutil.Process(process.pid).nice(VERY_HIGH_PRIORITY)
+        except psutil.AccessDenied as e:
+            psutil.Process(process.pid).nice(HIGH_PRIORITY)
+    
+    def _get_data(self):
+        one_byte = self.read(1)
+        n_bytes = self.in_waiting
+        return one_byte + self.read(n_bytes)
+    
+    def _send_data(self):
+        while self.is_open:
+            print "waiting for commands"
+            data = self.pipe.recv()
+            print data
+            self.write(data)
+    
+    def _run(self):
+        thread.start_new_thread(self._send_data, ())
+        while self.is_open:
+            try:
+                data = self._get_data()
+                self.pipe.send(data)
+            except SerialException as e:
+                logging.error(e.message)
+                self.stop()
+                break
+    
+    def stop(self):
+        if self.is_open:
+        self.close()
+
+\end{lstlisting}\vspace{14pt}
+
+\begin{lstlisting}[label={listing:rpi-ws},caption={Websocket Class},language=Python, style=styleprogramming]
+import logging
+import thread
+from websocket import WebSocketApp, ABNF
+from Constants import URL, CAMERA_PATH, PARAMETERS
+
+class WebSocketConnection(WebSocketApp):
+    def __init__(self, pipe, url=URL + CAMERA_PATH + PARAMETERS):
+    WebSocketApp.__init__(self, url,
+    on_message=self.on_message,
+    on_error=self.on_error,
+    on_close=self.on_close,
+    on_open=self.on_open)
+    self.open_connection = False
+    self.pipe = pipe
+    
+    def on_message(self, ws, message):
+        logging.warn("received command:%s, %d bytes", message[0], len(message))
+        self.pipe.send(message)
+    
+    def on_error(self, ws, error):
+        logging.error(error)
+    
+    def on_close(self, ws):
+        self.open_connection = False
+        logging.warn("### closed ###")
+    
+    def on_open(self, ws):
+        self.open_connection = True
+        logging.warn("opened new socket")
+    
+        def run():
+            while (self.open_connection == True):
+                data = self.pipe.recv()
+                self.send_data(data)
+        
+        thread.start_new_thread(run, ())
+    
+    def stop(self):
+        self.open_connection = False
+    
+    def send_data(self, data):
+        if self.open_connection and len(data) != 0:
+        self.send(data, opcode=ABNF.OPCODE_BINARY)
+        
+    def set_pipe(self, pipe):
+        self.pipe = pipe
+\end{lstlisting}\vspace{14pt}
 \clearpage
 \liite{3}
 \end{document}
