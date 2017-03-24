@@ -922,10 +922,16 @@ In order to separate tasks it is possible to use multiple threads which are supp
 It is also desirable being able to do certain operations remotely without using \gls{ssh}. The connection made between client-server-raspberry can be taken in advance to for example shutdown, reset, update, etc the raspberry. For this purpose the subprocess package can be use to issue commands and other process, as one can do in a terminal shell~\cite{python-subprocess}. See the listing~\ref{listing:rpi-subprocess} to see my actual implementation.
 
 \section{Client Application Methods}
-% mention Lab view client Lab View
-\subsection{\gls{udp} Java client}
-\subsection{Websocket Python Client}
+On this section it will be described different methods to create a client able to connect to the cloud thus the sensor, present the data to the user and send commands to the sensor.
+
 \subsubsection{Reversing engineering a LabView Application}
+At the beginning of the project Levitazer provided an example application to read the sensor from a laptop made in \gls{labview}, although this works it is not an idea platform to develop since it is strict closed software and in order to work with it a expensive license has to be paid. Then it was agreed that I will make an reverse-enginered python version out of the \gls{labview} client and extends its capabilities beyond the the simple laptop-sensor connection
+    \putimage{labview}{LabView implementation}
+\gls{labview} programs are not write in code but using a "visual programming language" based in diagrams similar to circuits were the data flows. It is oriented to instrument control
+    \putimage{labview-udp}{Labview UDP client}
+
+%\subsection{\gls{udp} Java client}
+\subsection{Websocket Python Client}
 \subsection{Android Client}
 
 \section{Server Side Methods}
