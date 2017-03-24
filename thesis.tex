@@ -312,6 +312,7 @@ xleftmargin=1cm
 \newacronym{ws}{Websocket}{Websocket}
 \newacronym{paas}{PaaS}{Platform As A Service}
 \newacronym{cpu}{CPU}{Central Process Unit}
+\newacronym{ssh}{SSH}{Secure Shell}
 
 
 
@@ -901,22 +902,24 @@ To do all the communication and configuration with the module there is a board w
 
 
 \subsection{Raspberry Pi}
-A Raspberry pi is a credit card sized computer and on its model 3B includes among other things 4 \gls{usb} ports multi-core \gls{cpu}~\ref{rpi3}. Considering that the raspberry comes with a Linux distribution the possibilities are unlimited, for the purposes of this project it is specially handy the possibility of using any programming language and a lot of software packets available.
+A Raspberry pi is a credit card sized computer and on its model 3B includes among other things 4 \gls{usb} ports multi-core \gls{cpu}~\cite{rpi3}. Considering that the raspberry comes with a Linux distribution the possibilities are unlimited, for the purposes of this project it is specially handy the possibility of using any programming language and a lot of software packets available.
 
 \putimage{raspberry}{Raspberry Pi Physical appearance}
 
 \subsubsection{The reader program}
-The programming language chosen to communicate with the sensor from the raspberry pi was \gls{python} %There is a number quite large of libraries available to use with python
-First I am going to point the necessary features for this application:
+The programming language chosen to communicate with the sensor from the raspberry pi was \gls{python} since it has a number of libraries available to use. Then it is necessary to point what features are suitable for a program which reads the sensor and open a connection to the server side:
 \begin{itemize}
-    \item needs to communicate both ways trough \gls{usb}.
-    \item has to open a connection to the server/cloud continuously and be able to recover. automatically from failures on the network.
-    \item must do all this at same time taking advance of raspberry pi's multiple cores.
-    \item prioritize the sensor read task over the rest, this is the most critical part and must be have a higher priority
+    \item Needs to communicate both ways trough \gls{usb}.
+    \item Has to open a connection to the server/cloud continuously and be able to recover. automatically from failures on the network.
+    \item Must do all this at same time taking advance of raspberry pi's multiple cores.
+    \item Prioritize the sensor read task over the rest, this is the most critical part and must be have a higher priority
+
     
 \end{itemize}
 
 In order to separate tasks it is possible to use multiple threads which are supported in \gls{python} and the multiprocessing package to have separate into several process and take advantage of the various \gls{cpu} cores~\cite{python-multi}. For controlling the priority the package "psutil" allow to control the "niceness" of the process~\cite{python-psutil}
+
+It is also desirable being able to do certain operations remotely without using \gls{ssh}. The connection made between client-server-raspberry can be taken in advance to for example shutdown, reset, update, etc the raspberry. For this purpose the subprocess package can be use to issue commands and other process, as one can do in a terminal shell~\cite{python-subprocess}. See the listing~\ref{listing:rpi-subprocess} to see my actual implementation.
 
 \section{Client Application Methods}
 % mention Lab view client Lab View
@@ -1186,6 +1189,54 @@ class WebSocketConnection(WebSocketApp):
     def set_pipe(self, pipe):
         self.pipe = pipe
 \end{lstlisting}\vspace{14pt}
+
+\begin{lstlisting}[label={listing:rpi-subprocess},caption={Subprocess example},language=Python, style=styleprogramming]
+from thread import start_new_thread
+from subprocess32 import call
+import logging
+
+def shutdown():
+    run_command_async("/sbin/poweroff")
+
+def reboot():
+    run_command_async("/sbin/reboot")
+
+def update():
+    run_command_async("./build.sh")
+
+def test():
+    run_command_async("sleep", "3")
+
+commands = {
+'rs': shutdown,
+'rr': reboot,
+'ru': update
+}
+
+def run_command_async(*args):
+    def run(*args):
+        result = call(args)
+    
+    start_new_thread(run, args)
+
+
+def is_raspberry_command(s):
+""" Check this is a command for the raspberry rather than the sensor. First letter must be an 'r'"""
+    if s[0] == 'r':
+        command = commands.get(s)
+        if callable(command):
+            command()
+        else:
+            logging.warn("command not found: %s" % s)
+            return True
+    else:
+        return False
+
+
+
+\end{lstlisting}\vspace{14pt}
+
+
 \clearpage
 \liite{3}
 \end{document}
