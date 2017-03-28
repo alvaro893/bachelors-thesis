@@ -313,10 +313,25 @@ xleftmargin=1cm
 \newacronym{paas}{PaaS}{Platform As A Service}
 \newacronym{cpu}{CPU}{Central Process Unit}
 \newacronym{ssh}{SSH}{Secure Shell}
+\newacronym{oop}{OOP}{Object Oriented Programming}
+\newacronym{cpp}{C++}{C plus plus}
+\newacronym{xml}{XML}{Extensible Markup Language}
 
 
 
 %Glossary entries
+\newglossaryentry{matplotlib}{
+	name=Matplotlib, 
+	description={Plotting library for Python programming language}
+}
+\newglossaryentry{qt}{
+	name=Qt, 
+	description={Cross-platform application framework}
+}
+\newglossaryentry{labview}{
+	name=LabVIEW, 
+	description={environment for visual programming language used for instrument control}
+}
 \newglossaryentry{thesis}{
 	name=thesis, 
 	description={a written essay one submitted for a university degree},
@@ -924,15 +939,52 @@ It is also desirable being able to do certain operations remotely without using 
 \section{Client Application Methods}
 On this section it will be described different methods to create a client able to connect to the cloud thus the sensor, present the data to the user and send commands to the sensor.
 
-\subsubsection{Reversing engineering a LabView Application}
-At the beginning of the project Levitazer provided an example application to read the sensor from a laptop made in \gls{labview}, although this works it is not an idea platform to develop since it is strict closed software and in order to work with it a expensive license has to be paid. Then it was agreed that I will make an reverse-enginered python version out of the \gls{labview} client and extends its capabilities beyond the the simple laptop-sensor connection
+\subsubsection{Reversing engineering a \gls{labview} Application}
+At the beginning of the project Levitazer provided an example application to read the sensor from a laptop made in \gls{labview}, although this works it is not an idea platform to develop since it is strict closed software and in order to work with it a expensive license has to be paid. Then it was agreed that I will make an reverse-enginered python version out of the \gls{labview} client and extends its capabilities beyond the the simple laptop-sensor connection.
+
     \putimage{labview}{LabView implementation}
-\gls{labview} programs are not write in code but using a "visual programming language" based in diagrams similar to circuits were the data flows. It is oriented to instrument control
+    
+\gls{labview} programs are not write in code but using a "visual programming language" based in diagrams similar to circuits were the data flows. It is oriented to instrument control, data acquisition, automation, etc.~\cite{labview}
+
+Although there was not intention to use \gls{labview} for the purposes of this thesis, it does was used to do research about what protocols to use and testing, see figure~\ref{fig:labview-udp} for a simple \gls{udp} client applications which just receives raw binary information from a sensor and displays it alongside the frame number.
+
     \putimage{labview-udp}{Labview UDP client}
 
 %\subsection{\gls{udp} Java client}
 \subsection{Websocket Python Client}
+This application was intended to have the characteristics of the \gls{labview}'s mentioned on the previous section and provide it with connectivity to a cloud \gls{paas} for remote communication. The application was wrote on python and taking advantage of the multiple libraries that the community offers for free as open source. % TODO: citation required?
+
+\putimage{python-client}{Python Client Application}
+
+\subsubsection{Design}
+On a relatively complex application as this one  \gls{oop} is the most convenient way to go when designing the application
+
+    \putimage{python-uml}{UML diagram (simplified)}
+    
+As seen in figure~\ref{python-uml} it shows the most important components of the application and its relations, it can be noticed that there is a separation between \gls{ui} components and logical ones.
+
+\subsubsection{User Interface}
+The user interface is implemented using the known \gls{qt} framework which is uses \gls{cpp} but there is a python bindings package to use in a python application without writing a single line of \gls{cpp} code. % TODO: citation
+
+Advantages of using qt are among others:
+\begin{itemize}
+    \item cross-platform: same code works on any operative system where the framework is available.
+    \item it is possible to design the interface using a designer program (see figure~\ref{fig:qt-designer}) and save it as a \gls{xml} file that can be read from the application, saving a lot of time on development stage.
+    \item it is a well known framework and there is plenty of information available about it.
+\end{itemize}
+
+\putimage{qt-designer}{QT designer}
+
+The sensor image itself is made using a plotting library named \gls{matplotlib} used in quality scientific plots and animations. \gls{matplotlib}  also provides a back-end to attach the graphics to \gls{qt} among other \gls{ui} frameworks.
+
+\subsubsection{Logic}
+
+
+
 \subsection{Android Client}
+
+    \putimage[4]{android-client}{Android Client}
+    \putimage[4]{android-client2}{Android Client}
 
 \section{Server Side Methods}
 \subsection{Communication sensor-client}
