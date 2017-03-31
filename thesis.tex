@@ -319,8 +319,8 @@ xleftmargin=1cm
 \newacronym{json}{JSON}{JavaScript Object Notation}
 \newacronym{uri}{URI}{Uniform Resource Identifier}
 \newacronym{npm}{npm}{Node Packet Manager}
-
-
+\newacronym{ip}{IP}{Internet Protocol}
+\newacronym{ran}{RAN}{Radio Access Network}
 
 
 %Glossary entries
@@ -584,7 +584,7 @@ Even though this is not a health care company, the sensors and methods here expl
 
 The methods and software I developed are being used to create an \gls{api} that connect \gls{ir} sensors together.
 
-\section{Business Challenge}
+\section{Business Challenge}\label{sec:business-challenge}
 %% improving costs by not having personal watching people all the time
 Find a system which using \gls{ir} sensors allow us to monitoring patients while keeping their privacy along reducing costs by using less staff and improve the service quality, data from those sensors can be accessed from anywhere which make them very versatile and portable.
 \section{Objective and Outcome of the Study}
@@ -601,13 +601,34 @@ This is an great project as it is a hot topic (\gls{iot} and cloud computing) in
 %What is already known about your chosen subject area and what is not known?
 %Discuss ideas in previous studies relevant to your topic (a brief introduction to the current state of knowledge and practice in your subject area). Identify a gap in the subject area and justify the purpose of your project, that is, the focus of your topic.
 
+Communications between devices is not a new topic, there are plenty of methods and communications protocols, this can be also part of the problem: there are too many and sometimes this can be overwhelming. In this section what is known about communication and network protocols will be discussed to find the best way to create a communication channel as stated in the business challenge on section~\ref{sec:business-challenge}.
 
-% RAN https://en.wikipedia.org/wiki/Radio_access_network
+
 % NetLeap \cite{netleap}
 
-\section{Exchanging data between devices: Communication Channel}
+\section{Exchanging data between devices}
 % Talk about what is know about communication systems, full stack development, etc
-\section{Connectivity Methods: protocols}
+Nowadays there is many ways to communicate between systems but here it will be used web services to achieve communication between sensors and clients. In order to establish a communication between two ends in a computer network or Internet it is important to comprehend how works the "Internet Protocol Architecture" or \gls{tcp}/\gls{ip} stack which is the conceptual model which most of networks are based on~\cite[p.~9]{tcpip}.
+
+	\putimage[5]{tcpip}{\gls{tcp}/\gls{ip} Architecture}
+
+The \gls{tcp}/\gls{ip} stack is build in layers:
+\begin{enumerate}
+	\item Network Access Layer: physical medium to access the network.
+	\item Internet Layer: handles the routing of data
+	\item Transport Layer: provides host to host data delivery services.
+	\item Application Layer: applications and process that make use of the network
+\end{enumerate}
+Then, it must be find out a way to communicate through the \gls{tcp}/\gls{ip} stack as shown in figure~\ref{fig:tcpip}.
+
+\section{The medium}
+At this point it has to be decided what medium to use to access the network (Network Access Layer in figure~\ref{fig:tcpip}). It could be a simple copper cable, Wi-Fi, microwaves, laser, etc. almost any kind of electromagnetic wave. But since this is an \gls{iot} project the best approach will be using \gls{ran} which are almost everywhere and provide great speeds and bandwidth.
+
+On this project Nokia provided us access to NetLeap which is a \gls{3g} and \gls{lte} network (the same that use mobile phones to connect to Internet). NetLeap is a	test closed network for research~\cite{netleap}.
+
+\section{Network protocols}
+
+
 \subsection{\gls{udp}}
 \subsubsection{The NAT problem}
 %% VPN as solution
