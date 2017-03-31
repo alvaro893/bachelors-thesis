@@ -316,10 +316,22 @@ xleftmargin=1cm
 \newacronym{oop}{OOP}{Object Oriented Programming}
 \newacronym{cpp}{C++}{C plus plus}
 \newacronym{xml}{XML}{Extensible Markup Language}
+\newacronym{json}{JSON}{JavaScript Object Notation}
+\newacronym{uri}{URI}{Uniform Resource Identifier}
+\newacronym{npm}{npm}{Node Packet Manager}
+
 
 
 
 %Glossary entries
+\newglossaryentry{apache}{
+	name=Apache, 
+	description={the most used web server software in the world}
+}
+\newglossaryentry{android}{
+	name=Android, 
+	description={Operative System used mainly in Smart-phones}
+}
 \newglossaryentry{matplotlib}{
 	name=Matplotlib, 
 	description={Plotting library for Python programming language}
@@ -692,7 +704,7 @@ Here is a short explanation about the meta-data values:
     \item Delay between frames: if no delay is set (delay=0) then the delay is about 111 milliseconds (9 frames per second).
 \end{itemize}
 
-\subsubsection{Commands}
+\subsubsection{Commands} \label{commands}
 % TODO: more Pictures of the sensors
 The commands are sent over the same serial \gls{usb} cable from which the frames are received.
 
@@ -719,7 +731,7 @@ The commands are sent over the same serial \gls{usb} cable from which the frames
 
 The frame-rate is 9 frames per second at maximum, although the sensor can be configured with an arbitrary delay time between frames.
 
-\subsubsection{Creating the image}
+\subsubsection{Creating the image}\label{creatingimage}
 Every frame has a size of 160x120, but the image data comes in a matrix of 80x239 (240 is the meta-data row) as equation~\ref{eq:sensor-stream} and \ref{eq:metadata-row} shown before. Each byte of data can be seen as a pixel in a gray-scale image, but in order to generate the correct image the "data matrix" must be reshaped to 160x120 as show in the figure~\ref{fig:sensor-image}. Every 2 row in the data matrix make 1 row in the image.
 \putimage{sensor-image}{Reshaping data}
 
@@ -936,7 +948,7 @@ In order to separate tasks it is possible to use multiple threads which are supp
 
 It is also desirable being able to do certain operations remotely without using \gls{ssh}. The connection made between client-server-raspberry can be taken in advance to for example shutdown, reset, update, etc the raspberry. For this purpose the subprocess package can be use to issue commands and other process, as one can do in a terminal shell~\cite{python-subprocess}. See the listing~\ref{listing:rpi-subprocess} to see my actual implementation.
 
-\section{Client Application Methods}
+\section{Client Application Methods}\label{sec:client-application-methods}
 On this section it will be described different methods to create a client able to connect to the cloud thus the sensor, present the data to the user and send commands to the sensor.
 
 \subsubsection{Reversing engineering a \gls{labview} Application}
@@ -954,12 +966,15 @@ Although there was not intention to use \gls{labview} for the purposes of this t
 \subsection{Websocket Python Client}
 This application was intended to have the characteristics of the \gls{labview}'s mentioned on the previous section and provide it with connectivity to a cloud \gls{paas} for remote communication. The application was wrote on python and taking advantage of the multiple libraries that the community offers for free as open source. % TODO: citation required?
 
-\putimage{python-client}{Python Client Application}
 
 \subsubsection{Design}
-On a relatively complex application as this one  \gls{oop} is the most convenient way to go when designing the application
+On a relatively complex application as this one  \gls{oop} is the most convenient way to go when designing the application.
 
-    \putimage{python-uml}{UML diagram (simplified)}
+As data sources in this application, it can be from directly \gls{usb} or from network, for those purposes the class "SerialConnection" will be in charge of communicate with a \gls{ir} sensor connected to the computer over \gls{usb} see listing~\ref{listing:serialcommunication}. on the other hand "WebsocketConnection" mimics roughly the behavior of "SerialConnection" however it makes the connection over Internet using the \gls{ws} protocol.
+
+Once a connection is made the class "Camera" and its children will handle data processing to make array frames as it was explained in section~\ref{creatingimage}.
+
+    \putimage[15]{python-uml}{UML diagram (simplified)}
     
 As seen in figure~\ref{python-uml} it shows the most important components of the application and its relations, it can be noticed that there is a separation between \gls{ui} components and logical ones.
 
@@ -973,52 +988,46 @@ Advantages of using qt are among others:
     \item it is a well known framework and there is plenty of information available about it.
 \end{itemize}
 
-\putimage{qt-designer}{QT designer}
+    \putimage{qt-designer}{QT designer}
 
-The sensor image itself is made using a plotting library named \gls{matplotlib} used in quality scientific plots and animations. \gls{matplotlib}  also provides a back-end to attach the graphics to \gls{qt} among other \gls{ui} frameworks.
+The sensor image itself is made using a plotting library named \gls{matplotlib} used in quality scientific plots and animations. \gls{matplotlib}  also provides a back-end to attach the graphics to \gls{qt} among other \gls{ui} frameworks. This can be seen in the \gls{uml} diagram (figure~\ref{fig:python-uml}) where the class "MplCanvas" which presents the frames from the "Camera" inherits from the \gls{matplotlib} class "FigureCanvasQTAgg". %TODO citation for matplotlib
 
-\subsubsection{Logic}
+    \putimage{python-client}{Python Client Application}
+    
+As seen in figure~\ref{fig:python-client} the application client has 2 well differenced parts. On the left it is the image displayed as a colored gray-scale image in figure~\ref{fig:ir-image}. \gls{matplotlib} let us apply color maps on the image very easily, also to add an interpolation to improve the image quality, in this case there is a Bicubic interpolation %TODO: ref?
 
+    \putimage[5]{ir-image}{Ir image}
+
+On the left side there is a control panel (figure~\ref{fig:control-panel}) which displays meta-data information and buttons that can send commands to the sensor as described in section~\ref{commands}, on the right of some buttons there are input fields to enter the arguments to the commands that required it alongside the current value of the argument (current argument values are meta-data as well).
+
+    \putimage{control-panel}{Control panel}
+    
+There is a separate section for special buttons to control a raspberry pi in the case the sensor is connected to a one.
 
 
 \subsection{Android Client}
+During the development of the project I found attractive the idea of having a client application on the phone and after finishing the python client described in the previous section I started to develop a simple but powerful \gls{android} application. It let connect to any camera already registered in the cloud (At this stage the cloud allows multiple sensors see. section~\ref{serverside}).
+
+As in the python client, it is necessary to code:
+\begin{itemize}
+    \item a class to connect to server or cloud through \gls{ws}.
+    \item create the image from the data.
+    \item allow to choose which camera to connect to.
+\end{itemize}
+
+\gls{android} application are slitted on different screens called Activities which contain \gls{ui} elements that the user can interact. In this case there is an activity for choosing the camera to connect, see figure~\ref{fig:android-client}.
 
     \putimage[4]{android-client}{Android Client}
+
+The other activity makes the actual connection and process the data in real time so the different frames can be visualized in gray-scale (figure~\ref{fig:android-client2}).
+
     \putimage[4]{android-client2}{Android Client}
+% TODO more stuff here
 
-\section{Server Side Methods}
-\subsection{Communication sensor-client}
-	\putimage{communication_udp}{Diagram of the communication using the module and UDP}
-\subsection{Python Flask}
-\subsection{Node js Server Application}
-\subsubsection{Unit Testing}
-\subsubsection{Acceptance Testing: Robot Framework}
+\section{Server Side Methods} \label{serverside}
+On this section describes the different approaches tested to created the middle point between sensors and clients. The server side application must be hosted somewhere, in this case a cloud environment described in the next section.
 
-\section{Cloud \gls{paas} methods}
-\subsection{Google Cloud}
-\subsection{Open Shift and Docker}
-% url hooks to update
-
-\section{Other Tools used}
-\subsection{Control Version}
-% show repository in gitgub
-% url hooks to update
-%image of the git branches
-GitHub
-\subsection{Using Latex as edition tool}
-% What is latex, what is tex
-% reasons to use latex, abreviations, commands etc, show figures
-Latex
-
-\chapter{Results}
-%What was found/created/designed/produced?
-
-\section{Discarded Methods}
-\subsection{android smart-phone gateway solution}
-This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as \gls{java}.
-\subsection{\gls{lte} module solution}
-
-\section{The communication channel}
+\subsection{The communication channel}\label{sec:the-communication-channel}
 Sections 3.4 and 3.5 discuss where the channel logic is (aka the cloud) and what kind of application and technology could be used. Regardless what technology it is used for coding, build and maintain the cloud application, and before start coding it should define how different components are related between each other.
 Let’s start by defining the following entities:
 \begin{itemize}
@@ -1033,6 +1042,63 @@ The diagram in figure \ref{fig:channel-er} represents the general view of how en
 On the final implementation the server side application was written in \gls{js} which is the Language for \gls{nodejs} applications.
 \putimage[15]{channel-uml}{\gls{uml} diagram}
 
+
+
+\subsection{Python Flask}
+Flask is a \gls{python} framework for web development which allows to write web applications back-ends and is specially useful to create web \gls{api}s 
+
+\subsection{Node js Server Application}
+\gls{nodejs} is a \gls{js} runtime which allows to create server-side applications, the main reason of why one would choose \gls{nodejs} over other well know options such as \gls{apache} + \gls{php} is the non-blocking model \gls{nodejs} is based on. This let make asynchronous code easily and it is quite fast~\cite[p.12]{nodejs}~\cite{nodeblocking}.
+In addiction to this there are other options to consider working with \gls{nodejs}:
+\begin{itemize}
+    \item It has big community.
+    \item It has likely the biggest open source library on Internet, accessible through \gls{npm}.
+    \item most of cloud providers offer it out of the box.
+    \item It is very easy to start up and configure unlike options.
+\end{itemize}
+To work with both \gls{ws} and \gls{http} protocols in a \gls{nodejs} application it is possible to use these quite well know open source libraries:
+
+\begin{itemize}
+    \item ws. It is claimed to be the fastest \gls{ws} library \url{https://www.npmjs.com/package/ws}
+    \item Express. Lightweight web framework for node. Probably the most used node web framework \url{https://www.npmjs.com/package/express}
+\end{itemize}
+Although this libraries are focused for web applications the clients described in section~\ref{sec:client-application-methods} do not need \gls{html} characteristics . However in the future a \gls{html} client application could be developed using the \gls{api} of this node application.
+
+\section{Testing}
+
+\subsection{Unit Testing}
+\subsection{Acceptance Testing: Robot Framework}
+
+\section{Cloud \gls{paas} methods}
+\subsection{Google Cloud}
+\subsection{Open Shift and Docker}
+% url hooks to update
+
+\subsection{Communication sensor-client}
+\putimage{communication_udp}{Diagram of the communication using the module and UDP}
+\section{Other Tools used}
+\subsection{Control Version}
+% show repository in gitgub
+% url hooks to update
+%image of the git branches
+GitHub
+\subsection{Using Latex as edition tool}
+% What is latex, what is tex
+% reasons to use latex, abreviations, commands etc, show figures
+Latex
+\subsection{IDE}
+Pycharm
+Visual Studio Code
+
+\chapter{Results}
+%What was found/created/designed/produced?
+
+\section{Discarded Methods}
+\subsection{android smart-phone gateway solution}
+This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as \gls{java}.
+\subsection{\gls{lte} module solution}
+
+
 \section{Sensor Reader Application}
 
 \section{Client Applications}
@@ -1041,8 +1107,54 @@ On the final implementation the server side application was written in \gls{js} 
 
 
 
+\section{Web Api}
+In order to provide communication with both sensors and clients a web \gls{api} can be the most convenient way to expose the services of the application providing certain endpoints to register sensors, clients and to access information about the application itself, the information retrieved could be in \gls{json}  or \gls{xml} format.
+
+The endpoints are defined as \gls{uri}s. A complete \gls{uri} looks like this:
+\begin{quote}
+    \texttt{<protocol>://<domain>:<protocol><path>?<parameters>}
+\end{quote}
+
+Path accepted by the \gls{api} are shown in table~\ref{table:api} 
+
+\begin{table}[h]
+    \centering
+    \begin{tabu}{| l | c | c |}
+        \hline
+        \rowfont[c]{\bfseries} path & protocol & description \\ \hline
+        
+        \texttt{/client} & \gls{ws} 		 & Register a client \\
+        \texttt{/camera} & \gls{ws}  	 & Register a sensor \\
+        \texttt{/cams} 	& \gls{http} GET & receive a \gls{json} of information  \\
+        
+        \hline
+    \end{tabu}
+    \caption{Endpoints of the web \gls{api}}
+    \label{table:api}
+\end{table}
+
+\texttt{/client} and \texttt{/camera} parameters also accept query parameters shown in table~\ref{table:apiarguments}.
+
+\begin{table}[h]
+    \centering
+    \begin{tabu}{| l | c | c |}
+        \hline
+        \rowfont[c]{\bfseries} parameter & type & description \\ \hline
+        
+        \texttt{pass} 		& alphanumeric & password to access \\
+        \texttt{camera\_name} & alphanumeric & camera to connect or to register \\
+        
+        \hline
+    \end{tabu}
+    \caption{parameters of the web \gls{api}}
+    \label{table:apiarguments}
+\end{table}
+
+For example \texttt{ws://localhost:8080/camera?pass=d8n2d0\&camera\_name=corner-camera}
+
 \chapter{Discussion}
 %What do the results mean?
+\section{reasons about the protocols}
 \section{Use in Well-being environments}
 \section{Possible changes in the future}
 \subsection{3D \gls{ir} map using multiple sensors}
@@ -1143,7 +1255,7 @@ $
 
 
 
-\chapter{Sensor reader listings}\label{appx:second}
+\chapter{Sensor reader listings}\label{appx:reader}
 \addtocontents{toc}{\vspace{11pt}}
 
 \begin{lstlisting}[label={listing:serial-reader},caption={Serial Reader Class},language=Python, style=styleprogramming]
@@ -1294,7 +1406,17 @@ def is_raspberry_command(s):
 
 \end{lstlisting}\vspace{14pt}
 
-
 \clearpage
 \liite{3}
+\chapter{Python Client listings}\label{appx:pythonclient}
+\addtocontents{toc}{\vspace{11pt}}
+appendix content
+\clearpage
+\liite{4}
+
+\chapter{Android Client listings}\label{appx:androidclient}
+\addtocontents{toc}{\vspace{11pt}}
+appendix 
+\clearpage
+\liite{5}
 \end{document}
