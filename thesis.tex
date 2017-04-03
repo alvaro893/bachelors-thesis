@@ -150,7 +150,21 @@ Name, Title \newline
 }
 \ExplSyntaxOff
 
-
+%PROGRAMMING LANGUAGE DEFINITIONS
+\lstdefinelanguage{JavaScript}{
+    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, const, var, if, in, while, do, else, case, break},
+    keywordstyle=\color{blue}\bfseries,
+    ndkeywords={class, export, boolean, throw, implements, import, this},
+    ndkeywordstyle=\color{darkgray}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=false,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{purple}\ttfamily,
+    stringstyle=\color{red}\ttfamily,
+    morestring=[b]',
+    morestring=[b]"
+}
 %NORMAL TEXT
 %all text, title, etc. in the same font: Arial
 %replace with arial.ttf if you have the fontfile
@@ -311,6 +325,8 @@ xleftmargin=1cm
 \newacronym{er}{ER Diagram}{Entity Relationship Diagram}
 \newacronym{ws}{Websocket}{Websocket}
 \newacronym{paas}{PaaS}{Platform As A Service}
+\newacronym{saas}{SaaS}{Software As A Service}
+\newacronym{iaas}{IaaS}{Infrastructure As A Service}
 \newacronym{cpu}{CPU}{Central Process Unit}
 \newacronym{ssh}{SSH}{Secure Shell}
 \newacronym{oop}{OOP}{Object Oriented Programming}
@@ -321,9 +337,23 @@ xleftmargin=1cm
 \newacronym{npm}{npm}{Node Packet Manager}
 \newacronym{ip}{IP}{Internet Protocol}
 \newacronym{ran}{RAN}{Radio Access Network}
+\newacronym{s2i}{S2I}{Source-to-Image}
+
 
 
 %Glossary entries
+\newglossaryentry{git}{
+	name=Git, 
+	description={Control version software}
+}
+\newglossaryentry{docker}{
+	name=Docker, 
+	description={Software container platform}
+}
+\newglossaryentry{kubernetes}{
+	name=Kubernetes, 
+	description={Automated container deployment, scaling, and management}
+}
 \newglossaryentry{apache}{
 	name=Apache, 
 	description={the most used web server software in the world}
@@ -984,8 +1014,8 @@ Although there was not intention to use \gls{labview} for the purposes of this t
     \putimage{labview-udp}{Labview UDP client}
 
 %\subsection{\gls{udp} Java client}
-\subsection{Websocket Python Client}
-This application was intended to have the characteristics of the \gls{labview}'s mentioned on the previous section and provide it with connectivity to a cloud \gls{paas} for remote communication. The application was wrote on python and taking advantage of the multiple libraries that the community offers for free as open source. % TODO: citation required?
+\subsection{Websocket Python Client}\label{sec:websocket-python-client}
+This application was intended to have the characteristics of the \gls{labview}'s mentioned on the previous section and provide it with connectivity to a cloud service for remote communication. The application was wrote on python and taking advantage of the multiple libraries that the community offers for free as open source. % TODO: citation required?
 
 
 \subsubsection{Design}
@@ -1045,7 +1075,7 @@ The other activity makes the actual connection and process the data in real time
     \putimage[4]{android-client2}{Android Client}
 % TODO more stuff here
 
-\section{Server Side Methods} \label{serverside}
+\section{Server Side Methods}\label{sec:server-side-methods} 
 On this section describes the different approaches tested to created the middle point between sensors and clients. The server side application must be hosted somewhere, in this case a cloud environment described in the next section.
 
 \subsection{The communication channel}\label{sec:the-communication-channel}
@@ -1059,7 +1089,7 @@ Let’s start by defining the following entities:
 \end{itemize}
 \putimage[15]{channel-er}{ER diagram}
 The channel should support an unlimited number of sensors which can hold an unlimited number of clients.
-The diagram in figure \ref{fig:channel-er} represents the general view of how entities are related to each other. This helps to develop a \gls{uml} Class Diagram which specifies how classes in an Object Orient Programming language are related to each other. In figure~\ref{fig:channel-uml} there is such diagram simplified.
+The diagram in figure \ref{fig:channel-er} represents the general view of how entities are related to each other. This helps to develop a \gls{uml} Class Diagram which specifies how classes in an \gls{oop} language are related to each other. In figure~\ref{fig:channel-uml} there is such diagram simplified.
 On the final implementation the server side application was written in \gls{js} which is the Language for \gls{nodejs} applications.
 \putimage[15]{channel-uml}{\gls{uml} diagram}
 
@@ -1083,16 +1113,101 @@ To work with both \gls{ws} and \gls{http} protocols in a \gls{nodejs} applicatio
     \item ws. It is claimed to be the fastest \gls{ws} library \url{https://www.npmjs.com/package/ws}
     \item Express. Lightweight web framework for node. Probably the most used node web framework \url{https://www.npmjs.com/package/express}
 \end{itemize}
-Although this libraries are focused for web applications the clients described in section~\ref{sec:client-application-methods} do not need \gls{html} characteristics . However in the future a \gls{html} client application could be developed using the \gls{api} of this node application.
+Although this libraries are focused for web applications the clients described in section~\ref{sec:client-application-methods} do not need \gls{html} characteristics . However in the future a \gls{html} client application could be developed using the \gls{api} of this \gls{nodejs} application.
+
+Since both protocols must be listen the same port, a \gls{http} server must be created using express then integrating it with the \gls{ws} one and finally listening to the desired port, see listing~\ref{listing:nodejs-example}.
+
+\putcode{nodejs-example}{html and websocket server}[language=JavaScript, style=styleprogramming]$
+const express = require('express');
+const WebSocket = require('ws');
+const http = require('http');
+
+const port = process.env.PORT
+const ip = '0.0.0.0';
+
+/* http server */
+const express = express();
+const server = http.createServer(express);
+    // ... handle http requests ...
+
+/* websocket server extends the http server */
+var wss = new WebSocket.Server({
+    server: server,
+    // other websocket configuration ...
+});
+
+ wss.on('connection', function connection(ws) {
+    // ... handle websocket requests ...
+});
+
+server.listen(port, ip);
+$
+
+Express and ws have events to handle the connections using callbacks to for any behavior one wants to add.
+
+A complete view of the main file application can be consulted in appendix~\ref{appx:nodejsapp} listing~\ref{listing:nodejsmain}
+
+
 
 \section{Testing}
+Testing is an important part of Software development process it gives insight about the quality and how much the software is error-prone, however creating test and maintaining after refactoring it is also a time consuming practice and since this project is carried out by one person rather than a team of developers there were added test only in the server-side of the whole communication system.
 
 \subsection{Unit Testing}
+Unit Testing is about testing modules or units which are single pieces of software that should work independently of others. In \gls{oop} this is usually a class, but it could be a single function or method. It is the developer who should define what is a single unit.
 \subsection{Acceptance Testing: Robot Framework}
+In order to test the server-side application with arbitrary number of clients and sensors with different configuration and backgrounds an acceptance testing approach is very convenient; acceptance testing features a more structured and complex way of testing which allows a efficient way of pinpointing application failure, automation and reusability~\cite{bisht2013robot}.
 
-\section{Cloud \gls{paas} methods}
-\subsection{Google Cloud}
-\subsection{Open Shift and Docker}
+For this purpose Robot Framework is a great tool, it is a open source for general purpose test automation. It is very flexible and it allows create test using a human friendly keywords and generate complete reports and logs about the test results. It can also be extended by adding existing libraries or creating them using \gls{python} or \gls{java}~\cite{robotframe}.
+A simple test file can be seen in listing~\ref{listing:robot-example}
+
+\putcode{robot-example}{A example of robot framework}[style=styleprogramming]$
+Documentation     A test suite with a single test for valid login.
+Resource          resource.txt
+
+*** Test Cases ***
+Valid Login
+Open Browser To Login Page
+Input Username    demo
+Input Password    mode
+Submit Credentials
+Welcome Page Should Be Open
+[Teardown]    Close Browser
+$
+
+Using the libraries already in the client python application in section~\ref{sec:websocket-python-client} and the Robot Framework \gls{api} I created a library to test \gls{ws} connections. Those connection are held in an array, created and deleted for every single test, see listing~\ref{listing:robotlib} for the whole library code in the appendix~\ref{appx:nodejsapp}.
+
+The library provide keywords like the ones in the listing~\ref{listing:robot-example} but a group of test cases have to be defined in addiction to define some local keywords to reuse behavior. see listing~\ref{listing:robottest} in appendix~\ref{appx:nodejsapp} for all test cases defined to test the server-side application. On this file it can be noticed several sections between triple asterisks:
+\begin{itemize}
+    \item Variables. To define global variables which syntax is "\texttt{\$\{variable\_name\}}".
+    \item Settings. Define libraries which in addiction to my own \gls{ws} library there is also other to run processes, invoke operative system commands, \gls{http} requests, etc. Provide actions at beginning and the end of every test or even at the beginning and end of the whole test suite.
+    \item keywords. Here it is defined custom keywords out of other keywords, they can accept arguments and return values.
+    \item Test Cases. The last section show every test case. At the end will be shown either if the test was passed or failed.
+\end{itemize}
+
+After the execution of tests an \gls{html} report file is generated (figure~\ref{fig:test-report}) along to a log one (figure~\ref{fig:test-log})
+
+    \putimage[14]{test-report}{Test Report}
+     
+The Report is general view of what happened during the test execution.
+     
+    \putimage[14]{test-log}{Test Logs}
+    
+The log file contain a more detailed information about the tests.
+
+
+
+\section{Cloud methods}
+While the Server Side methods section~\ref{sec:server-side-methods} describes the application itself, it does not tell anything about where and how to host the code so that it is available everywhere from Internet.
+
+"The cloud" is quite a broad concept which usually includes different service models as \gls{saas} which are hosted applications accessible from client applications, \gls{paas} which provides services for developers to create applications such as \gls{saas} ones, however the developer do not have access to the cloud infrastructure like the servers or the network, \gls{iaas}. Similar to \gls{paas} but with more control over the platform~\cite{petermelltimothygrance2011}.
+%\subsection{Google Cloud}
+\subsection{OpenShift and Docker}
+OpenShift is a platform for the deployment of web applications and services. It takes advantage of technologies such as \gls{kubernetes} and \gls{docker} to run and manage application in containers~\cite{shipley2016openshift}. Nokia (which collaborates actively in this project) provides \gls{paas} as part of their Nokia Innovation Platform which aims to create solutions for \gls{iot}~\cite{nokiainnovation}.
+
+The process of updating the server side application is through a OpenShift mechanism called \gls{s2i} which allow creating containers from the application source code without using \gls{docker} files, it its simplest form a developer provides a \gls{git} repository to the platform and OpenShift takes cares of everything: building, deploying, routing, etc~\cite[p.~5]{shipley2016openshift}.
+
+
+
 % url hooks to update
 
 \subsection{Communication sensor-client}
@@ -1440,4 +1555,633 @@ appendix content
 appendix 
 \clearpage
 \liite{5}
+
+\chapter{Node.js application listings}\label{appx:nodejsapp}
+\addtocontents{toc}{\vspace{11pt}}
+
+\begin{lstlisting}[label={listing:nodejsmain},caption={Main file},language=JavaScript, style=styleprogramming]
+"use strict";
+
+const express = require('express');
+var WebsocketConnections = require('./websocketConnections');
+var WebSocket = require('ws');
+var url = require('url');
+var http = require('http');
+var params;
+
+console.log("version 1.0");
+var port = process.env.PORT || process.env.port || process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var ip = process.env.OPENSHIFT_NODEJS_IP || process.argv[2] || '0.0.0.0';
+
+var PASSWORD = process.env.WS_PASSWORD;
+var camDataPath = "/camera";
+var clientDataPath = "/client";
+var camConnections = new WebsocketConnections.CameraConnections();
+
+/** http server: base */
+const app = express();
+app.get('/cams', function(req, res){
+    res.send({ cams: camConnections.getInfo(), count: camConnections.count()});
+});
+const server = http.createServer(app);
+main(server)
+
+/** @function
+*  @param {http.Server} server */
+function main(server) {
+    /** websocket server extends the http server */
+    var wss = new WebSocket.Server({
+        verifyClient: verifyClient,
+        server: server
+    });
+    
+    console.log("running on %s:%d", ip, port);
+    
+    wss.on('connection', function connection(ws) {
+        var parsedUrl = url.parse(ws.upgradeReq.url);
+        var path = parsedUrl.pathname;
+        
+        switch (path) {
+            case camDataPath:  // a camera wants to register
+            var camera_name = params.camera_name || undefined;
+            var req = ws.upgradeReq;
+            var ipAddress = req.headers['x-forwarded-for'] || 
+            req.connection.remoteAddress || 
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
+            camConnections.add(ws, camera_name, ipAddress);
+            break;
+            case clientDataPath:  // a client wants to register to a camera
+            case "/":
+            var camera_name = params.camera_name || "camera0";
+            camConnections.addClientToCamera(camera_name, ws, function(err){
+                if(err){ws.terminate();}
+            });
+            break;
+            default:
+            console.log("rejected: no valid path");
+            ws.terminate();
+            return;
+        }
+    });
+    
+    server.listen(port, ip);
+}
+
+
+function verifyClient(info) {
+    var acceptHandshake = false;
+    var accepted = "rejected: no valid password, use 'pass' parameter in the handshake please";
+    var ip = info.req.connection.remoteAddress;
+    var clientUrl = url.parse(info.req.url, true);
+    params = clientUrl.query;
+    
+    acceptHandshake = params.pass == PASSWORD;
+    
+    if (acceptHandshake) {
+        accepted = "accepted";
+    }
+    console.log("new client %s: %s", accepted, info.req.url);
+    return acceptHandshake;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[label={listing:nodejsimplementation},caption={implementation of server-side classes},language=JavaScript, style=styleprogramming]
+var WebSocket = require('ws');
+
+/** A class that hold WebSocket clients for a camera
+* @class
+*/
+function ClientConnections() {
+    this.clients = [];
+}
+/** Lenght of the internal array of clients
+* @method
+*/
+ClientConnections.prototype.getLength = function(){
+    return this.clients.length;
+};
+/**@method
+* @param {WebSocket} conn - client websocket connection to add
+*/
+ClientConnections.prototype.add = function (conn) {
+    
+    this.clients.push(conn);
+    // console.log("client connections:%d", this.clients.length)
+};
+/**@method
+* @param {WebSocket} conn - websocket connection to close
+*/
+ClientConnections.prototype.close = function (conn) {
+    if(this.clients.length < 1){
+        return;
+    }
+    var indx = this.clients.indexOf(conn);
+    this.clients.splice(indx, 1);
+};
+
+/**send message to all websockets in the array
+* @method
+* @param {string} message 
+*/
+ClientConnections.prototype.sendToAll = function (message) {
+    this.clients.forEach(function (client, ind, arr) {
+        checkSocketOpen(client, function(){
+            client.send(message);
+        });
+    });
+};
+
+/**Close all clients in the array
+* @method
+*/
+ClientConnections.prototype.closeAll = function (message) {
+    this.clients.forEach(function (client, ind, arr) {
+        try{
+            client.close();
+        }catch(err){
+            console.error(err.message);
+        }
+    });
+};
+
+
+/**A class that holds CameraClient objects
+* @class
+*/
+function CameraConnections() {
+    /** @member {Array} - this an array of clientcameras, no websockets connections */
+    this.cameras = [];
+}
+
+/**
+* @method
+* @return {number} - number of cameras in the connected
+*/
+CameraConnections.prototype.count = function() {
+    return this.cameras.length;
+};
+
+
+/**
+* @method
+* @return {array} - array of names of the cameras
+*/
+CameraConnections.prototype.getInfo = function() {
+    var cams = [];
+    this.cameras.forEach(function(element, index) {
+        var name = element.name;
+        if (element.name === undefined){
+            name = "camera"+index;
+        }
+        var infoObject = {name:name, ip:element.ip};
+        console.log(infoObject)
+        cams.push(infoObject);
+    }, this);
+    return cams;    
+};
+
+/**
+* @method
+* @param {WebSocket} conn - connection to add
+* @param {string} name - name of the socket
+*/
+CameraConnections.prototype.add = function (conn, name, ip) {
+    var cname = name;
+    var self = this;
+    if (!cname) {
+        cname = undefined; //name will be based on index
+    }
+    
+    // defining the callbacks for this camera
+    conn.on('message', incomingFromCamera);
+    conn.on('close', closingCamera);
+    
+    var camera = new Camera(conn, cname, ip);
+    this.cameras.push(camera);
+    
+    /** Callled when a connection to a camera is closed
+    * @callback */
+    function closingCamera(code, message) {
+        try{
+            camera.clients.closeAll();
+            self.removeCamera(camera);
+        }catch(err){
+            console.error("Error on closing clients:"+err.message);
+        }
+        console.log("Camera %s closing connection: %d, %s", camera.name, code, message);
+    }
+    /** Called when data from a camera is comming
+    * @callback */
+    function incomingFromCamera(message, flags) {
+        try {
+            camera.clients.sendToAll(message);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    return camera;
+};
+/**
+* @method
+* @param {(string|object|function)} cameraName - can be the name of the camera or a Camera object
+* @param {WebSocket} clientConn
+* @param {} callback
+*/
+CameraConnections.prototype.addClientToCamera = function (cameraName, clientConn, callback) {
+    if(typeof cameraName === 'string'){
+        this.getCamera(cameraName, tryAddClientToCamera);
+    }else{
+        tryAddClientToCamera(cameraName);
+    }
+    
+    function tryAddClientToCamera(camera){
+        if(!camera){
+            var err = new Error("cannot add client to invalid camera: "+camera);
+            callback(err);
+            return;
+        }
+        
+        // new client Callbacks
+        clientConn.on('message', incomingFromClient);
+        clientConn.on('close', closingClient);
+        camera.clients.add(clientConn);
+        callback();
+        
+        /** Called when a client sent data
+        * @callback
+        * @param {string} message 
+        * @param {object} flags 
+        */
+        function incomingFromClient(message, flags) {
+            camera.sendMessage(message);
+        }
+        /** Called when a connection to a client is closed
+        * @callback
+        * @param {number} code 
+        * @param {string} message 
+        */
+        function closingClient(code) {
+            camera.clients.close(clientConn);
+            console.log("Closing client connection for: %s camera. info: %d, %s", camera.name, code);
+        }
+        
+    }
+};
+
+CameraConnections.prototype.removeCamera = function(cameraClient){
+    var indx = this.cameras.indexOf(cameraClient);
+    this.cameras.splice(indx, 1);
+};
+
+CameraConnections.prototype.close = function(camera){
+    // this will trigger closingCamera callback
+    this.removeCamera(camera);
+};
+/**
+* @method
+* @param {string} name - name of the camera
+* @param {} callback - callback which receives the camera object
+*/
+CameraConnections.prototype.getCamera = function (name, callback) {
+    var cameraFound;
+    this.cameras.forEach(function(c, index) {
+        if (c.name == name || name == "camera"+index) {
+            cameraFound = c;
+        }
+    }, this);
+    
+    callback(cameraFound);
+};
+
+
+/**@class
+*  A camera client, it has a list of clients attached, and a unique name
+*  @param {WebSocket} conn - connection object
+*  @param {String} name - name of this camera (for identification)
+*  @param {String} ip - ip address of this camera
+*/
+function Camera(conn, name, ip) {
+    this.conn = conn;
+    this.name = name;
+    this.ip = ip;
+    this.clients = new ClientConnections();
+}
+
+Camera.prototype.sendMessage = function (message) {
+    var conn = this.conn;
+    checkSocketOpen(conn, function(){
+        conn.send(message);
+    });
+};
+
+exports.ClientCamera = Camera;
+exports.ClientConnections = ClientConnections;
+exports.CameraConnections = CameraConnections;
+
+/**
+* 
+* @param {WebSocket} socket 
+* @param {} callback
+*/
+function checkSocketOpen(socket, callback){
+    if(!socket){
+        console.error('socket does not exists');
+        return;
+    }
+    if(socket.readyState == WebSocket.OPEN){
+        callback();
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[label={listing:robottest},caption={RobotFramework test file},language=Python, style=styleprogramming]
+*** Variables ***
+${password}                "password here"
+${url}                     localhost:8080
+${camera_name_param}       camera_name=
+${url_params}              ?pass=${password}
+${uri_client}              ws://${url}/client${url_params}&${camera_name_param}
+${uri_camera}              ws://${url}/camera${url_params}&${camera_name_param}
+${cloud_path}               ../
+${cloud_app}                npm start --prefix  ${cloud_path}
+${outf}                    log/stdout.txt
+${errf}                    log/stderr.txt
+
+
+*** Settings ***
+Library           lib/WebsocketLibrary.py
+Library           OperatingSystem
+Library           Process
+Library           HttpLibrary.HTTP
+Suite Setup       Run Cloud
+Suite Teardown    Close Cloud
+Test Teardown     sleep  200 ms
+
+*** Keywords ***
+Close cloud
+    Terminate All Processes
+Run Cloud
+    Remove Files                ${outf}  ${errf}
+    Set Environment Variable    WS_PASSWORD  30022
+    Start Process               ${cloud_app}   alias=cloud_process  stdout=${outf}  stderr=${errf}  shell=True
+    sleep   1
+    ${is_running} =             Is Process Running  handle=cloud_process
+    Should Be True              ${is_running}   msg=Cloud is not running
+Wait To Receive Message
+    [arguments]   ${socket}  ${message}
+    Wait Until Keyword Succeeds  5x  5 ms  Receive Next Message   ${socket}  ${message}
+Wait Until Queue
+    [arguments]   ${socket}   ${n}
+    Wait Until Keyword Succeeds   5x  50 ms  Messages In Queue Should Be   ${socket}   ${n}
+Create Camera Socket
+    [arguments]   ${name}
+    create socket  ${name}  ${uri_camera}${name}
+    Create Camera Socket Noname
+    create socket  noname  ${uri_camera}
+Create Client Socket
+    [arguments]   ${name}   ${camera_socket}
+    create socket  ${name}  ${uri_client}${camera_socket}
+Random Message
+    ${randint}  Evaluate   str(random.randint(0, sys.maxint))   modules=random, sys
+    [Return]   ${randint}
+Send Random Message From
+    [arguments]  ${socket}
+    ${message}   Random Message
+    Send From Socket  ${socket}  ${message}
+Get Cameras
+    Create Http Context 	${url}   http
+    GET 	/cams
+    Response Status Code Should Equal 	200
+    ${body} = 	Get Response Body 	
+    Should Start With 	${body} 	{
+    Log Json  ${body}
+Number Of Cameras Should Be
+    [arguments]   ${n}
+    Create Http Context 	${url}   http
+    GET 	/cams
+    Response Status Code Should Equal 	200
+    ${body} = 	Get Response Body 	
+    Json Value Should Equal  ${body}  /count  ${n}
+    Log Json  ${body}
+    
+    
+    *** Test Cases ***
+    close sockets
+    create Camera Socket         camera0
+    Create Client Socket         client          camera0
+    sleep                                100 ms
+    Close Socket                 client
+    Create Client Socket         client2          camera0
+    sleep                                100 ms
+    Close Socket                 client2
+    
+    
+    Check Socket Library works
+    Create Socket                client0  ${uri_camera}
+    Do Exist Socket             client0
+    
+    Create camera client and send
+    Create Camera Socket         camera0
+    Create Client Socket         client0  camera0
+    send From Socket             camera0  hi
+    send From Socket             client0  hello
+    
+    cameras without name and with name
+    create Camera Socket Noname
+    create Camera Socket Noname
+    create Camera Socket Noname
+    create Camera Socket         1111special-cam1111
+    create Camera Socket Noname
+    create Camera Socket Noname
+    sleep  80 ms
+    Number Of Cameras Should Be    6
+    
+    
+    5 cameras, 1 client, 5 messages
+    create Camera Socket         camera0
+    create Camera Socket         camera1
+    create Camera Socket         camera-special
+    create Camera Socket         camera3
+    create Camera Socket         camera4
+    Create Client Socket         client          camera-special
+    sleep                                100 ms
+    Get Cameras
+    
+    Send Random Message From             camera-special
+    Send Random Message From             camera-special
+    Send Random Message From             camera-special
+    Send Random Message From             camera-special
+    Send Random Message From             camera-special
+    Wait Until Queue          client   5
+    
+    
+    
+    several cameras with several clients, bidirectional communication
+    Create Camera Socket        cam
+    Create Camera Socket        camf
+    Create Client Socket        client       cam
+    Create Client Socket        client1      cam
+    Create Client Socket        client2      camf
+    Create Client Socket        client3      camf
+    sleep                                100 ms
+    Get Cameras
+    
+    Send Random Message From             cam
+    Send Random Message From             camf
+    
+    Wait Until Queue          client    1
+    Wait Until Queue          client1   1
+    Wait Until Queue          client2   1
+    Wait Until Queue          client3   1
+    
+    Send Random Message From             client
+    Send Random Message From             client1
+    Send Random Message From             client2
+    Send Random Message From             client3
+    
+    Wait Until Queue          cam       2
+    Wait Until Queue          camf      2
+    
+    Http Server
+    Get Cameras
+\end{lstlisting}
+
+\begin{lstlisting}[label={listing:robotlib},caption={RobotFramework websocket library},language=Python, style=styleprogramming]
+#!/usr/bin/python
+import subprocess
+import sys
+from Queue import Queue, Empty
+from threading import Thread
+import websocket
+from robot.api import logger
+
+__version__ = '0.1'
+__author__ = "Alvaro Bolanos Rodriguez"
+
+
+class WebsocketLibrary:
+    ROBOT_LIBRARY_SCOPE = 'TEST CASE'
+    ROBOT_LISTENER_API_VERSION = 2
+    
+    def __init__(self):
+        self.ROBOT_LIBRARY_LISTENER = self
+        # self.url = "%s:%d" % (host, port)
+        self.socketDic = {}
+    
+    def _start_suite(self, name, attrs):
+        print 'started suite'
+    
+    def _end_suite(self, name, attrs):
+        print 'Suite %s (%s) ending.' % (name, attrs['id'])
+    
+    def _start_test(self, name, attrs):
+        pass
+        def _end_test(self, name, attrs):
+        self.stop_all_sockets()
+    
+    def _get_socket(self, name):
+        try:
+            return self.socketDic.get(name)
+        except Exception as e:
+            logger.error(e.message)
+    
+    raise Exception("%s socket not found in list" % name)
+    
+    def create_socket(self, name, uri):
+        ws = self.WebSocketConnection(uri, name=name)
+        self.socketDic[name] = ws
+        logger.info("created %s using %s" % (name, uri))
+    
+    def do_exist_socket(self, name):
+        if self.socketDic.has_key(name):
+            logger.info("'%s' exists" % name)
+        else:
+            raise AssertionError("'%s' does not exist" % name)
+    
+    def close_socket(self,name):
+        s = self._get_socket(name)
+        s.stop()
+    
+    def send_from_socket(self, socket, message):
+        try:
+            s = self._get_socket(socket)
+            s.send_to_socket(message)
+            logger.info("%s is sending '%s' message" % (s.name, message) )
+        except websocket.WebSocketConnectionClosedException as e:
+            logger.warn(e.message + ".Try using 'Wait to' keyword style")
+    
+    def stop_all_sockets(self):
+        for name, socket in self.socketDic.items():
+        socket.stop()
+        self.socketDic = {}
+    
+    def receive_next_message(self, name, expected):
+        ws = self._get_socket(name)
+        try:
+            received_message = ws.receive_next_message()
+        except Empty as e:
+            msg = e.message+"Message is not in Queue yet"
+            logger.warn(msg)
+            raise AssertionError(msg)
+        if not ws:
+            raise AssertionError("there is no websocket")
+            if not received_message == expected:
+                msg = "Messages do not match:'%s' is not '%s'" % (received_message, expected)
+                logger.warn(msg)
+                raise AssertionError(msg)
+    
+    def messages_in_queue_should_be(self, name, n):
+        expected = int(n)
+        s = self._get_socket(name)
+        actual = s.in_queue.qsize()
+        if actual != expected:
+            raise AssertionError("number of elements does not match, was %d, expected %d" % (actual, expected))
+
+
+class WebSocketConnection(Thread):
+    def __init__(self, url, name):
+        Thread.__init__(self, name=name)
+        # websocket.enableTrace(True)
+        self.url = url
+        self.name = name
+        self.in_queue = Queue(10)
+        self.ws = websocket.WebSocketApp(self.url,
+        on_message=self.on_message,
+        on_error=self.on_error,
+        on_close=self.on_close,
+        on_open=self.on_open)
+        self.setDaemon(True)
+        self.start()
+    
+    def run(self):
+        self.ws.run_forever()
+    
+    def on_message(self, ws, message):
+        self.in_queue.put(message)
+        logger.info("from %s:%s" % (self.name, message))
+        
+    def on_error(self, ws, error):
+        logger.error(error)
+    
+    def on_close(self, ws):
+        logger.info("closed %s" % self.name)
+    
+    def on_open(self, ws):
+        logger.info("opened %s" % self.name)
+    
+    def stop(self):
+        self.ws.close()
+    
+    def send_to_socket(self, data):
+        self.ws.send(data)
+    
+    def receive_next_message(self):
+        return self.in_queue.get(block=False)
+
+\end{lstlisting}
+
+
+\clearpage
+\liite{6}
 \end{document}
