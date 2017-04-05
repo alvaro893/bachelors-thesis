@@ -25,7 +25,7 @@ Etunimi Sukunimi, Titteli
 \def\metropoliadegreeprogramme {Information Technology}
 \def\metropoliaspecialisation {Software Engineer}
 \def\metropoliainstructors {
-Name, Title \newline
+Tero Nurminen, TKI-vastaava yliopettaja \newline
 }
 \def\metropoliakeywords {Keywords}
 \date{\today}
@@ -338,10 +338,20 @@ xleftmargin=1cm
 \newacronym{ip}{IP}{Internet Protocol}
 \newacronym{ran}{RAN}{Radio Access Network}
 \newacronym{s2i}{S2I}{Source-to-Image}
+\newacronym{cvs}{CVS}{Control Version System}
+\newacronym{voip}{VoIp}{Voice over IP}
+\newacronym{nat}{NAT}{Network Address Translation}
+\newacronym{vpn}{VPN}{Virtual Private Network}
+\newacronym{www}{WWW}{World Wide Web}
+
 
 
 
 %Glossary entries
+\newglossaryentry{github}{
+	name=GitHub, 
+	description={Hosting site for \gls{git} repositories}
+}
 \newglossaryentry{git}{
 	name=Git, 
 	description={Control version software}
@@ -467,6 +477,10 @@ xleftmargin=1cm
 	basicstyle=\ttfamily\small\captionsetup{justification=centering},
 	commentstyle=\ttfamily\color{violet}
 }
+\lstdefinestyle{styleprogrammingappendix}{
+    basicstyle=\ttfamily\scriptsize\captionsetup{justification=centering},
+    commentstyle=\ttfamily\color{violet}
+}
 %\lstdefinestyle{styleprogrammingcomments}{commmentstyle=\ttfamily\color{violet}}
 %\lstdefinestyle{styleprogramming}{basicstyle=\ttfamily\small,numbers=none}
 
@@ -507,7 +521,7 @@ xleftmargin=1cm
   \\ \hline
   Degree Programme & \metropoliadegreeprogramme
   \\ \hline
-  Specialisation option & \metropoliaspecialisation
+  Specialization option & \metropoliaspecialisation
   \\ \hline
   Instructor(s) & \metropoliainstructors
   \\ \hline
@@ -627,7 +641,7 @@ The outcome of this study is a full working communication Chanel using modern cl
 This is an great project as it is a hot topic (\gls{iot} and cloud computing) in the IT world. Methods described on this thesis may help others with their projects.
 
 
-\chapter{Theoretical Background}
+\chapter{Theoretical Background}\label{sec:theoretical-background}
 %What is already known about your chosen subject area and what is not known?
 %Discuss ideas in previous studies relevant to your topic (a brief introduction to the current state of knowledge and practice in your subject area). Identify a gap in the subject area and justify the purpose of your project, that is, the focus of your topic.
 
@@ -636,7 +650,7 @@ Communications between devices is not a new topic, there are plenty of methods a
 
 % NetLeap \cite{netleap}
 
-\section{Exchanging data between devices}
+\section{Communication between devices}
 % Talk about what is know about communication systems, full stack development, etc
 Nowadays there is many ways to communicate between systems but here it will be used web services to achieve communication between sensors and clients. In order to establish a communication between two ends in a computer network or Internet it is important to comprehend how works the "Internet Protocol Architecture" or \gls{tcp}/\gls{ip} stack which is the conceptual model which most of networks are based on~\cite[p.~9]{tcpip}.
 
@@ -651,22 +665,50 @@ The \gls{tcp}/\gls{ip} stack is build in layers:
 \end{enumerate}
 Then, it must be find out a way to communicate through the \gls{tcp}/\gls{ip} stack as shown in figure~\ref{fig:tcpip}.
 
-\section{The medium}
-At this point it has to be decided what medium to use to access the network (Network Access Layer in figure~\ref{fig:tcpip}). It could be a simple copper cable, Wi-Fi, microwaves, laser, etc. almost any kind of electromagnetic wave. But since this is an \gls{iot} project the best approach will be using \gls{ran} which are almost everywhere and provide great speeds and bandwidth.
+\section{The medium}\label{sec:the-medium}
+At this point it has to be decided what medium to use to access the network (Network Access Layer in figure~\ref{fig:tcpip}). It could be a simple copper cable, Wi-Fi, microwaves, laser, etc. almost any kind of electromagnetic wave. But since this is an \gls{iot} project the best approach will be using \gls{ran} which it is accessible from cell antennas and nowadays provide great speeds and bandwidth.
 
-On this project Nokia provided us access to NetLeap which is a \gls{3g} and \gls{lte} network (the same that use mobile phones to connect to Internet). NetLeap is a	test closed network for research~\cite{netleap}.
+On this project Nokia provided us access to NetLeap which is a \gls{3g} and \gls{lte} network (the same that use mobile phones to connect to Internet). NetLeap is atest closed network for research~\cite{netleap}.
 
 \section{Network protocols}
+The Internet Layer protocols usually rely in routers and other apparatus which are out of our control, hence the only concern is about transport and application layer.
+
+The idea is to use reliable application protocol to make the connections and this should be platform independent and a Internet standard, these protocol standards specifications are available officially in \url{https://www.rfc-editor.org/standards}. On the next sections are the protocols considered and the reasoning behind them.
 
 
-\subsection{\gls{udp}}
-\subsubsection{The NAT problem}
-%% VPN as solution
-\subsection{\gls{rtp}}
-\subsection{\gls{http}}
-\cite{http-rfc}
-\subsection{\gls{ws}}
-\cite[p.~30]{rfc6455}
+\subsection{UDP}
+\gls{udp} is a connectionless transport protocol, it does guaranties delivery of packets and they can come in a different order than when they were sent.
+\gls{udp} is commonly used to provide real time video stream on protocols as \gls{rtp}, it is also used in \gls{voip} to deliver telephone calls over network. They take advantage about the connectionless nature of \gls{udp} in form of less latency by the other hand losing some packets of during a call or a video retransmission is not a big deal. 
+
+Then a \gls{udp} communication system could be fitted for this project since, what it is sending from the \gls{ir} sensors is a binary stream of images. Commands can be sent over \gls{udp} as well.
+This can be done sending packets between sensors and clients directly or through a server which could coordinate the data flow.
+
+\subsubsection{Port issues on remote hosts}\label{sec:port-issues-on-remote-hosts}
+Routers and firewalls usually do not accept connection from ports other than 80 and 443. and this is an issue when using \gls{udp} (or \gls{tcp}) sockets approaches. Inside a local network or in the same computer there is no such problem, so a solution can be using a \gls{vpn} provider which allows remote computers act as if they where in a local network and increase the security as well.
+
+Another solution is \gls{udp} hole punching technique to establish bidirectional communication between hosts that are behind \gls{nat} routers by using a external host to keep track of the ports and address used in the \gls{nat} tables of both hosts routers.
+
+
+
+
+\subsection{TCP}
+the \gls{tcp} is the other transport layer protocol, it differs from \gls{udp} in unlike this, \gls{tcp} is connection based and guaranties the delivery of packets. Thus protocols made on top of \gls{tcp} establish a connection and then data can start flowing.
+
+\subsubsection{Http}
+\gls{http} and \gls{https} is application layer protocol made on top of \gls{tcp}. Http is meant to request resources such as \gls{html} documents, \gls{xml}, \gls{json} or plain text. Any request has a response which can contain a body of data and response code (like the famous "404 not found")~\cite{http-rfc}.
+
+\gls{http} is strongly related to the \gls{www}, on most of routers and firewalls the port 80 (\gls{http}) and 443 \gls{https} are accessible. Then the \gls{http} responses can be used to send data to a particular computer indirectly without having trouble with \gls{nat} routers or firewalls which could be used for sensor-client communication.
+
+\putimage[14]{http-approach}{Http/s approach}
+
+As seen in figure~\ref{fig:http-approach} both sensor and client requests sending the data (which is between "<>" signs in the figure) that other end expect to receive. A server application take cares to forward requests data to responses. Thus all requests are always towards the server 
+
+\subsubsection{Websocket}
+\gls{ws} is a relatively new protocol (end of 2011) which was meant to provide web applications with bidirectional communication without making continuous \gls{http} requests through techniques like XMLHttpRequest~\cite[p.~4]{rfc6455}.
+
+As \gls{http}, \gls{ws} use ports 80 and 443 (secure \gls{ws}) by default then it has not problems with \gls{nat} and firewalls. Once a connection is established both ends can receive and send data until the connection is closed. This connection is started with a handshake in form of a \gls{http} GET request~\cite[p.~6]{rfc6455}. 
+
+
 
 
 
@@ -1057,7 +1099,7 @@ There is a separate section for special buttons to control a raspberry pi in the
 
 
 \subsection{Android Client}
-During the development of the project I found attractive the idea of having a client application on the phone and after finishing the python client described in the previous section I started to develop a simple but powerful \gls{android} application. It let connect to any camera already registered in the cloud (At this stage the cloud allows multiple sensors see. section~\ref{serverside}).
+During the development of the project I found attractive the idea of having a client application on the phone and after finishing the python client described in the previous section I started to develop a simple but powerful \gls{android} application. It let connect to any camera already registered in the cloud (At this stage the cloud allows multiple sensors see. section~\ref{sec:server-side-methods}).
 
 As in the python client, it is necessary to code:
 \begin{itemize}
@@ -1070,9 +1112,11 @@ As in the python client, it is necessary to code:
 
     \putimage[4]{android-client}{Android Client}
 
-The other activity makes the actual connection and process the data in real time so the different frames can be visualized in gray-scale (figure~\ref{fig:android-client2}).
+The other activity makes the a \gls{ws} connection and process the data in real time so the different frames can be visualized in gray-scale (figure~\ref{fig:android-client2}).
 
     \putimage[4]{android-client2}{Android Client}
+
+To achieve this \gls{android} allows to extend \gls{ui} elements with new behavior. In this case "ImageView" class is extended to add a \gls{ws} connection and fill the image with an array of binary data from this connection (same than in the python application section~\ref{sec:websocket-python-client}), in listing~\ref{listing:cameraview} the "CameraView" class meets this behavior using "WebsocketConnection" to get data from sensors (listing~\ref{listing:websocketconnection}) and "HighCamera" to represent a frame of the image (listing~\ref{listing:highcamera}). All of these listing can be found in appendix~\ref{appx:androidclient}.
 % TODO more stuff here
 
 \section{Server Side Methods}\label{sec:server-side-methods} 
@@ -1211,29 +1255,51 @@ The process of updating the server side application is through a OpenShift mecha
 % url hooks to update
 
 \subsection{Communication sensor-client}
+% TODO: \subsection{Communication sensor-client}
 \putimage{communication_udp}{Diagram of the communication using the module and UDP}
+
 \section{Other Tools used}
+
 \subsection{Control Version}
-% show repository in gitgub
-% url hooks to update
-%image of the git branches
-GitHub
-\subsection{Using Latex as edition tool}
+On any serious software development project there must be a \gls{cvs} which allows keep tracking of any changes in the code (or other files) and reversed if necessary. On this project the popular control version tool "Git" was used, which has many features but the one that makes it more special is its decentralized repository model which means that every repository copy has all the history changes.
+
+All the repositories to the applications developed in this thesis are hosted in \gls{github} which it is perfect for sharing or publish open source projects. Here is a list with every repository for most of the software developed in this project.
+
+\begin{itemize}
+    \item \gls{android} client application: \url{https://github.com/alvaro893/android-ir-sensor-client}
+    \item Server-side \gls{nodejs} application: \url{https://github.com/alvaro893/cloud_websocket}
+    \item Python client application: \url{https://github.com/alvaro893/sensor_reader}
+    \item Sensor Reader application on raspberry pi side: \url{https://github.com/alvaro893/sensor-reader/tree/raspberry}
+    \item This Thesis: \url{https://github.com/alvaro893/bachelors-thesis}
+\end{itemize}
+
+The code shown in the appendixes is in these repositories and up-to-date.
+
+\subsection{Using Latex to for the thesis}
 % What is latex, what is tex
 % reasons to use latex, abreviations, commands etc, show figures
-Latex
-\subsection{IDE}
-Pycharm
-Visual Studio Code
+To write this thesis I used \LaTeX which is a documentation preparation system rather than using the mainstream options which are LibreOffice or Office Word. The reasons for this was automation and the quality one can achieve. It is known that it is preferred in academic articles and theses.
+%\subsection{IDE}
+%Pycharm
+%Visual Studio Code
 
 \chapter{Results}
 %What was found/created/designed/produced?
 
 \section{Discarded Methods}
+
 \subsection{android smart-phone gateway solution}
 This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as \gls{java}.
-\subsection{\gls{lte} module solution}
 
+\subsection{\gls{lte} module solution}
+This method could have been the ideal solution to read a sensor and connect it to Internet, but there were multiple issues regarding this method:
+\begin{itemize}
+    \item It turned out that the module did not support the \gls{lts} frequency bands of the mobile provider Netleap see section~\ref{sec:the-medium} of chapter~\ref{sec:theoretical-background}.
+    \item It was hard to set-up a developing environment for it.
+\end{itemize} 
+
+\subsection{\gls{udp} protocols}
+There were many test to use \gls{upd} for communications but for the issues mentioned in section~\ref{sec:port-issues-on-remote-hosts} of chapter~\ref{sec:theoretical-background} and because \gls{ws} worked very good. any \gls{udp} was dropped.
 
 \section{Sensor Reader Application}
 
@@ -1362,7 +1428,7 @@ I want to thank to...
 % And you can cite \cite{tobias:book} stuff, it will go into the main bibliography.
 
 \section{Configuration}
-\putcode{configure_at_commands}{Configure and test an Internet connection}[style=styleprogramming]$
+\putcode{configure_at_commands}{Configure and test an Internet connection}[style=styleprogrammingappendix]$
 //configure internet profile
 AT^sics?^ 
 AT^SICS=0,"conType","GPRS0"
@@ -1394,7 +1460,7 @@ $
 \chapter{Sensor reader listings}\label{appx:reader}
 \addtocontents{toc}{\vspace{11pt}}
 
-\begin{lstlisting}[label={listing:serial-reader},caption={Serial Reader Class},language=Python, style=styleprogramming]
+\begin{lstlisting}[label={listing:serial-reader},caption={Serial Reader Class},language=Python, style=styleprogrammingappendix]
 import thread
 import logging
 import psutil
@@ -1447,7 +1513,7 @@ class Serial_reader(Serial):
 
 \end{lstlisting}\vspace{14pt}
 
-\begin{lstlisting}[label={listing:rpi-ws},caption={Websocket Class},language=Python, style=styleprogramming]
+\begin{lstlisting}[label={listing:rpi-ws},caption={Websocket Class},language=Python, style=styleprogrammingappendix]
 import logging
 import thread
 from websocket import WebSocketApp, ABNF
@@ -1496,7 +1562,7 @@ class WebSocketConnection(WebSocketApp):
         self.pipe = pipe
 \end{lstlisting}\vspace{14pt}
 
-\begin{lstlisting}[label={listing:rpi-subprocess},caption={Subprocess example},language=Python, style=styleprogramming]
+\begin{lstlisting}[label={listing:rpi-subprocess},caption={Subprocess example},language=Python, style=styleprogrammingappendix]
 from thread import start_new_thread
 from subprocess32 import call
 import logging
@@ -1552,14 +1618,354 @@ appendix content
 
 \chapter{Android Client listings}\label{appx:androidclient}
 \addtocontents{toc}{\vspace{11pt}}
-appendix 
+
+\begin{lstlisting}[label={listing:cameraview},caption={CameraView class, extending ImageView},language=Java, style=styleprogrammingappendix]
+package es.alvaroweb.ircamerareader.wscameraview;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.support.annotation.Nullable;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.support.v7.widget.AppCompatImageView;
+import java.util.Random;
+import okio.ByteString;
+
+/**
+* Copyright (C) 2016 Alvaro Bolanos Rodriguez
+*/
+
+public class CameraView extends AppCompatImageView implements WebsocketConnection.OnReceiveRow, HighCamera.FrameCallback, View.OnClickListener {
+    
+    private static final String DEBUG_TAG = CameraView.class.getSimpleName();
+    private static Random random = new Random();
+    private Bitmap bitmap;
+    private int sizex = 160;
+    private int sizey = 120;
+    private WebsocketConnection websocketConnection;
+    private HighCamera highCamera;
+    private Runnable t;
+    private boolean reversed = true;
+    
+    
+    public CameraView(Context context) {
+        super(context);
+        initBitmap();
+    }
+    
+    public CameraView(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        initBitmap();
+    }
+    
+    private void initBitmap() {
+        bitmap = Bitmap.createBitmap(sizex, sizey, Bitmap.Config.ARGB_8888);
+        highCamera = new HighCamera(this);
+        this.setOnClickListener(this);
+    }
+    
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        // Bitmap has to be set here. and this callback is called from UI
+        this.setImageBitmap(bitmap);
+    }
+    
+    
+    public void setImage(byte[][] array) {
+        boolean dimensionMaches = array[0].length == bitmap.getWidth() &&
+        array.length == bitmap.getHeight();
+        
+        if (!dimensionMaches) {
+            Log.d("image", "doesn't match the dimension");
+            return;
+        }
+        
+        for (int i = 0; i < bitmap.getHeight(); i++) {
+            for (int j = 0; j < bitmap.getWidth(); j++) {
+                int pixel = convertByteToInt(array[i][j]);
+                if (reversed) {
+                    bitmap.setPixel(j, bitmap.getHeight() - i - 1, Color.rgb(pixel, pixel, pixel));
+                } else {
+                    bitmap.setPixel(j, i, Color.rgb(pixel, pixel, pixel));
+                }
+            }
+        }
+    }
+    
+    public void setRandomImage(View view) {
+        byte[][] arr = new byte[sizey][sizex];
+        for (int i = 0; i < sizey; i++) {
+            for (int j = 0; j < sizex; j++) {
+                arr[i][j] = ((byte) randint(Byte.MIN_VALUE, Byte.MAX_VALUE));
+            }
+        }
+        setImage(arr);
+    }
+    
+    public void cleanImage() {
+        for (int i = 0; i < bitmap.getWidth(); i++) {
+            for (int j = 0; j < bitmap.getHeight(); j++) {
+                bitmap.setPixel(i, j, Color.rgb(255, 255, 255));
+            }
+        }
+    }
+    
+    private int convertByteToInt(byte b) {
+        return b & 0xff;
+    }
+    
+    private int randint(int min, int max) {
+        return random.nextInt(max + 1 - min) + min;
+    }
+    
+    public void connectTo(String uri) {
+        Log.d(CameraView.class.getSimpleName(), "uri received: " + uri);
+        websocketConnection = new WebsocketConnection(uri, this);
+    }
+    
+    public void stopWebsocket() {
+        websocketConnection.close();
+    }
+    
+    @Override
+    public void receiveRows(ByteString data) {
+        if (data.size() < 1) {
+            return;
+        }
+        highCamera.consumeData(data);
+    }
+    
+    @Override
+    public void frameReady(byte[][] frame) {
+        this.setImage(frame);
+    }
+    
+    
+    @Override
+    public void onClick(View view) {
+        reversed = !reversed;
+    }
+    
+    public interface UpdateArray {
+        void updateArray();
+    }
+}
+\end{lstlisting}\vspace{14pt}
+
+\begin{lstlisting}[label={listing:highcamera},caption={HighCamera class, represents a frame},language=Java, style=styleprogrammingappendix]
+package es.alvaroweb.ircamerareader.wscameraview;
+
+import android.util.Log;
+import com.google.common.primitives.Bytes;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import okio.ByteString;
+
+/**
+* 00 01 02 04 ------
+Data is arranged on 240(0xF0) rows of 84 bytes(FF FF FF n_row and 80 of data):
+FF FF FF 01 <DATA>
+FF FF FF 02 <DATA>
+FF FF FF 03 <DATA>
+...
+FF FF FF F0 <DATA>
+FF FF FF <TELEMETRY> (38 Bytes)
+Where the 4th byte is the number of the row
+Every row of the actual picture has 2 rows of the raw data
+so the image is 160 x 120 (20198 Bytes)
+*/
+
+public class HighCamera {
+    private static final int TELEMETRY_ROW_NUMBER = 240;
+    private static final int BYTES_IN_ROW_NUMBER = 81;
+    private static final String DEBUG_TAG = HighCamera.class.getSimpleName();
+    
+    private byte[][] frame;
+    FrameCallback frameCallback;
+    private byte[] remains;
+    private byte[] delimiter = new byte[]{-1,-1,-1};
+    
+    public HighCamera(FrameCallback callback) {
+        frame = new byte[120][160];
+        frameCallback = callback;
+        remains = new byte[]{};
+    }
+    
+    public void consumeData(ByteString data){
+        
+        List<byte[]> pieces = delimiterData(Bytes.concat(remains, data.toByteArray()), delimiter);
+        
+        int lastIndex = pieces.size() - 1;
+        for(int i = 0; i < pieces.size(); i++){
+            if(i == lastIndex) continue;
+            processRow(pieces.get(i));
+        }
+        remains = pieces.get(lastIndex);
+    }
+    
+    
+    public void processRow(byte[] row){
+        if(row.length < BYTES_IN_ROW_NUMBER){
+            return;
+        }
+        int rowNumber = byteToInt(row[0]);
+        Log.d(DEBUG_TAG, "rownumber:"+rowNumber);
+        if (rowNumber < TELEMETRY_ROW_NUMBER){
+            getFrameData(rowNumber, row);
+        }else{
+            getTelemetryData(row);
+        }
+    }
+    
+    private void getTelemetryData(byte[] row) {
+        // todo telemetry
+        frameCallback.frameReady(frame);
+    }
+    
+    private void getFrameData(int rowNumber, byte[] row){
+        for(int i = 0; i < BYTES_IN_ROW_NUMBER - 1; i++){
+            int ind = i + 1;
+            int frameRow = rowNumber / 2;
+            int frameCol = rowNumber % 2 * (BYTES_IN_ROW_NUMBER -1)+ ind;
+            try{
+                frame[frameRow][frameCol] = row[ind];
+            }catch (ArrayIndexOutOfBoundsException e){
+                Log.e(DEBUG_TAG, e.getLocalizedMessage());
+            }
+        }
+    }
+    
+    private int byteToInt(byte b){
+        return b & 0xff;
+    }
+    
+    
+    private List<byte[]> delimiterData(byte[] array, byte[] delimiter) {
+        List<byte[]> byteArrays = new LinkedList<>();
+        if (delimiter.length == 0) {
+            return byteArrays;
+        }
+        int begin = 0;
+        
+        outer:
+        for (int i = 0; i < array.length - delimiter.length + 1; i++) {
+            for (int j = 0; j < delimiter.length; j++) {
+                if (array[i + j] != delimiter[j]) {
+                    continue outer;
+                }
+            }
+            byteArrays.add(Arrays.copyOfRange(array, begin, i));
+            begin = i + delimiter.length;
+        }
+        byteArrays.add(Arrays.copyOfRange(array, begin, array.length));
+        return byteArrays;
+    }
+    
+    interface FrameCallback{
+        void frameReady(byte[][] frame);
+    }
+}
+\end{lstlisting}\vspace{14pt}
+
+\begin{lstlisting}[label={listing:websocketconnection},caption={WebsocketConnection class, makes a websocket connection},language=Java, style=styleprogrammingappendix]
+package es.alvaroweb.ircamerareader.wscameraview;
+
+import android.util.Log;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
+import okio.ByteString;
+
+
+/**
+* Copyright (C) 2016 Alvaro Bolanos Rodriguez
+*/
+
+public class WebsocketConnection extends WebSocketListener {
+    private static final String DEBUG_TAG = WebsocketConnection.class.getSimpleName();
+    private final WebSocket webSocket;
+    private final Request requestToServer;
+    private OnReceiveRow callback;
+    public WebsocketConnection(String serverURI, OnReceiveRow callback) {
+        OkHttpClient client = new OkHttpClient();
+        requestToServer = new Request.Builder().url(serverURI).build();
+        webSocket = client.newWebSocket(requestToServer, this);
+        this.callback = callback;
+    }
+    
+    @Override
+    public void onOpen(WebSocket webSocket, Response response) {
+        super.onOpen(webSocket, response);
+        log("onOpen: " + response.message());
+    }
+    
+    @Override
+    public void onMessage(WebSocket webSocket, String text) {
+        super.onMessage(webSocket, text);
+        log("onMessage: " + text);
+        
+    }
+    
+    @Override
+    public void onMessage(WebSocket webSocket, ByteString bytes) {
+        super.onMessage(webSocket, bytes);
+        log("onMessage: " + bytes.size() + "bytes received");
+        callback.receiveRows(bytes);
+    }
+    
+    @Override
+    public void onClosing(WebSocket webSocket, int code, String reason) {
+        super.onClosing(webSocket, code, reason);
+        log("onClosing: " + reason + ", code:" + code);
+    }
+    
+    @Override
+    public void onClosed(WebSocket webSocket, int code, String reason) {
+        super.onClosed(webSocket, code, reason);
+        log("onClosed: " + reason + ", code:" + code);
+    }
+    
+    @Override
+    public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+        super.onFailure(webSocket, t, response);
+        Log.e(DEBUG_TAG, "onFailure: " + t.getMessage());
+        t.printStackTrace();
+        
+    }
+    
+    public void send(byte[] bytes){
+        ByteString byteString = ByteString.of(bytes);
+        webSocket.send(byteString);
+    }
+    
+    public void close(){
+        webSocket.close(1000, "fulfilled");
+    }
+    
+    private void log(String s){
+        Log.d(DEBUG_TAG, s);
+    }
+    
+    interface OnReceiveRow{
+        void receiveRows(ByteString bytes);
+    }
+}
+\end{lstlisting}\vspace{14pt}
+
 \clearpage
 \liite{5}
 
 \chapter{Node.js application listings}\label{appx:nodejsapp}
 \addtocontents{toc}{\vspace{11pt}}
 
-\begin{lstlisting}[label={listing:nodejsmain},caption={Main file},language=JavaScript, style=styleprogramming]
+\begin{lstlisting}[label={listing:nodejsmain},caption={Main file},language=JavaScript, style=styleprogrammingappendix]
 "use strict";
 
 const express = require('express');
@@ -1646,7 +2052,7 @@ function verifyClient(info) {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[label={listing:nodejsimplementation},caption={implementation of server-side classes},language=JavaScript, style=styleprogramming]
+\begin{lstlisting}[label={listing:nodejsimplementation},caption={implementation of server-side classes},language=JavaScript, style=styleprogrammingappendix]
 var WebSocket = require('ws');
 
 /** A class that hold WebSocket clients for a camera
@@ -1895,7 +2301,7 @@ function checkSocketOpen(socket, callback){
 }
 \end{lstlisting}
 
-\begin{lstlisting}[label={listing:robottest},caption={RobotFramework test file},language=Python, style=styleprogramming]
+\begin{lstlisting}[label={listing:robottest},caption={RobotFramework test file},language=Python, style=styleprogrammingappendix]
 *** Variables ***
 ${password}                "password here"
 ${url}                     localhost:8080
@@ -2047,7 +2453,7 @@ Number Of Cameras Should Be
     Get Cameras
 \end{lstlisting}
 
-\begin{lstlisting}[label={listing:robotlib},caption={RobotFramework websocket library},language=Python, style=styleprogramming]
+\begin{lstlisting}[label={listing:robotlib},caption={RobotFramework websocket library},language=Python, style=styleprogrammingappendix]
 #!/usr/bin/python
 import subprocess
 import sys
