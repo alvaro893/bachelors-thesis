@@ -531,9 +531,9 @@ xleftmargin=1cm
   \\ \hline
   \multicolumn{2}{|p{15cm}|}{\begin{singlespacing}\vspace{-22pt}
   \paragraph{}	
- The objective of this thesis was to develop a bidirectional communication system for \gls{ir} cameras using \gls{iot} modules to connect them to mobile networks through \gls{lte} and creating all the software solutions to accomplish it which is mainly a sensor-side, client-side and a server-side application, using also cloud based tools in the server-side
+ The objective of this thesis was to develop a bidirectional communication system for \gls{ir} cameras using \gls{iot} modules to connect them through mobile networks and creating all the software solutions to accomplish it; this is mainly a sensor-side, a client-side and a server-side application, using also cloud based tools.
   \paragraph{}
-  One of the key points of \gls{ir} cameras is the respect of privacy, Unlike normal cameras generally people cannot be recognized. Applications of this in health care and well-being are discussed on chapter~\ref{sec:discussion}, these application are mostly related to monitoring patients e.g. trigger alarm when a patient does not move for a while, control the number of people in a room, etc.
+  One of the key points of \gls{ir} cameras is the privacy. Unlike normal cameras, generally, people cannot be recognized. Applications of this in health care and well-being are discussed on chapter~\ref{sec:discussion}, these application are mostly related to monitoring patients e.g. trigger alarm when a patient does not move for a while, control the number of people in a room, etc.
   \paragraph{}
   This project is focused on the technical details of the communication system and the different methods used.
   
@@ -616,34 +616,38 @@ xleftmargin=1cm
 
 Thermal images have a number of advantages over conventional light-based video camera images. These thermal images can tell not only whether there are living people or animals but also whether there is any temperature anomaly on them. They can be used to make assumptions about their physical state using image processing software.
 
+Finland is one of the most rapidly aging country in Europe and the costs in elder and mental health care are becoming more expensive. Health care entities may decrease their costs by search for new ideas in the field of IT. In the discussion chapter some ideas to use \gls{ir} sensors and the communication channel are explained~\cite{agingeuropa}.
+
 Here is where \gls{iot} comes into play, Nowadays the Internet is very accessible and fast. Almost every conceivable device: phones, watches, televisions, speakers, cameras, etc can be connected, send and receive continuously big amounts of data.
 
-Although with \gls{iot} it comes the process of defining a communication channel between the \gls{iot} devices, services, clients, databases, etc. In order to manipulate, visualize, store and distribute data from them. On this thesis it is explained the steps of how to develop software solutions to these topics and other alternatives that were tried, which ones and why were implemented at the end along tools and technologies which were used to carry out the project.
+Although with \gls{iot} it comes the process of defining a communication channel between the \gls{iot} devices, services, clients, databases, etc. In order to manipulate, visualize, store and distribute data from them. On this thesis it is explained the steps that were followed to develop the solutions to these topics and what alternatives were tried and what tools/technologies were used to carry out the project.
 
-In Finland the costs in elder and mental health care are becoming more expensive. Health care entities in Finland may decrease their costs by search for new ideas in the field of IT. In  the discussion chapter some ideas to use \gls{ir} sensors and the communication channel are explained.
+
+%% TODO: mention nokia in introduction?
+
 %Finland is nowadays facing a difficult issue in the area of well-being. The population is aging and the costs in elder health and mental health care are sky-rocketing. This is why health care entities in Finland are looking into decrease their costs by search for new ideas in the field of IT.
 %This thesis discusses also how \gls{ir} sensors could be exploited in the case company to decrease costs and improving monitoring of patients.
 
 \section{Background of the case company}
-The thesis originates in a collaboration with a startup called Levitezer (\url{http://www.levitezer.com/}) which provides the \gls{ir} sensors. A company that develops gimbals and controllers for cameras for image stabilization among other projects~\cite{levitezer}.
+The thesis originates in a collaboration with the case company called Levitezer (\url{http://www.levitezer.com/}), Metropolia and Nokia.
+ Levitezer is company that develops controllers for cameras for image stabilization such as gimbals~\cite{levitezer}. They provide the \gls{ir} sensors. Nokia with their innovation platform~\cite{nokiainnovation}, provides the cloud environment and the network. My part as Metropolia student is develop the mentioned communication channel.
 
-Even though this is not a health care company, the sensors and methods here explained could be used but no limited to Hospitals, sanatoriums, clinics, nursing homes, etc. And right now Levitezer is trying to expand their business.
-%% TODO: mention nokia in introduction?
-The methods and software developed are being used to create an \gls{api} that connect \gls{ir} sensors together.
+
 
 \section{Business Challenge}\label{sec:business-challenge}
 %% improving costs by not having personal watching people all the time
-Find a system which using \gls{ir} sensors allow us to monitoring patients while keeping their privacy along reducing costs by using less staff and improve the service quality, data from those sensors can be accessed from anywhere which make them very versatile and portable.
+The case company wants to find a system which uses \gls{ir} sensors that allow us to monitor patients while keeping their privacy along with reducing costs by using less staff and improve the service quality. Moreover, it should be possible to access data from those sensors fro anywhere which make them very versatile and portable.
 \section{Objective and Outcome of the Study}
 With the business challenge in mind, this study aims to answer the following question:
 \begin{displayquote}
-{\large  How to create a effective communication channel between ir sensors and clients such as computers, laptops, etc and use it on Well-being services?}
+{\large  How to create an effective communication channel between ir sensors and clients such as computers, laptops, etc and use it on Well-being services?}
 \end{displayquote}
 
 The outcome of this study is:
 \begin{enumerate}
-\item full working communication Chanel using modern cloud technologies, client-side pieces of software able to read sensors; displaying data in form of images and being able of sending commands to modify sensor behavior, all in bidirectional full duplex communication context.
-\item proposals to use it on health care institutions.
+\item Different client-side applications able to connect to sensors.
+\item An web \gls{api} that connect \gls{ir} sensors to a cloud hence to clients.
+\item Proposals to use the resulting communication system on health care institutions.
 \end{enumerate}
 
 
@@ -652,14 +656,13 @@ The outcome of this study is:
 %What is already known about your chosen subject area and what is not known?
 %Discuss ideas in previous studies relevant to your topic (a brief introduction to the current state of knowledge and practice in your subject area). Identify a gap in the subject area and justify the purpose of your project, that is, the focus of your topic.
 
-Communications between devices is not a new topic, there are plenty of methods and communications protocols, this can be also part of the problem: there are too many and sometimes this can be overwhelming. In this section what is known about communication and network protocols will be discussed to find the best way to create a communication channel as stated in the business challenge on section~\ref{sec:business-challenge}.
+Communications between devices is not a new topic, there are plenty of methods and communications protocols, this can be also part of the problem: there are too many of them and sometimes this can be overwhelming. In this section it is described what is known about communication and network protocols in order to find the best way to create a communication channel as stated in the business challenge on section~\ref{sec:business-challenge} of the introduction.
 
 
-% NetLeap \cite{netleap}
 
 \section{Communication between devices}
 % Talk about what is know about communication systems, full stack development, etc
-Nowadays there is many ways to communicate between systems but here it will be used web services to achieve communication between sensors and clients. In order to establish a communication between two ends in a computer network or Internet it is important to comprehend how works the "Internet Protocol Architecture" or \gls{tcp}/\gls{ip} stack which is the conceptual model which most of networks are based on~\cite[9]{tcpip}.
+In order to establish a communication between two ends in a computer network or Internet it is good to comprehend how the "Internet Protocol Architecture" or \gls{tcp}/\gls{ip} stack work, which is the conceptual model which most of networks are based on~\cite[9]{tcpip}.
 
 	\putimage[5]{tcpip}{\gls{tcp}/\gls{ip} Architecture}
 
@@ -670,12 +673,13 @@ The \gls{tcp}/\gls{ip} stack is build in layers:
 	\item Transport Layer: provides host to host data delivery services.
 	\item Application Layer: applications and process that make use of the network
 \end{enumerate}
-Then, it must be find out a way to communicate through the \gls{tcp}/\gls{ip} stack as shown in figure~\ref{fig:tcpip}.
+
+Then, a way to communicate through the \gls{tcp}/\gls{ip} stack as shown in figure~\ref{fig:tcpip} must be found.
 
 \section{The medium}\label{sec:the-medium}
-At this point it has to be decided what medium to use to access the network (Network Access Layer in figure~\ref{fig:tcpip}). It could be a simple copper cable, Wi-Fi, microwaves, laser, etc. almost any kind of electromagnetic wave. But since this is an \gls{iot} project the best approach will be using \gls{ran} which it is accessible from cell antennas and nowadays provide great speeds and bandwidth.
+At this point it has to be decided what physical medium to \textit{access the network} (Network Access Layer in figure~\ref{fig:tcpip}). It could be a simple copper cable, Wi-Fi, microwaves, laser, etc. almost any kind of electromagnetic wave. But since this is an \gls{iot} project the best approach will be using \gls{ran} which it is accessible from cell antennas and nowadays provide great speeds and bandwidth.
 
-On this project Nokia provided us access to NetLeap which is a \gls{3g} and \gls{lte} network (the same that use mobile phones to connect to Internet). NetLeap is atest closed network for research~\cite{netleap}.
+As stated in the Introduction, Nokia provides access to a mobile network. This network is called NetLeap which uses \gls{3g} and \gls{lte} technologies (the same that use mobile phones to connect to Internet). NetLeap is a closed network for research managed by Aalto University and Nokia~\cite{netleap}.
 
 \section{Network protocols}
 The Internet Layer protocols usually rely in routers and other apparatus which are out of our control, hence the only concern is about transport and application layer.
@@ -1206,7 +1210,7 @@ A complete view of the main file application can be consulted in appendix~\ref{a
 
 
 
-\section{Testing}
+\section{Testing Methods}
 Testing is an important part of Software development process it gives insight about the quality and how much the software is error-prone, however creating test and maintaining after refactoring it is also a time consuming practice and since this project is carried out by one person rather than a team of developers there were added test only in the server-side of the whole communication system.
 
 \subsection{Unit Testing}
@@ -1258,7 +1262,7 @@ While the Server Side methods section~\ref{sec:server-side-methods} describes th
 
 "The cloud" is quite a broad concept which usually includes different service models as \gls{saas} which are hosted applications accessible from client applications, \gls{paas} which provides services for developers to create applications such as \gls{saas} ones, however the developer do not have access to the cloud infrastructure like the servers or the network, \gls{iaas}. Similar to \gls{paas} but with more control over the platform~\cite{petermelltimothygrance2011}.
 %\subsection{Google Cloud}
-\subsection{OpenShift and Docker}
+\subsection*{OpenShift and Docker}
 OpenShift is a platform for the deployment of web applications and services. It takes advantage of technologies such as \gls{kubernetes} and \gls{docker} to run and manage application in containers~\cite{shipley2016openshift}. Nokia (which collaborates actively in this project) provides \gls{paas} as part of their Nokia Innovation Platform which aims to create solutions for \gls{iot}~\cite{nokiainnovation}.
 
 The process of updating the server side application is through a OpenShift mechanism called \gls{s2i} which allow creating containers from the application source code without using \gls{docker} files, it its simplest form a developer provides a \gls{git} repository to the platform and OpenShift takes cares of everything: building, deploying, routing, etc~\cite[5]{shipley2016openshift}.
@@ -1379,7 +1383,7 @@ At the end the \gls{nodejs} application turned out to work better and faster. so
 \clearpage\chapter{Discussion}\label{sec:discussion}
 %What do the results mean?
 \section{Use in health care}
-In this section different uses in health care of the sensor communication channel will be discussed. As mentioned on the introduction chapter~\ref{sec:introduction} these sensors does not capture light but heat, thus making patients impossible to recognize on the distance, this can be considered an advantage since most of the people do not feel comfortable with the idea of being watched or video-recorded. Also when using Image Processing techniques an \gls{ir} image can be easier for a computer to "understand" in other words to analyze especially when it is possible to add limits to the maximum and minimum temperature so that a range of temperature can be interesting while the rest is removed. figure~\ref{fig:setminimum}.
+In this section different uses in health care of the sensor communication channel will be discussed. As mentioned on the introduction chapter~\ref{sec:introduction} these sensors do not capture light but heat, thus making patients impossible to recognize from a distance, this can be considered an advantage since most of the people do not feel comfortable with the idea of being watched or video-recorded. Also when using Image Processing techniques an \gls{ir} image can be easier for a computer to "understand" in other words to analyze especially when it is possible to add limits to the maximum and minimum temperature so that a range of temperature can be interesting while the rest is removed. figure~\ref{fig:setminimum}.
     
     \putimage{setminimum}{Minimum set to human temperature}
 
@@ -1484,45 +1488,11 @@ I want to thank to Jukka Honkaniemi and Tero Nurminen (Metropolia) for let me be
 \makeoddhead{plain}{}{}{\appname \thechapter \\ \thepage\,(\stepcounter{appx#1}\total{appx#1})}}
 
 \liite{1}
-\chapter{LTE module}\label{appx:first}
-% Note that every appendix will be a chapter.
-% Sorry for the ugly hack on how to count the total pages per appendix.
-% Of course with section and subsection.
-% And you can cite \cite{tobias:book} stuff, it will go into the main bibliography.
-
-% TODO: consider deleting some code in appendices.
-% TODO: lte module appendix.
-\section{Configuration}
-\putcode{configure_at_commands}{Configure and test an Internet connection}[style=styleprogrammingappendix]$
-//configure internet profile
-AT^sics?^ 
-AT^SICS=0,"conType","GPRS0"
-AT^SICS=0,"apn","otaniemi"
-AT^SICS=0,"inactTO", "20"
-AT^SICS=0,dns1,"8.8.8.8"
-AT^SICS=0,passwd,""
-AT^SICS=0,user,""
-
-//configure internet service
-AT^SISS=0,srvType,"Socket"
-at^siss=0,conId,0
-at^siss=0,address,"socketcp://8.8.8.8:80"
-
-// check internet
-AT^SICI?
-
-// make a ping to google
-AT^SISX="Ping",0,"8.8.8.8"
-$
-
-
-
-\clearpage % avoid that the last page of previous appendix get this header
-\liite{2}
 
 
 
 \chapter{Sensor reader listings}\label{appx:reader}
+
 \addtocontents{toc}{\vspace{11pt}}
 
 \begin{lstlisting}[label={listing:serial-reader},caption={Serial Reader Class},language=Python, style=styleprogrammingappendix]
@@ -1674,7 +1644,7 @@ def is_raspberry_command(s):
 \end{lstlisting}\vspace{14pt}
 
 \clearpage
-\liite{3}
+\liite{2}
 
 % TODO: Python client appendix
 \chapter{Python Client listings}\label{appx:pythonclient}
@@ -1683,7 +1653,7 @@ def is_raspberry_command(s):
 
 
 \clearpage
-\liite{4}
+\liite{3}
 
 \chapter{Android Client listings}\label{appx:androidclient}
 \addtocontents{toc}{\vspace{11pt}}
@@ -2029,7 +1999,7 @@ public class WebsocketConnection extends WebSocketListener {
 \end{lstlisting}\vspace{14pt}
 
 \clearpage
-\liite{5}
+\liite{4}
 
 \chapter{Node.js application listings}\label{appx:nodejsapp}
 \addtocontents{toc}{\vspace{11pt}}
@@ -2657,6 +2627,6 @@ class WebSocketConnection(Thread):
 \end{lstlisting}
 
 
-\clearpage
-\liite{6}
+%\clearpage
+%\liite{5}
 \end{document}
