@@ -343,6 +343,7 @@ xleftmargin=1cm
 \newacronym{nat}{NAT}{Network Address Translation}
 \newacronym{vpn}{VPN}{Virtual Private Network}
 \newacronym{www}{WWW}{World Wide Web}
+\newacronym{pdf}{PDF}{Portable Document Format}
 
 
 
@@ -607,7 +608,7 @@ xleftmargin=1cm
 
 \sloppy % enforce alignment to fully justified
 
-\chapter{Introduction}
+\chapter{Introduction}\label{sec:introduction}
 
 
 Thermal images had a number of advantages over conventional light-based video camera images. These thermal images tell us not only there are living people or animals but also if there is any temperature anomaly on them. They can be used to make assumptions about their physical state using image processing software.
@@ -641,7 +642,7 @@ The outcome of this study is a full working communication Chanel using modern cl
 This is an great project as it is a hot topic (\gls{iot} and cloud computing) in the IT world. Methods described on this thesis may help others with their projects.
 
 
-\chapter{Theoretical Background}\label{sec:theoretical-background}
+\clearpage\chapter{Theoretical Background}\label{sec:theoretical-background}
 %What is already known about your chosen subject area and what is not known?
 %Discuss ideas in previous studies relevant to your topic (a brief introduction to the current state of knowledge and practice in your subject area). Identify a gap in the subject area and justify the purpose of your project, that is, the focus of your topic.
 
@@ -652,7 +653,7 @@ Communications between devices is not a new topic, there are plenty of methods a
 
 \section{Communication between devices}
 % Talk about what is know about communication systems, full stack development, etc
-Nowadays there is many ways to communicate between systems but here it will be used web services to achieve communication between sensors and clients. In order to establish a communication between two ends in a computer network or Internet it is important to comprehend how works the "Internet Protocol Architecture" or \gls{tcp}/\gls{ip} stack which is the conceptual model which most of networks are based on~\cite[p.~9]{tcpip}.
+Nowadays there is many ways to communicate between systems but here it will be used web services to achieve communication between sensors and clients. In order to establish a communication between two ends in a computer network or Internet it is important to comprehend how works the "Internet Protocol Architecture" or \gls{tcp}/\gls{ip} stack which is the conceptual model which most of networks are based on~\cite[9]{tcpip}.
 
 	\putimage[5]{tcpip}{\gls{tcp}/\gls{ip} Architecture}
 
@@ -694,7 +695,7 @@ Another solution is \gls{udp} hole punching technique to establish bidirectional
 \subsection{TCP}
 the \gls{tcp} is the other transport layer protocol, it differs from \gls{udp} in unlike this, \gls{tcp} is connection based and guaranties the delivery of packets. Thus protocols made on top of \gls{tcp} establish a connection and then data can start flowing.
 
-\subsubsection{Http}
+\subsubsection{Http}\label{sec:http}
 \gls{http} and \gls{https} is application layer protocol made on top of \gls{tcp}. Http is meant to request resources such as \gls{html} documents, \gls{xml}, \gls{json} or plain text. Any request has a response which can contain a body of data and response code (like the famous "404 not found")~\cite{http-rfc}.
 
 \gls{http} is strongly related to the \gls{www}, on most of routers and firewalls the port 80 (\gls{http}) and 443 \gls{https} are accessible. Then the \gls{http} responses can be used to send data to a particular computer indirectly without having trouble with \gls{nat} routers or firewalls which could be used for sensor-client communication.
@@ -704,16 +705,16 @@ the \gls{tcp} is the other transport layer protocol, it differs from \gls{udp} i
 As seen in figure~\ref{fig:http-approach} both sensor and client requests sending the data (which is between "<>" signs in the figure) that other end expect to receive. A server application take cares to forward requests data to responses. Thus all requests are always towards the server 
 
 \subsubsection{Websocket}
-\gls{ws} is a relatively new protocol (end of 2011) which was meant to provide web applications with bidirectional communication without making continuous \gls{http} requests through techniques like XMLHttpRequest~\cite[p.~4]{rfc6455}.
+\gls{ws} is a relatively new protocol (end of 2011) which was meant to provide web applications with bidirectional communication without making continuous \gls{http} requests through techniques like XMLHttpRequest~\cite[4]{rfc6455}.
 
-As \gls{http}, \gls{ws} use ports 80 and 443 (secure \gls{ws}) by default then it has not problems with \gls{nat} and firewalls. Once a connection is established both ends can receive and send data until the connection is closed. This connection is started with a handshake in form of a \gls{http} GET request~\cite[p.~6]{rfc6455}. 
-
-
+As \gls{http}, \gls{ws} use ports 80 and 443 (secure \gls{ws}) by default then it has not problems with \gls{nat} and firewalls. Once a connection is established both ends can receive and send data until the connection is closed. This connection is started with a handshake in form of a \gls{http} GET request~\cite[6]{rfc6455}. 
 
 
 
 
-\chapter{Methods and Materials}
+
+
+\clearpage\chapter{Methods and Materials}\label{sec:methods-and-materials}
 %How was the project carried out in practice, and how was the data analysed?
 %Describe the context in which the work was carried out (such as the overall project and its design, your specific task, work environment) and the workflow. Describe the methods and materials used (accurate details of data, software, materials, methods, techniques). Give a full account of exact test arrangements and measurements carried out, and accurate details of data analysis.
 %The issues included in this section depend on the nature of your project. Whatever the issues, describe them in sufficient detail and in logical sequence.
@@ -1123,6 +1124,7 @@ To achieve this \gls{android} allows to extend \gls{ui} elements with new behavi
 On this section describes the different approaches tested to created the middle point between sensors and clients. The server side application must be hosted somewhere, in this case a cloud environment described in the next section.
 
 \subsection{The communication channel}\label{sec:the-communication-channel}
+% TODO: refactor text here
 Sections 3.4 and 3.5 discuss where the channel logic is (aka the cloud) and what kind of application and technology could be used. Regardless what technology it is used for coding, build and maintain the cloud application, and before start coding it should define how different components are related between each other.
 Let’s start by defining the following entities:
 \begin{itemize}
@@ -1140,7 +1142,7 @@ On the final implementation the server side application was written in \gls{js} 
 
 
 \subsection{Python Flask}
-Flask is a \gls{python} framework for web development which allows to write web applications back-ends and is specially useful to create web \gls{api}s 
+Flask is a \gls{python} framework for web development which allows to write web applications back-ends and is specially useful to create web \gls{api}s. this application use an \gls{http} approach as in section~\ref{sec:http} was described. It keeps a buffer of image data and commands, so that both sensor and client have to request continuously even though when there is no new data. 
 
 \subsection{Node js Server Application}
 \gls{nodejs} is a \gls{js} runtime which allows to create server-side applications, the main reason of why one would choose \gls{nodejs} over other well know options such as \gls{apache} + \gls{php} is the non-blocking model \gls{nodejs} is based on. This let make asynchronous code easily and it is quite fast~\cite[p.12]{nodejs}~\cite{nodeblocking}.
@@ -1248,11 +1250,8 @@ While the Server Side methods section~\ref{sec:server-side-methods} describes th
 \subsection{OpenShift and Docker}
 OpenShift is a platform for the deployment of web applications and services. It takes advantage of technologies such as \gls{kubernetes} and \gls{docker} to run and manage application in containers~\cite{shipley2016openshift}. Nokia (which collaborates actively in this project) provides \gls{paas} as part of their Nokia Innovation Platform which aims to create solutions for \gls{iot}~\cite{nokiainnovation}.
 
-The process of updating the server side application is through a OpenShift mechanism called \gls{s2i} which allow creating containers from the application source code without using \gls{docker} files, it its simplest form a developer provides a \gls{git} repository to the platform and OpenShift takes cares of everything: building, deploying, routing, etc~\cite[p.~5]{shipley2016openshift}.
+The process of updating the server side application is through a OpenShift mechanism called \gls{s2i} which allow creating containers from the application source code without using \gls{docker} files, it its simplest form a developer provides a \gls{git} repository to the platform and OpenShift takes cares of everything: building, deploying, routing, etc~\cite[5]{shipley2016openshift}.
 
-
-
-% url hooks to update
 
 \subsection{Communication sensor-client}
 % TODO: \subsection{Communication sensor-client}
@@ -1263,7 +1262,33 @@ The process of updating the server side application is through a OpenShift mecha
 \subsection{Control Version}
 On any serious software development project there must be a \gls{cvs} which allows keep tracking of any changes in the code (or other files) and reversed if necessary. On this project the popular control version tool "Git" was used, which has many features but the one that makes it more special is its decentralized repository model which means that every repository copy has all the history changes.
 
-All the repositories to the applications developed in this thesis are hosted in \gls{github} which it is perfect for sharing or publish open source projects. Here is a list with every repository for most of the software developed in this project.
+All the repositories to the applications developed in this thesis are hosted in \gls{github} which it is perfect for sharing or publish open source projects.
+
+\subsection{Latex}
+% What is latex, what is tex
+% reasons to use latex, abreviations, commands etc, show figures
+To write this thesis I used \LaTeX which is a documentation preparation system rather than using the mainstream options which are LibreOffice or Office Word. The reasons for this was automation and the quality one can achieve. It is known that it is preferred in academic articles and theses.
+
+    \putimage{latex-look}{How the document looks like}
+    
+In figure~\ref{fig:latex-look} it can be observed how the code looks like, it is just raw text with no style at all and it has to be compiled to generate a \gls{pdf} document.
+%\subsection{IDE}
+%Pycharm
+%Visual Studio Code
+
+\clearpage\chapter{Results}\label{sec:results}
+%What was found/created/designed/produced?
+The results of this thesis is a set of pieces of software which together form the communication channel, being its central part the server-side hosted in cloud accessible through the web \gls{api} described on section~\ref{sec:web-api}.
+
+
+
+\section{Software}\label{sec:software}
+After solving some bugs in the server-side and the raspberry pi part the communication system can work continuously 24 hours a day with several cameras as 5.4.2017 the longest test in a sensor in the system has been 4 days and 19 hours. In figure~\ref{fig:multi-camera} can be seen a client application with sensors on different locations.
+
+     \putimage{multi-camera}{Multiple sensors connected to a single client}
+
+As stated in chapter~\ref{sec:methods-and-materials} all the code is in \gls{github} repositories, here is a list with every repository for most of the software developed in this project.
+
 
 \begin{itemize}
     \item \gls{android} client application: \url{https://github.com/alvaro893/android-ir-sensor-client}
@@ -1275,49 +1300,16 @@ All the repositories to the applications developed in this thesis are hosted in 
 
 The code shown in the appendixes is in these repositories and up-to-date.
 
-\subsection{Using Latex to for the thesis}
-% What is latex, what is tex
-% reasons to use latex, abreviations, commands etc, show figures
-To write this thesis I used \LaTeX which is a documentation preparation system rather than using the mainstream options which are LibreOffice or Office Word. The reasons for this was automation and the quality one can achieve. It is known that it is preferred in academic articles and theses.
-%\subsection{IDE}
-%Pycharm
-%Visual Studio Code
 
-\chapter{Results}
-%What was found/created/designed/produced?
-
-\section{Discarded Methods}
-
-\subsection{android smart-phone gateway solution}
-This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as \gls{java}.
-
-\subsection{\gls{lte} module solution}
-This method could have been the ideal solution to read a sensor and connect it to Internet, but there were multiple issues regarding this method:
-\begin{itemize}
-    \item It turned out that the module did not support the \gls{lts} frequency bands of the mobile provider Netleap see section~\ref{sec:the-medium} of chapter~\ref{sec:theoretical-background}.
-    \item It was hard to set-up a developing environment for it.
-\end{itemize} 
-
-\subsection{\gls{udp} protocols}
-There were many test to use \gls{upd} for communications but for the issues mentioned in section~\ref{sec:port-issues-on-remote-hosts} of chapter~\ref{sec:theoretical-background} and because \gls{ws} worked very good. any \gls{udp} was dropped.
-
-\section{Sensor Reader Application}
-
-\section{Client Applications}
-\subsection{Python Desktop Application}
-\subsection{Android Smart-phone Application}
-
-
-
-\section{Web Api}
-In order to provide communication with both sensors and clients a web \gls{api} can be the most convenient way to expose the services of the application providing certain endpoints to register sensors, clients and to access information about the application itself, the information retrieved could be in \gls{json}  or \gls{xml} format.
+\section{Web Api}\label{sec:web-api}
+In order to provide communication with both sensors and clients a web \gls{api} can be the most convenient way to expose the services of the application providing certain endpoints to register sensors, clients and to access information about the application itself, the information retrieved is in \gls{json} format.
 
 The endpoints are defined as \gls{uri}s. A complete \gls{uri} looks like this:
 \begin{quote}
     \texttt{<protocol>://<domain>:<protocol><path>?<parameters>}
 \end{quote}
 
-Path accepted by the \gls{api} are shown in table~\ref{table:api} 
+Domain is provided by the cloud service, if the server-side application is running locally in a personal computer domain is "localhost". Paths accepted by the \gls{api} are shown in table~\ref{table:api}
 
 \begin{table}[h]
     \centering
@@ -1354,22 +1346,80 @@ Path accepted by the \gls{api} are shown in table~\ref{table:api}
 
 For example \texttt{ws://localhost:8080/camera?pass=d8n2d0\&camera\_name=corner-camera}
 
-\chapter{Discussion}
+\section{Discarded Methods}
+
+\subsection{android smart-phone gateway solution}
+This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as \gls{java}.
+
+\subsection{\gls{lte} module solution}
+This method could have been the ideal solution to read a sensor and connect it to Internet, but there were multiple issues regarding this method:
+\begin{itemize}
+    \item It turned out that the module did not support the \gls{lte} frequency bands of the mobile provider Netleap see section~\ref{sec:the-medium} of chapter~\ref{sec:theoretical-background}.
+    \item It was hard to set-up a developing environment for it.
+\end{itemize} 
+
+\subsection{\gls{udp} protocols}
+There were many test to use \gls{udp} for communications but for the issues mentioned in section~\ref{sec:port-issues-on-remote-hosts} of chapter~\ref{sec:theoretical-background} and because \gls{ws} worked very good. any \gls{udp} was dropped.
+
+\subsection{python flask server-side application}
+At the end the \gls{nodejs} application turned out to work better and faster. so the flask application was not further developed.
+
+
+\clearpage\chapter{Discussion}\label{sec:discussion}
 %What do the results mean?
-\section{reasons about the protocols}
-\section{Use in Well-being environments}
+\section{Use in health care}
+In this section different uses in health care of the sensor communication channel will be discussed. As mentioned on the introduction chapter~\ref{sec:introduction} these sensors does not capture light but heat, thus making patients impossible to recognize on the distance, this can be considered an advantage since most of the people do not feel comfortable with the idea of being watched or video-recorded. Also when using Image Processing techniques an \gls{ir} image can be easier for a computer to "understand" in other words to analyze especially when it is possible to add limits to the maximum and minimum temperature so that a range of temperature can be interesting while the rest is removed. figure~\ref{fig:setminimum}.
+    
+    \putimage{setminimum}{Minimum set to human temperature}
+
+On table~\ref{table:commands} in chapter~\ref{sec:methods-and-materials} the available commands to the sensor are shown, we can set maximum and minimum temperatures or make it back to automatic.
+
+    \putimage{2bit}{2bit version of the image}
+
+In addiction to set the minimums and maximums it is possible to change the bit density of the image so we get less data and probably making the image analysis a little easier as it is shown in figure~\ref{fig:2bit}.
+
+\subsection{Bed patient care}
+A use case may be for monitoring patients on bed, either hospital or home bed. Using image analysis software nurses or doctor could obtain data from multiple patients at the same time. since the sensors can detect heat this could trigger some alarm on high temperature or if the patient is missing for a long period of time.
+
+    \putimage{fiber-detector-prototype}{Analysis program prototype}
+    
+In the figure~\ref{fig:fiber-detector-prototype} we can see a prototype with temperature graphics and other indicators.
+    
+\subsection{Nursing homes / Residential care}
+The same principle could be applied to nursing or residential homes where there is a number of people inside a room or outside in a backyard. Then trough image analysis it can be detected how many persons there are, if someone is too still or passed out, etc.
+\subsection{Psychiatric hospital}
+As in nursing homes, psychiatric hospital could have this kind of system. It could detect potential dangerous situations in this case.
+
+\section{Other uses}
+\subsection{Self-driven vehicles}
+Self-driven public transport vehicles could benefit with this system too, since that there is no driver nor any other worker on the vehicle, accessible remotely \gls{ir} sensor can give valuable data to an hypothetically station in charge of the security of such vehicles and trigger an alarm in case of any dangerous situation.
+    \putimage{robo-bussi}{self-driven bus in Otaniemi}
+On figure~\ref{fig:robo-bussi} is the "robobussi" moving around Otaniemi campus in Espoo.
+
+\subsection{General surveillance}
+Surveillance is usually help by regular light based cameras plus sometimes some \gls{ir} LEDs which allows them see during night time, However since humans emit heat they can be easily spotted with \gls{ir} sensors instead.
+
 \section{Possible changes in the future}
-\subsection{3D \gls{ir} map using multiple sensors}
-\subsection{gls{html}5 application}
+\subsection{3D Heat map using multiple sensors}
+When using several sensors, it could be possible to create 3D heat map with all the data similar to figure~\ref{fig:heatmap}.
+
+    \putimage[10]{heatmap}{Heat map concept}
+    
+This can be used to have a better understanding of how heat behaves in a particular area.
+
+\subsection{HTML5 application}
+Since this project uses already web technologies such as \gls{ws} it will not difficult to create an \gls{html}5 client application for connecting to the different sensors able to do the same as the python client, however the user does not need to install anything to make it work, only an up to day Internet browser.
+
 \subsection{Using RTP to broadcast video to clients}
+The server-side application could be extended to support \gls{udp} protocols as \gls{rtp} which can be used to multi-cast video stream to a big number of clients that for example need the video image but no control the sensor~\cite[298]{hardy2013networks}. Commands can be still sent through \gls{ws} 
 
+\clearpage\chapter{Conclusions}
+As stated in the business challenge this project was about "create a effective communication channel between ir sensors and clients such as computers, laptops, etc and use it on Well-being services" which can be concluded that it is done even beyond the original requirements. Chapters \ref{sec:results} and \ref{sec:discussion} have the information on what was done and propositions to use it in health care and well-being. Note that this is still a outgoing project and development is likely to continue even after this thesis is published.
 
-\chapter{Conclusions}
-\section{Technologies chosen and why}
-\section{What have I learned}
+The communication channel has been created, it has been tested and  it works. Please refer to section~\ref{sec:software} in chapter~\ref{sec:results} to obtain the last version of the code created in this project.
 
-\chapter{Acknowledgments}
-I want to thank to... 
+\clearpage\chapter{Acknowledgments}
+I want to thank to Jukka Honkaniemi and Tero Nurminen (Metropolia) for let me be part of this project and their guidance. Also I want to Thanks to Kim Janson (Levitazer)for all I learn during last months in this project.
 
 
 
@@ -1377,7 +1427,7 @@ I want to thank to...
 %   BIBLIOGRAPHY 
 %----------------------------------------------------------------------------------------
 
-\IfLanguageName{finnish}{\bibliographystyle{vancouver_fi}}{\bibliographystyle{vancouver}}
+\clearpage\IfLanguageName{finnish}{\bibliographystyle{vancouver_fi}}{\bibliographystyle{vancouver}}
 %line space
 %\singlespacing %removed otherwise the appendix are also single space
 \begin{flushleft}
@@ -1427,6 +1477,8 @@ I want to thank to...
 % Of course with section and subsection.
 % And you can cite \cite{tobias:book} stuff, it will go into the main bibliography.
 
+% TODO: consider deleting some code in appendices.
+% TODO: lte module appendix.
 \section{Configuration}
 \putcode{configure_at_commands}{Configure and test an Internet connection}[style=styleprogrammingappendix]$
 //configure internet profile
@@ -1610,6 +1662,8 @@ def is_raspberry_command(s):
 
 \clearpage
 \liite{3}
+
+% TODO: Python client appendix
 \chapter{Python Client listings}\label{appx:pythonclient}
 \addtocontents{toc}{\vspace{11pt}}
 appendix content
