@@ -27,7 +27,7 @@ Etunimi Sukunimi, Titteli
 \def\metropoliainstructors {
 Tero Nurminen, TKI-vastaava yliopettaja \newline
 }
-\def\metropoliakeywords {Keywords}
+\def\metropoliakeywords {IoT, IR, sensor, cloud, full-stack, communication channel, websocket, http}
 \date{\today}
 
 %----------------------------------------------------------------------------------------
@@ -323,7 +323,6 @@ xleftmargin=1cm
 \newacronym{rtp}{RTP}{Real Time Transport Protocol}
 \newacronym{uml}{UML}{Unified Modeling Language}
 \newacronym{er}{ER Diagram}{Entity Relationship Diagram}
-\newacronym{ws}{Websocket}{Websocket}
 \newacronym{paas}{PaaS}{Platform As A Service}
 \newacronym{saas}{SaaS}{Software As A Service}
 \newacronym{iaas}{IaaS}{Infrastructure As A Service}
@@ -349,6 +348,10 @@ xleftmargin=1cm
 
 
 %Glossary entries
+\newglossaryentry{ws}{
+	name=Websocket, 
+	description={Application protocol build on top of \gls{tcp}}
+}
 \newglossaryentry{github}{
 	name=GitHub, 
 	description={Hosting site for \gls{git} repositories}
@@ -528,11 +531,11 @@ xleftmargin=1cm
   \\ \hline
   \multicolumn{2}{|p{15cm}|}{\begin{singlespacing}\vspace{-22pt}
   \paragraph{}	
-  In this bachelor's thesis project I develop a communication system for \gls{ir} cameras using \gls{iot} modules to connect them to mobile networks through \gls{lte} hence to Internet, a server-side will receive, analyses and configures ir cameras and send to data to clients
+ The objective of this thesis was to develop a bidirectional communication system for \gls{ir} cameras using \gls{iot} modules to connect them to mobile networks through \gls{lte} and creating all the software solutions to accomplish it which is mainly a sensor-side, client-side and a server-side application, using also cloud based tools in the server-side
   \paragraph{}
-  One of the key points using \gls{ir} cameras is the respect of privacy, Unlike normal cameras generally people cannot be recognized. Applications are related to monitoring of patients: trigger alarm when a patient does not move for a while, control the number of people in a room, etc.
+  One of the key points of \gls{ir} cameras is the respect of privacy, Unlike normal cameras generally people cannot be recognized. Applications of this in health care and well-being are discussed on chapter~\ref{sec:discussion}, these application are mostly related to monitoring patients e.g. trigger alarm when a patient does not move for a while, control the number of people in a room, etc.
   \paragraph{}
-  This project is focused on the technical details of the communication system and implements what was studied on my Innovation Project, specifically analysis techniques that can be done on the server-side.
+  This project is focused on the technical details of the communication system and the different methods used.
   
   \end{singlespacing}} \\[14cm] \hline
   Keywords & \metropoliakeywords
@@ -611,23 +614,22 @@ xleftmargin=1cm
 \chapter{Introduction}\label{sec:introduction}
 
 
-Thermal images had a number of advantages over conventional light-based video camera images. These thermal images tell us not only there are living people or animals but also if there is any temperature anomaly on them. They can be used to make assumptions about their physical state using image processing software.
+Thermal images have a number of advantages over conventional light-based video camera images. These thermal images can tell not only whether there are living people or animals but also whether there is any temperature anomaly on them. They can be used to make assumptions about their physical state using image processing software.
 
 Here is where \gls{iot} comes into play, Nowadays the Internet is very accessible and fast. Almost every conceivable device: phones, watches, televisions, speakers, cameras, etc can be connected, send and receive continuously big amounts of data.
 
-Although with \gls{iot} it comes the inevitable process of define a communication channel between the \gls{iot} devices, visualize, store and distribute data from them. On this paper it is explained the steps of how to develop software solutions to these topics and all the alternatives that were tried, which ones and why were implemented at the end along all the tools and technologies which were used to carry out the project as smoothly as possible.
+Although with \gls{iot} it comes the process of defining a communication channel between the \gls{iot} devices, services, clients, databases, etc. In order to manipulate, visualize, store and distribute data from them. On this thesis it is explained the steps of how to develop software solutions to these topics and other alternatives that were tried, which ones and why were implemented at the end along tools and technologies which were used to carry out the project.
 
-
-%% imporve this
-Finland is nowadays facing a difficult issue in the area of well-being. The population is aging and the costs in elder health and mental health care are sky-rocketing. This is why health care entities in Finland are looking into decrease their costs by search for new ideas in the field of IT.
-This thesis discusses also how \gls{ir} sensors could be exploited in the case company to decrease costs and improving monitoring of patients.
+In Finland the costs in elder and mental health care are becoming more expensive. Health care entities in Finland may decrease their costs by search for new ideas in the field of IT. In  the discussion chapter some ideas to use \gls{ir} sensors and the communication channel are explained.
+%Finland is nowadays facing a difficult issue in the area of well-being. The population is aging and the costs in elder health and mental health care are sky-rocketing. This is why health care entities in Finland are looking into decrease their costs by search for new ideas in the field of IT.
+%This thesis discusses also how \gls{ir} sensors could be exploited in the case company to decrease costs and improving monitoring of patients.
 
 \section{Background of the case company}
-The thesis originates in a project I am doing in collaboration with a startup called Levitezer (\url{http://www.levitezer.com/}). A company that develops gimbals and controllers for cameras for image stabilization among other projects \cite{levitezer}.
+The thesis originates in a collaboration with a startup called Levitezer (\url{http://www.levitezer.com/}) which provides the \gls{ir} sensors. A company that develops gimbals and controllers for cameras for image stabilization among other projects~\cite{levitezer}.
 
-Even though this is not a health care company, the sensors and methods here explained could be used in Hospitals, sanatoriums, clinics, nursing homes, etc. And right now Levitezer is trying to expand their business to other areas.
-
-The methods and software I developed are being used to create an \gls{api} that connect \gls{ir} sensors together.
+Even though this is not a health care company, the sensors and methods here explained could be used but no limited to Hospitals, sanatoriums, clinics, nursing homes, etc. And right now Levitezer is trying to expand their business.
+%% TODO: mention nokia in introduction?
+The methods and software developed are being used to create an \gls{api} that connect \gls{ir} sensors together.
 
 \section{Business Challenge}\label{sec:business-challenge}
 %% improving costs by not having personal watching people all the time
@@ -638,8 +640,12 @@ With the business challenge in mind, this study aims to answer the following que
 {\large  How to create a effective communication channel between ir sensors and clients such as computers, laptops, etc and use it on Well-being services?}
 \end{displayquote}
 
-The outcome of this study is a full working communication Chanel using modern cloud technologies, client-side pieces of software able to read sensors; displaying data in form of images while receiving commands to change the sensor behavior, all in bidirectional full duplex communication, proposals to use it on health care institutions and use cases for image analysis
-This is an great project as it is a hot topic (\gls{iot} and cloud computing) in the IT world. Methods described on this thesis may help others with their projects.
+The outcome of this study is:
+\begin{enumerate}
+\item full working communication Chanel using modern cloud technologies, client-side pieces of software able to read sensors; displaying data in form of images and being able of sending commands to modify sensor behavior, all in bidirectional full duplex communication context.
+\item proposals to use it on health care institutions.
+\end{enumerate}
+
 
 
 \clearpage\chapter{Theoretical Background}\label{sec:theoretical-background}
@@ -1034,13 +1040,19 @@ The programming language chosen to communicate with the sensor from the raspberr
     \item Has to open a connection to the server/cloud continuously and be able to recover. automatically from failures on the network.
     \item Must do all this at same time taking advance of raspberry pi's multiple cores.
     \item Prioritize the sensor read task over the rest, this is the most critical part and must be have a higher priority
-
-    
 \end{itemize}
+
+
 
 In order to separate tasks it is possible to use multiple threads which are supported in \gls{python} and the multiprocessing package to have separate into several process and take advantage of the various \gls{cpu} cores~\cite{python-multi}. For controlling the priority the package "psutil" allow to control the "niceness" of the process~\cite{python-psutil}
 
 It is also desirable being able to do certain operations remotely without using \gls{ssh}. The connection made between client-server-raspberry can be taken in advance to for example shutdown, reset, update, etc the raspberry. For this purpose the subprocess package can be use to issue commands and other process, as one can do in a terminal shell~\cite{python-subprocess}. See the listing~\ref{listing:rpi-subprocess} to see my actual implementation.
+
+\subsubsection{Services}
+To run programs and script automatically from booting it is possible to add systemd based services which are in most of Linux distributions. For the purposes of this sensor reader it is needed at least 2 services. One to keep alive the network connection alive. Other to keep the reader program constantly running.
+
+\subsubsection{remote communication}
+In order to get access to the raspberry when it is out of reach, connections to it through Internet using \gls{ssh} are the most common way
 
 \section{Client Application Methods}\label{sec:client-application-methods}
 On this section it will be described different methods to create a client able to connect to the cloud thus the sensor, present the data to the user and send commands to the sensor.
@@ -1058,7 +1070,7 @@ Although there was not intention to use \gls{labview} for the purposes of this t
 
 %\subsection{\gls{udp} Java client}
 \subsection{Websocket Python Client}\label{sec:websocket-python-client}
-This application was intended to have the characteristics of the \gls{labview}'s mentioned on the previous section and provide it with connectivity to a cloud service for remote communication. The application was wrote on python and taking advantage of the multiple libraries that the community offers for free as open source. % TODO: citation required?
+This application was intended to have the characteristics of the \gls{labview}'s mentioned on the previous section and provide it with connectivity to a cloud service for remote communication. The application was wrote on python and taking advantage of the multiple libraries that the community offers for free as open source.
 
 
 \subsubsection{Design}
@@ -1070,10 +1082,10 @@ Once a connection is made the class "Camera" and its children will handle data p
 
     \putimage[15]{python-uml}{UML diagram (simplified)}
     
-As seen in figure~\ref{python-uml} it shows the most important components of the application and its relations, it can be noticed that there is a separation between \gls{ui} components and logical ones.
+As seen in figure~\ref{fig:python-uml} it shows the most important components of the application and its relations, it can be noticed that there is a separation between \gls{ui} components and logical ones.
 
 \subsubsection{User Interface}
-The user interface is implemented using the known \gls{qt} framework which is uses \gls{cpp} but there is a python bindings package to use in a python application without writing a single line of \gls{cpp} code. % TODO: citation
+The user interface is implemented using the known \gls{qt} framework which is uses \gls{cpp} but there is a python bindings package to use in a python application without writing a single line of \gls{cpp} code~\cite{riverbank}.
 
 Advantages of using qt are among others:
 \begin{itemize}
@@ -1084,11 +1096,11 @@ Advantages of using qt are among others:
 
     \putimage{qt-designer}{QT designer}
 
-The sensor image itself is made using a plotting library named \gls{matplotlib} used in quality scientific plots and animations. \gls{matplotlib}  also provides a back-end to attach the graphics to \gls{qt} among other \gls{ui} frameworks. This can be seen in the \gls{uml} diagram (figure~\ref{fig:python-uml}) where the class "MplCanvas" which presents the frames from the "Camera" inherits from the \gls{matplotlib} class "FigureCanvasQTAgg". %TODO citation for matplotlib
+The sensor image itself is made using a plotting library named \gls{matplotlib} used in quality scientific plots and animations. \gls{matplotlib}  also provides a back-end to attach the graphics to \gls{qt} among other \gls{ui} frameworks. This can be seen in the \gls{uml} diagram (figure~\ref{fig:python-uml}) where the class "MplCanvas" which presents the frames from the "Camera" inherits from the \gls{matplotlib} class "FigureCanvasQTAgg"~\cite{matplotlibqt4agg}.
 
     \putimage{python-client}{Python Client Application}
     
-As seen in figure~\ref{fig:python-client} the application client has 2 well differenced parts. On the left it is the image displayed as a colored gray-scale image in figure~\ref{fig:ir-image}. \gls{matplotlib} let us apply color maps on the image very easily, also to add an interpolation to improve the image quality, in this case there is a Bicubic interpolation %TODO: ref?
+As seen in figure~\ref{fig:python-client} the application client has 2 well differenced parts. On the left it is the image displayed as a colored gray-scale image in figure~\ref{fig:ir-image}. \gls{matplotlib} let us apply color maps on the image very easily, also to add an interpolation to improve the image quality, in this case there is a Bicubic interpolation~\cite{matplotlibinter}.
 
     \putimage[5]{ir-image}{Ir image}
 
@@ -1118,14 +1130,13 @@ The other activity makes the a \gls{ws} connection and process the data in real 
     \putimage[4]{android-client2}{Android Client}
 
 To achieve this \gls{android} allows to extend \gls{ui} elements with new behavior. In this case "ImageView" class is extended to add a \gls{ws} connection and fill the image with an array of binary data from this connection (same than in the python application section~\ref{sec:websocket-python-client}), in listing~\ref{listing:cameraview} the "CameraView" class meets this behavior using "WebsocketConnection" to get data from sensors (listing~\ref{listing:websocketconnection}) and "HighCamera" to represent a frame of the image (listing~\ref{listing:highcamera}). All of these listing can be found in appendix~\ref{appx:androidclient}.
-% TODO more stuff here
+
 
 \section{Server Side Methods}\label{sec:server-side-methods} 
 On this section describes the different approaches tested to created the middle point between sensors and clients. The server side application must be hosted somewhere, in this case a cloud environment described in the next section.
 
 \subsection{The communication channel}\label{sec:the-communication-channel}
-% TODO: refactor text here
-Sections 3.4 and 3.5 discuss where the channel logic is (aka the cloud) and what kind of application and technology could be used. Regardless what technology it is used for coding, build and maintain the cloud application, and before start coding it should define how different components are related between each other.
+Regardless what technology it is used for coding, build and maintain the cloud application, and before start coding it should define how different components are related between each other.
 Let’s start by defining the following entities:
 \begin{itemize}
     \item Sensor: It represents a single sensor connected to a raspberry pi, although it could a normal computer. The sensor itself does not connect to networks, thus it needs a middle hardware but it is considered as whole “entity” here.
@@ -1253,9 +1264,9 @@ OpenShift is a platform for the deployment of web applications and services. It 
 The process of updating the server side application is through a OpenShift mechanism called \gls{s2i} which allow creating containers from the application source code without using \gls{docker} files, it its simplest form a developer provides a \gls{git} repository to the platform and OpenShift takes cares of everything: building, deploying, routing, etc~\cite[5]{shipley2016openshift}.
 
 
-\subsection{Communication sensor-client}
-% TODO: \subsection{Communication sensor-client}
-\putimage{communication_udp}{Diagram of the communication using the module and UDP}
+%\subsection{Communication sensor-client}
+%% TODO: \subsection{Communication sensor-client}
+%\putimage{communication_udp}{Diagram of the communication using the module and UDP}
 
 \section{Other Tools used}
 
@@ -1393,7 +1404,9 @@ As in nursing homes, psychiatric hospital could have this kind of system. It cou
 \section{Other uses}
 \subsection{Self-driven vehicles}
 Self-driven public transport vehicles could benefit with this system too, since that there is no driver nor any other worker on the vehicle, accessible remotely \gls{ir} sensor can give valuable data to an hypothetically station in charge of the security of such vehicles and trigger an alarm in case of any dangerous situation.
+
     \putimage{robo-bussi}{self-driven bus in Otaniemi}
+    
 On figure~\ref{fig:robo-bussi} is the "robobussi" moving around Otaniemi campus in Espoo.
 
 \subsection{General surveillance}
@@ -1666,7 +1679,9 @@ def is_raspberry_command(s):
 % TODO: Python client appendix
 \chapter{Python Client listings}\label{appx:pythonclient}
 \addtocontents{toc}{\vspace{11pt}}
-appendix content
+
+
+
 \clearpage
 \liite{4}
 
