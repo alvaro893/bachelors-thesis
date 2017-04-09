@@ -629,8 +629,8 @@ Although with \gls{iot} it comes the process of defining a communication channel
 %This thesis discusses also how \gls{ir} sensors could be exploited in the case company to decrease costs and improving monitoring of patients.
 
 \section{Background of the case company}
-The thesis originates in a collaboration with the case company called Levitezer (\url{http://www.levitezer.com/}), Metropolia and Nokia.
- Levitezer is company that develops controllers for cameras for image stabilization such as gimbals~\cite{levitezer}. They provide the \gls{ir} sensors. Nokia with their innovation platform~\cite{nokiainnovation}, provides the cloud environment and the network. My part as Metropolia student is develop the mentioned communication channel.
+The thesis originates in a collaboration with the case company called LeViteZer (\url{http://www.levitezer.com/}), Metropolia and Nokia.
+ LeViteZer is company that develops controllers for cameras for image stabilization such as gimbals~\cite{levitezer}. They provide the \gls{ir} sensors. Nokia with their innovation platform~\cite{nokiainnovation}, provides the cloud environment and the network. My part as Metropolia student is develop the mentioned communication channel.
 
 
 
@@ -744,7 +744,7 @@ This chapter will discuss about methods for each side of the communication syste
 
 
 \section{The sensor}
-The \gls{ir} sensor provided by Levitezer delivers all infrared data in form of binary streams trough \gls{usb}.
+The \gls{ir} sensor provided by LeViteZer delivers all infrared data in form of binary streams trough \gls{usb}.
 
  In order to make the an image it is necessary to process the those streams. Every image or frame comes in 240 chunks or rows separated by a delimiter of 3 bytes:
 
@@ -1061,8 +1061,8 @@ In order to get access to the raspberry when it is out of reach, connections to 
 \section{Client Application Methods}\label{sec:client-application-methods}
 On this section it will be described different methods to create a client able to connect to the cloud thus the sensor, present the data to the user and send commands to the sensor.
 
-\subsubsection{Reversing engineering a \gls{labview} Application}
-At the beginning of the project Levitazer provided an example application to read the sensor from a laptop made in \gls{labview}, although this works it is not an idea platform to develop since it is strict closed software and in order to work with it a expensive license has to be paid. Then it was agreed that I will make an reverse-enginered python version out of the \gls{labview} client and extends its capabilities beyond the the simple laptop-sensor connection.
+\subsubsection{Porting the \gls{labview} Application}
+At the beginning of the project LeViteZer provided an example application to read the sensor from a laptop made in \gls{labview}, although this works it is not an idea platform to develop since it is strict closed software and in order to work with it a expensive license has to be paid. Then it was agreed that a ported python version will be made from the \gls{labview} client and extends its capabilities beyond the laptop-sensor \gls{usb} connection.
 
     \putimage{labview}{LabView implementation}
     
@@ -1436,7 +1436,7 @@ As stated in the business challenge this project was about "create a effective c
 The communication channel has been created, it has been tested and  it works. Please refer to section~\ref{sec:software} in chapter~\ref{sec:results} to obtain the last version of the code created in this project.
 
 \clearpage\chapter{Acknowledgments}
-I want to thank to Jukka Honkaniemi and Tero Nurminen (Metropolia) for let me be part of this project and their guidance. Also I want to Thanks to Kim Janson (Levitazer)for all I learn during last months in this project.
+I want to thank to Jukka Honkaniemi and Tero Nurminen (Metropolia) for let me be part of this project and their guidance. Also I want to Thanks to Kim Janson (LeViteZer) for all I learn during last months in this project.
 
 
 
