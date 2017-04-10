@@ -395,7 +395,7 @@ xleftmargin=1cm
 }
 \newglossaryentry{tcpip}
 {
-    name=TCP/IP stack,
+    name=TCP/IP,
     description={all the necessary layers to match the conceptual model of the Internet protocol suite}
 }
 \newglossaryentry{rs232}
@@ -662,7 +662,7 @@ Communications between devices is not a new topic, there are plenty of methods a
 
 \section{Communication between devices}
 % Talk about what is know about communication systems, full stack development, etc
-In order to establish a communication between two ends in a computer network or Internet it is good to comprehend how the "Internet Protocol Architecture" or \gls{tcp}/\gls{ip} stack work, which is the conceptual model which most of networks are based on~\cite[9]{tcpip}.
+In order to establish a communication between two ends in a computer network or in Internet it is good to comprehend how the "Internet Protocol Architecture" or \gls{tcpip} stack works. Most of networks are based on it, including office and home networks~\cite[9]{tcpip}.
 
 	\putimage[5]{tcpip}{\gls{tcp}/\gls{ip} Architecture}
 
@@ -688,39 +688,37 @@ The idea is to use reliable application protocol to make the connections and thi
 
 
 \subsection{UDP}
-\gls{udp} is a connectionless transport protocol, it does guaranties delivery of packets and they can come in a different order than when they were sent.
-\gls{udp} is commonly used to provide real time video stream on protocols as \gls{rtp}, it is also used in \gls{voip} to deliver telephone calls over network. They take advantage about the connectionless nature of \gls{udp} in form of less latency by the other hand losing some packets of during a call or a video retransmission is not a big deal. 
+\gls{udp} is a connectionless transport protocol, it does not guaranty delivery nor order of packets which means they can get lost and will not be re-requested and might come in a different order than when they were sent~\cite[18]{tcpip}.
 
-Then a \gls{udp} communication system could be fitted for this project since, what it is sending from the \gls{ir} sensors is a binary stream of images. Commands can be sent over \gls{udp} as well.
+\gls{udp} is commonly used to provide real communication such as time video stream on protocols as \gls{rtp}, it is also used in \gls{voip} to deliver telephone calls over network. They take advantage about the connectionless nature of \gls{udp} which despite  the mentioned disadvantages it has a low latency. On the other hand losing some packets during a call or video retransmission is not a big deal. 
+
+Then a \gls{udp} communication system may be suitable for this project since, what it is sending from the \gls{ir} sensors is a binary stream of images. Commands can be sent over \gls{udp} as well.
 This can be done sending packets between sensors and clients directly or through a server which could coordinate the data flow.
 
 \subsubsection{Port issues on remote hosts}\label{sec:port-issues-on-remote-hosts}
-Routers and firewalls usually do not accept connection from ports other than 80 and 443. and this is an issue when using \gls{udp} (or \gls{tcp}) sockets approaches. Inside a local network or in the same computer there is no such problem, so a solution can be using a \gls{vpn} provider which allows remote computers act as if they where in a local network and increase the security as well.
+Routers and firewalls usually do not accept connection from ports other than 80 and 443. This is an issue when using \gls{udp} (or \gls{tcp}) sockets approaches. In a local network usually there are no such issues (although firewalls could be strict, depends on the local network administrators), so a solution can be using a \gls{vpn} provider which allows remote computers act as if they where in a local network and increase the security as well.
 
-Another solution is \gls{udp} hole punching technique to establish bidirectional communication between hosts that are behind \gls{nat} routers by using a external host to keep track of the ports and address used in the \gls{nat} tables of both hosts routers.
+Another solution is \gls{udp} hole punching technique to establish bidirectional communication between hosts that are behind \gls{nat} routers by using a external host to keep track of the ports and addresses used in the \gls{nat} tables of both hosts routers.
 
 
 
 
 \subsection{TCP}
-the \gls{tcp} is the other transport layer protocol, it differs from \gls{udp} in unlike this, \gls{tcp} is connection based and guaranties the delivery of packets. Thus protocols made on top of \gls{tcp} establish a connection and then data can start flowing.
+\gls{tcp} is the other transport layer protocol, unlike \gls{udp}, \gls{tcp} is connection based and guaranties the delivery and order of packets. Thus protocols made on top of \gls{tcp} establish a connection and have to maintain it, which increases the latency~\cite[19]{tcpip}.
 
 \subsubsection{Http}\label{sec:http}
-\gls{http} and \gls{https} is application layer protocol made on top of \gls{tcp}. Http is meant to request resources such as \gls{html} documents, \gls{xml}, \gls{json} or plain text. Any request has a response which can contain a body of data and response code (like the famous "404 not found")~\cite{http-rfc}.
+\gls{http} and \gls{https} is application layer protocol made on top of \gls{tcp}. \gls{http} is meant to request resources such as \gls{html} documents, \gls{xml}, \gls{json} or plain text. Any request has a response which can contain a body of data and response code (like the famous "404 not found")~\cite{http-rfc}.
 
-\gls{http} is strongly related to the \gls{www}, on most of routers and firewalls the port 80 (\gls{http}) and 443 \gls{https} are accessible. Then the \gls{http} responses can be used to send data to a particular computer indirectly without having trouble with \gls{nat} routers or firewalls which could be used for sensor-client communication.
+\gls{http} is strongly related to the \gls{www}, on most of routers and firewalls the port 80 (\gls{http}) and 443 (\gls{https}) are allowed. In addiction, the \gls{http} responses can be used to receive data from the other end indirectly. This could be used for a request-response sensor-client communication approach using a third party like a server.
 
 \putimage[14]{http-approach}{Http/s approach}
 
-As seen in figure~\ref{fig:http-approach} both sensor and client requests sending the data (which is between "<>" signs in the figure) that other end expect to receive. A server application take cares to forward requests data to responses. Thus all requests are always towards the server 
+As seen in figure~\ref{fig:http-approach} both sensor and client use requests to send data (which is between "<>" signs in the figure) that other end expect to receive in the response. A server application take cares to forward requests data to responses. Thus all requests are always towards the server and must be continuous.
 
 \subsubsection{Websocket}
 \gls{ws} is a relatively new protocol (end of 2011) which was meant to provide web applications with bidirectional communication without making continuous \gls{http} requests through techniques like XMLHttpRequest~\cite[4]{rfc6455}.
 
-As \gls{http}, \gls{ws} use ports 80 and 443 (secure \gls{ws}) by default then it has not problems with \gls{nat} and firewalls. Once a connection is established both ends can receive and send data until the connection is closed. This connection is started with a handshake in form of a \gls{http} GET request~\cite[6]{rfc6455}. 
-
-
-
+As \gls{http}, \gls{ws} use ports 80 and 443 (secure \gls{ws}) by default then it can go through \gls{nat} and firewalls easily. Once a connection is established both ends can receive and send data until the connection is closed. This connection is started with a handshake in form of a \gls{http} GET request~\cite[6]{rfc6455}. 
 
 
 
@@ -1282,7 +1280,7 @@ All the repositories to the applications developed in this thesis are hosted in 
 \subsection{Latex}
 % What is latex, what is tex
 % reasons to use latex, abreviations, commands etc, show figures
-To write this thesis I used \LaTeX which is a documentation preparation system rather than using the mainstream options which are LibreOffice or Office Word. The reasons for this was automation and the quality one can achieve. It is known that it is preferred in academic articles and theses.
+To write this thesis \LaTeX was used which is a documentation preparation system rather than using the mainstream options which are LibreOffice or Office Word. The reasons for this was automation and the quality that can achieve.
 
     \putimage{latex-look}{How the document looks like}
     
