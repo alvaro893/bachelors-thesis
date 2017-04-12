@@ -727,10 +727,10 @@ As \gls{http}, \gls{ws} use ports 80 and 443 (secure \gls{ws}) by default then i
 %Describe the context in which the work was carried out (such as the overall project and its design, your specific task, work environment) and the workflow. Describe the methods and materials used (accurate details of data, software, materials, methods, techniques). Give a full account of exact test arrangements and measurements carried out, and accurate details of data analysis.
 %The issues included in this section depend on the nature of your project. Whatever the issues, describe them in sufficient detail and in logical sequence.
 
-The aim of this project is to design methods to transmit data from one sensor to a client application and vice-versa. Also define a generalization to communicate from $N$ sensors to $M$ client applications, being either $N$ and $M$ arbitrary numbers. Note that the communication must be bidirectional since clients can send commands to sensors to perform operations such as calibration, delay between frames, etc. Then on this communication system there are 3 well differentiated parts:
+The aim of this project is to design methods to transmit data from one sensor to a client application and vice-versa. Also define a generalization to communicate from $N$ sensors to $M$ client applications, being either $N$ and $M$ arbitrary numbers. Note that the communication must be bidirectional since clients can send commands to sensors in order to perform operations such as calibration, delay between frames, etc. On this communication system there are 3 well differentiated parts:
 \begin{itemize}
-    \item sensor side: software that connects the sensor with the server side.
-    \item server side: software that connects sensors and clients together.
+    \item Sensor side: software that connects the sensor with the server side.
+    \item Server side: software that connects sensors and clients together.
     \item client side: software that connects the an user with the server side to access a sensor.
 \end{itemize}
 
@@ -738,13 +738,13 @@ The figure~\ref{fig:communication-channel} shows this idea.
 
 \putimage{communication-channel}{A communication channel}
 
-This chapter will discuss about methods for each side of the communication system in detail.
+This chapter discuss about methods for each side of the communication system in detail.
 
 
 \section{The sensor}
 The \gls{ir} sensor provided by LeViteZer delivers all infrared data in form of binary streams trough \gls{usb}.
 
- In order to make the an image it is necessary to process the those streams. Every image or frame comes in 240 chunks or rows separated by a delimiter of 3 bytes:
+ In order to make the an image it is necessary to process those streams. Every image or frame comes in 240 rows of 80 bytes of data separated by a delimiter of 3 bytes plus an extra byte that identify the row:
 
 \begin{equation}
 \label{eq:sensor-stream}
@@ -755,7 +755,7 @@ The \gls{ir} sensor provided by LeViteZer delivers all infrared data in form of 
 
 
 
-In equation~\ref{eq:sensor-stream} every byte is seen in hexadecimal format containing an sequence "FF FF FF" is the between rows of typically 80 bytes of data. After the sequence, the 4th byte is the number which identify the row.
+In equation~\ref{eq:sensor-stream} every byte is on hexadecimal format containing a sequence "FF FF FF" which is at the beginning of every row. After this sequence, the 4th byte is the number which identify the row from 0 to 240.
 
 As equation~\ref{eq:metadata-row} shows, The 240th (F0 in hexadecimal) and last row provides meta-data about the frame
 
@@ -763,9 +763,10 @@ As equation~\ref{eq:metadata-row} shows, The 240th (F0 in hexadecimal) and last 
 \label{eq:metadata-row}
 \dots \text {FF FF FF F0} \left\lbrace metadata \right\rbrace
 \end{equation}
-In table~\ref{table:metadata-row} are listed all information contained in the meta-data taking as byte '0' the one after the sequence "FF FF FF F0"
+In table~\ref{table:metadata-row} are listed all information contained in the meta-data.
 
 \subsubsection{Meta-Data}
+Every frame comes with valuable data about its state and sensor's such as configuration, temperature parameters, etc.
 \begin{table}[h]
     \centering
     \begin{tabu}{| l | c |}
@@ -794,7 +795,7 @@ Here is a short explanation about the meta-data values:
 \begin{itemize}
     \item Time counter: Amount of seconds since the sensor was power on.
     \item Frame counter: Amount of frames since the sensor was power on.
-    \item Frame mean:
+    \item Frame mean: Temperature mean of the frame.
     \item Sensor temperature: temperature of the sensor itself.
     \item Maximum temperature: maximum temperature registered the current frame.
     \item Minimum temperature: minimum temperature registered the current frame.
@@ -805,6 +806,7 @@ Here is a short explanation about the meta-data values:
     \item Bit depth: bit depth of the image, it can be 0, 2 or 8 (default).
     \item Delay between frames: if no delay is set (delay=0) then the delay is about 111 milliseconds (9 frames per second).
 \end{itemize}
+Note: Temperatures from sensors are not in absolute values, this is because the sensor does not detect particular values but difference in temperature.
 
 \subsubsection{Commands} \label{commands}
 % TODO: more Pictures of the sensors
@@ -831,23 +833,23 @@ The commands are sent over the same serial \gls{usb} cable from which the frames
     \label{table:commands}
 \end{table}
 
-The frame-rate is 9 frames per second at maximum, although the sensor can be configured with an arbitrary delay time between frames.
+Note: The frame-rate is 9 frames per second at maximum, although the sensor can be configured with an arbitrary delay time between frames.
 
 \subsubsection{Creating the image}\label{creatingimage}
-Every frame has a size of 160x120, but the image data comes in a matrix of 80x239 (240 is the meta-data row) as equation~\ref{eq:sensor-stream} and \ref{eq:metadata-row} shown before. Each byte of data can be seen as a pixel in a gray-scale image, but in order to generate the correct image the "data matrix" must be reshaped to 160x120 as show in the figure~\ref{fig:sensor-image}. Every 2 row in the data matrix make 1 row in the image.
+Every frame has a size of 160x120 pixels, but the image data comes in a matrix of 80x239 (240 is the meta-data row) as equation~\ref{eq:sensor-stream} and \ref{eq:metadata-row} shown before. Each byte of data can be seen as a pixel in a gray-scale image, but in order to generate the correct image the "data matrix" must be reshaped to 160x120 as show in the figure~\ref{fig:sensor-image}. Every 2 row in the data matrix make 1 row in the image.
 \putimage{sensor-image}{Reshaping data}
 
-I developed a simple solution to do this:
+In the future the number of pixels might change so it is better to define a generalized solution to do the reshaping:
 
-For each data row (equation~\ref{eq:data}) let $n_j$ be the data current row number performing by the 4th byte in equation~\ref{eq:sensor-stream}, then for every $d_i$ value in the data row is possible to define every pixel $p_{ij}$ of the image matrix (equation~\ref{eq:image}) as a coordinate pair $(x,y)$ in the data matrix 
+For each data row (equation~\ref{eq:data}) let $n_j$ be the data current row number performing by the 4th byte in equation~\ref{eq:sensor-stream}, then for every $d_i$ value in the data row is possible to define every pixel $p_{ij}$ of the image matrix (equation~\ref{eq:image}) as a coordinate pair $(x,y)$ in the data matrix. $s$ is the size of the data row which is 80 in this case.
 \begin{equation}
 \label{eq:data}
 D_{i,j} = 
 \begin{pmatrix}
-n_1 & d_1 & d_2 & d_3 & \cdots & d_i\\
-n_2 & d_1 & d_2 & d_3 & \cdots & d_i\\
-\vdots & \vdots & \vdots& \vdots  & \ddots & \vdots  \\
-n_j & d_1 & d_2 & d_3 & \cdots & d_i\\
+    n_1 & d_{1,1} & d_{1,2} & \cdots & d_{i,1}\\
+    n_2 & d_{2,1} & d_{2,2} & \cdots & d_{i,2}\\
+ \vdots & \vdots  & \vdots  & \ddots & \vdots  \\
+    n_j & d_{1,j} & d_{2,j} & \cdots & d_{i,j}\\
 \end{pmatrix}
 \end{equation}
 
@@ -864,7 +866,7 @@ I_{i,j} =
 
 \begin{equation}
 \label{eq:coordinate}
-x = n_j \backslash 2  \qquad y = n_j \bmod 80 + i
+x = n_j \backslash 2  \qquad y = n_j \bmod s + i
 \end{equation}
 
 \begin{equation}
@@ -874,7 +876,7 @@ p_{ij} = d_{xy}
 
 As seen in equation~\ref{eq:pixel} any pixel value corresponds to a x,y pair define in equation~\ref{eq:coordinate} .
 
-Note the "\textbackslash" here is meant for integer division in equation~\ref{eq:coordinate}, it is \textbf{not} a normal division with rational or decimal numbers.
+Note the "\textbackslash" here is meant for integer division in equation~\ref{eq:coordinate}, it is \textbf{not} a normal division with rational or decimal numbers. "mod" function represents the modulus operation which finds the remainder of a division.
 
 As an example of a practical implementation in \gls{python} see the listing~\ref{listing:image-python} which function process{\_}data{\_}row is called for every data row
 
@@ -897,8 +899,6 @@ The sensor has been described in the previous section. Here different methods to
 
 \subsection{Android smart-phone as Gateway}
 Most of Android smart-phones have an \gls{otg} which allows to use \gls{usb} peripherals in the phone with the correspondent \gls{otg} adapter This can be used to develop an Android application to receive the data from the sensor and send it through Internet using any protocol, in this sense the cellphone act as a gateway to Internet, letting the sensor access the \gls{3g} or the \gls{lte} network.
-
-\putimage{android_otg}{Android smart-phone and sensor}
 
 An advantage of this approach is that the smart-phone(including a \gls{sim} card) has all the hardware on it to make the communication. Hence there is only need to focus on the software part.
 
