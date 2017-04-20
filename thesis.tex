@@ -25,9 +25,9 @@ Etunimi Sukunimi, Titteli
 \def\metropoliadegreeprogramme {Information Technology}
 \def\metropoliaspecialisation {Software Engineer}
 \def\metropoliainstructors {
-Tero Nurminen, TKI-vastaava yliopettaja \newline
+Dr. Tero Nurminen, TKI-vastaava yliopettaja \newline
 }
-\def\metropoliakeywords {IoT, IR, sensor, cloud, full-stack, communication channel, websocket, http}
+\def\metropoliakeywords {IoT, IR, sensor, cloud, full-stack, communication channel, websocket, http, LTE, Android, Python}
 \date{\today}
 
 %----------------------------------------------------------------------------------------
@@ -307,7 +307,7 @@ xleftmargin=1cm
 \newacronym{ram}{RAM}{Random Access Memory}
 \newacronym{php}{PHP}{Hypertext Preprocessor}
 \newacronym{lte}{LTE}{Long Term Evolution}
-\newacronym{3g}{3G}{Third generation}
+\newacronym{3g}{3G}{Third Generation Mobile Network}
 \newacronym{ir}{IR}{Infrared}
 \newacronym{iot}{IoT}{Internet of Things}
 \newacronym{usb}{USB}{Universal Serial Bus}
@@ -333,7 +333,7 @@ xleftmargin=1cm
 \newacronym{xml}{XML}{Extensible Markup Language}
 \newacronym{json}{JSON}{JavaScript Object Notation}
 \newacronym{uri}{URI}{Uniform Resource Identifier}
-\newacronym{npm}{npm}{Node Packet Manager}
+\newacronym{npm}{NPM}{Node Packet Manager}
 \newacronym{ip}{IP}{Internet Protocol}
 \newacronym{ran}{RAN}{Radio Access Network}
 \newacronym{s2i}{S2I}{Source-to-Image}
@@ -343,6 +343,7 @@ xleftmargin=1cm
 \newacronym{vpn}{VPN}{Virtual Private Network}
 \newacronym{www}{WWW}{World Wide Web}
 \newacronym{pdf}{PDF}{Portable Document Format}
+\newacronym{ascii}{ASCII}{American Standard Code for Information Interchange}
 
 
 
@@ -350,11 +351,11 @@ xleftmargin=1cm
 %Glossary entries
 \newglossaryentry{ws}{
 	name=Websocket, 
-	description={Application protocol build on top of \gls{tcp}}
+	description={Application protocol build on top of TCP}
 }
 \newglossaryentry{github}{
 	name=GitHub, 
-	description={Hosting site for \gls{git} repositories}
+	description={Hosting site for Git repositories}
 }
 \newglossaryentry{git}{
 	name=Git, 
@@ -389,14 +390,14 @@ xleftmargin=1cm
 	description={environment for visual programming language used for instrument control}
 }
 \newglossaryentry{thesis}{
-	name=thesis, 
-	description={a written essay one submitted for a university degree},
-	plural=theses
+	name=Thesis, 
+	description={A final year project report for a university degree},
+	plural=Theses
 }
 \newglossaryentry{tcpip}
 {
     name=TCP/IP,
-    description={all the necessary layers to match the conceptual model of the Internet protocol suite}
+    description={All the necessary layers to match the conceptual model of the Internet protocol suite}
 }
 \newglossaryentry{rs232}
 {
@@ -688,7 +689,7 @@ The idea is to use reliable application protocol to make the connections and thi
 
 
 \subsection{UDP}
-\gls{udp} is a connectionless transport protocol, it does not guaranty delivery nor order of packets which means they can get lost and will not be re-requested and might come in a different order than when they were sent~\cite[18]{tcpip}.
+\Gls{udp} is a connectionless transport protocol, it does not guaranty delivery nor order of packets which means they can get lost and will not be re-requested and might come in a different order than when they were sent~\cite[18]{tcpip}.
 
 \gls{udp} is commonly used to provide real communication such as time video stream on protocols as \gls{rtp}, it is also used in \gls{voip} to deliver telephone calls over network. They take advantage about the connectionless nature of \gls{udp} which despite  the mentioned disadvantages it has a low latency. On the other hand losing some packets during a call or video retransmission is not a big deal. 
 
@@ -696,7 +697,7 @@ Then a \gls{udp} communication system may be suitable for this project since, wh
 This can be done sending packets between sensors and clients directly or through a server which could coordinate the data flow.
 
 \subsubsection{Port issues on remote hosts}\label{sec:port-issues-on-remote-hosts}
-Routers and firewalls usually do not accept connection from ports other than 80 and 443. This is an issue when using \gls{udp} (or \gls{tcp}) sockets approaches. In a local network usually there are no such issues (although firewalls could be strict, depends on the local network administrators), so a solution can be using a \gls{vpn} provider which allows remote computers act as if they where in a local network and increase the security as well.
+Routers and firewalls usually do not accept connection from ports other than 80 and 443. This is an issue when using \gls{udp} (or \gls{tcp}) sockets approaches. In a local network usually there are no such issues (although firewalls could be strict, depends upon the local network administrators), so a solution can be using a \gls{vpn} provider which allows remote computers act as if they where in a local network and increase the security as well.
 
 Another solution is \gls{udp} hole punching technique to establish bidirectional communication between hosts that are behind \gls{nat} routers by using a external host to keep track of the ports and addresses used in the \gls{nat} tables of both hosts routers.
 
@@ -810,22 +811,22 @@ Note: Temperatures from sensors are not in absolute values, this is because the 
 
 \subsubsection{Commands} \label{commands}
 % TODO: more Pictures of the sensors
-The commands are sent over the same serial \gls{usb} cable from which the frames are received.
+The commands are sent over the same serial \gls{usb} cable from which the frames are received. In table~\ref{table:commands} the main commands are displayed along its binary representation: for the first byte an \gls{ascii} character and for the data argument it depends upon the command.
 
 \begin{table}[h]
     \centering
     \begin{tabu}{| l | c | c |}
         \hline
-        \rowfont[c]{\bfseries} Command Name & Command (ASCII byte) & Arguments \\ \hline
+        \rowfont[c]{\bfseries} Command Name & Command (\gls{ascii} byte) & Arguments \\ \hline
         
-       Synchronize 		    & S & No      \\
-       Calibrate   		    & C & No      \\
-       Set Max Limit        & H & 2 bytes \\
-       Set Min Limit        & L & 2 bytes \\
-       Auto Max Limit       & A & No	  \\
-       Auto Min Limit       & a & No	  \\
-       Set Bit Depth        & B & 1 byte  \\
-       Set Frame Delay      & U & 2 bytes \\
+       Synchronize 		                    & S & No      \\
+       Calibrate   		                    & C & No      \\
+       Set Maximum Temperature Limit        & H & 2 bytes \\
+       Set Minimum Temperature Limit        & L & 2 bytes \\
+       Auto Maximum Temperature Limit       & A & No	  \\
+       Auto Minimum Temperature Limit       & a & No	  \\
+       Set Bit Depth                        & B & 1 byte  \\
+       Set Frame Delay                      & U & 2 bytes \\
 
         \hline
     \end{tabu}
@@ -966,10 +967,10 @@ Notice in line 3 that it is in reality quite simple to receive binary data in fo
 
 
 \subsection{Lte module}
-\gls{lte} modules work as a phone: They need a \gls{sim} card to connect to network, they can be integrated in a board. Typically these modules have a number of interfaces such as \gls{usb}, rs-232, \gls{spi}, etc to connect peripherals.
+\acrfull{lte} modules work as a phone: They need a \gls{sim} card to connect to network, they can be integrated in a board. Typically these modules have a number of interfaces such as \gls{usb}, rs-232, \gls{spi}, etc to connect peripherals.
 
 
-In order to set a route between your device and a service on Internet or your own server, a piece of code must be provided, it depends on the module how can be done. For a project like this it is interesting that the module has its own \gls{tcpip}.
+In order to set a route between your device and a service on Internet or your own server, a piece of code must be provided, it depends upon the module how can be done. For a project like this it is interesting that the module has its own \gls{tcpip}.
 
 
 
@@ -980,14 +981,14 @@ This is not a simple modem that allows other machines to be connected to Interne
 
 	\putimage[5]{lte_module}{ELS61-E chip size}
 
-The module used was Gemalto ELS61-E which is configured using the Hayes command set (also called AT commands) which are used typically on modems %reference%.
+The module used was Gemalto ELS61-E which is configured using the Hayes command set (also called AT commands) which are used typically on modems. See how AT commands look in listing~\ref{listing:at_commands_example}. %reference.
 \putcode{at_commands_example}{AT commands}[style=styleprogramming]$
 AT^SMSO  # shutdown
 AT+COPS  # register to network command
 $ % end of code, delimiter is $
 
 
-This module can be programmed using \gls{javame} which is a \gls{java} edition for embedded devices \cite{javame}. Application layer protocols and \gls{tcp}/\gls{udp} sockets can be used in a \gls{midlet} which allows to describe the life-cycle of a single application. With this tools the \gls{usb}, \gls{spi} or \gls{rs232} ports can be controlled and even send AT commands.
+This module can be programmed using \gls{javame} which is a \gls{java} edition for embedded devices \cite{javame}. Application layer protocols and \gls{tcp}/\gls{udp} sockets can be used in a \gls{midlet} which allows to describe the life-cycle of a single application such as in the listing~\ref{listing:midlet-example} example. With this tools the \gls{usb}, \gls{spi} or \gls{rs232} ports can be controlled and even send AT commands.
 
 
 \putcode{midlet-example}{MIDlet application life-cycle example}[language=Java,style=styleprogramming]^
@@ -1046,15 +1047,40 @@ The programming language chosen to communicate with the sensor from the raspberr
 
 
 
-In order to separate tasks it is possible to use multiple threads which are supported in \gls{python} and the multiprocessing package to have separate into several process and take advantage of the various \gls{cpu} cores~\cite{python-multi}. For controlling the priority the package "psutil" allow to control the "niceness" of the process~\cite{python-psutil}
+In order to separate tasks it is possible to use multiple threads which are supported in \gls{python} and although this allows run several tasks at the same time when using python, it could be advisable to use the multiprocessing package to separate tasks into several process and take advantage of the various \gls{cpu} cores~\cite{python-multi}. For controlling process priority the package "psutil" allows to control the "niceness" of the process~\cite{python-psutil}.
 
-It is also desirable being able to do certain operations remotely without using \gls{ssh}. The connection made between client-server-raspberry can be taken in advance to for example shutdown, reset, update, etc the raspberry. For this purpose the subprocess package can be use to issue commands and other process, as one can do in a terminal shell~\cite{python-subprocess}. See the listing~\ref{listing:rpi-subprocess} to see my actual implementation.
+In order to get access to the raspberry when it is out of reach, connections to it through Internet using \gls{ssh}, which is a protocol to connect to remote hosts using shell through an encrypted connection. It is also desirable being able to do certain operations remotely without using \gls{ssh}. The connection made between client-server-raspberry can be taken in advance to for example shutdown, reset, update, etc the raspberry. For this purpose the subprocess package can be use to issue commands and other process, as one can do in a terminal shell~\cite{python-subprocess}. See the listing~\ref{listing:rpi-subprocess} on appendix~\ref{appx:reader} to see my actual implementation.
 
 \subsubsection{Services}
-To run programs and script automatically from booting it is possible to add systemd based services which are in most of Linux distributions. For the purposes of this sensor reader it is needed at least 2 services. One to keep alive the network connection alive. Other to keep the reader program constantly running.
+To run programs and script automatically from booting it is possible to add systemd based services which can be found in most of Linux distributions. For the purposes of this sensor reader it is needed at least two services. One to keep alive the network connection alive. Other to keep the reader program constantly running. Listing~\ref{listing:rpi-services} show these two services which basically run other script and try to keep it alive.
 
-\subsubsection{remote communication}
-In order to get access to the raspberry when it is out of reach, connections to it through Internet using \gls{ssh} are the most common way
+\putcode{rpi-services}{Systemd services}[language=Bash,style=styleprogramming]^
+### /lib/systemd/system/lte.service
+[Unit]
+Description=Lte module service
+
+[Service]
+ExecStartPre=ls /dev/cdc-wdm0 || echo "cannot see the lte module, retrying..."
+ExecStart=/home/pi/lte-daemon
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
+### /lib/systemd/system/sensor.service
+[Unit]
+Description=read sensor and send data via websocket
+
+[Service]
+ExecStart=/home/pi/sensor-reader/main.py
+WorkingDirectory=/home/pi/sensor-reader
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+^
 
 \section{Client Application Methods}\label{sec:client-application-methods}
 On this section it will be described different methods to create a client able to connect to the cloud thus the sensor, present the data to the user and send commands to the sensor.
@@ -1078,7 +1104,7 @@ This application was intended to have the characteristics of the \gls{labview}'s
 \subsubsection{Design}
 On a relatively complex application as this one  \gls{oop} is the most convenient way to go when designing the application.
 
-As data sources in this application, it can be from directly \gls{usb} or from network, for those purposes the class "SerialConnection" will be in charge of communicate with a \gls{ir} sensor connected to the computer over \gls{usb} see listing~\ref{listing:serialcommunication}. on the other hand "WebsocketConnection" mimics roughly the behavior of "SerialConnection" however it makes the connection over Internet using the \gls{ws} protocol.
+As data sources in this application, it can be from directly \gls{usb} or from network, for those purposes the class "SerialConnection" will be in charge of communicate with a \gls{ir} sensor connected to the computer directly over \gls{usb} (for testing) see listing~\ref{listing:serial-reader} in appendix~\ref{appx:reader}, this class is the same that is used in the raspberry side to read the sensor. On the other hand "WebsocketConnection" mimics roughly the behavior of "SerialConnection" however it makes the connection over Internet using the \gls{ws} protocol.
 
 Once a connection is made the class "Camera" and its children will handle data processing to make array frames as it was explained in section~\ref{creatingimage}.
 
@@ -1146,7 +1172,7 @@ Let’s start by defining the following entities:
     \item Cloud: It is what holds all the sensor entities and their clients on it.
     The channel should support an unlimited number of sensors which can hold an unlimited number of clients.
 \end{itemize}
-\putimage[15]{channel-er}{ER diagram}
+\putimage[15]{channel-er}{\acrlong{er} of the communication channel}
 The channel should support an unlimited number of sensors which can hold an unlimited number of clients.
 The diagram in figure \ref{fig:channel-er} represents the general view of how entities are related to each other. This helps to develop a \gls{uml} Class Diagram which specifies how classes in an \gls{oop} language are related to each other. In figure~\ref{fig:channel-uml} there is such diagram simplified.
 On the final implementation the server side application was written in \gls{js} which is the Language for \gls{nodejs} applications.
@@ -1364,14 +1390,14 @@ For example \texttt{ws://localhost:8080/camera?pass=d8n2d0\&camera\_name=corner-
 \subsection{android smart-phone gateway solution}
 This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as \gls{java}.
 
-\subsection{\gls{lte} module solution}
+\subsection{LTE module solution}
 This method could have been the ideal solution to read a sensor and connect it to Internet, but there were multiple issues regarding this method:
 \begin{itemize}
     \item It turned out that the module did not support the \gls{lte} frequency bands of the mobile provider Netleap see section~\ref{sec:the-medium} of chapter~\ref{sec:theoretical-background}.
     \item It was hard to set-up a developing environment for it.
 \end{itemize} 
 
-\subsection{\gls{udp} protocols}
+\subsection{UDP protocols}
 There were many test to use \gls{udp} for communications but for the issues mentioned in section~\ref{sec:port-issues-on-remote-hosts} of chapter~\ref{sec:theoretical-background} and because \gls{ws} worked very good. any \gls{udp} was dropped.
 
 \subsection{python flask server-side application}
