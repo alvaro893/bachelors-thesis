@@ -895,7 +895,7 @@ $
 
 Also note that in order to fill the "self.frame{\_}arr" matrix the function is must be called 239 times
 
-\section{Sensor Reader Methods}
+\section{Sensor Side Methods}
 The sensor has been described in the previous section. Here different methods to read the sensor are discussed, some worked better than others, nevertheless all of what was tried is included.
 
 \subsection{Android smart-phone as Gateway}
@@ -977,7 +977,7 @@ In order to set a route between your device and a service on Internet or your ow
 \subsubsection{Gemalto Lte module}
 
 
-This is not a simple modem that allows other machines to be connected to Internet, it has a complete \gls{tcpip} which means that protocols of the transport layer such as \gls{tcp} and \gls{udp} and application layer such as \gls{http} and \gls{https} can be used as well all in very small compact chip as it is seen in figure~\ref{fig:lte_module}.
+This is not a simple modem that allows other machines to be connected to Internet, it has a complete \gls{tcpip} stack which means that protocols of the transport layer such as \gls{tcp} and \gls{udp} and application layer such as \gls{http} and \gls{https} can be used as well all in very small compact chip as it is seen in figure~\ref{fig:lte_module}.
 
 	\putimage[5]{lte_module}{ELS61-E chip size}
 
@@ -1082,7 +1082,7 @@ RestartSec=5
 WantedBy=multi-user.target
 ^
 
-\section{Client Application Methods}\label{sec:client-application-methods}
+\section{Client Side Methods}\label{sec:client-application-methods}
 On this section it will be described different methods to create a client able to connect to the cloud thus the sensor, present the data to the user and send commands to the sensor.
 
 \subsubsection{Porting the \gls{labview} Application}
@@ -1149,13 +1149,11 @@ As in the python client, it is necessary to code:
     \item allow to choose which camera to connect to.
 \end{itemize}
 
-\gls{android} application are slitted on different screens called Activities which contain \gls{ui} elements that the user can interact. In this case there is an activity for choosing the camera to connect, see figure~\ref{fig:android-client}.
+\gls{android} application are slitted on different screens called Activities which contain \gls{ui} elements that the user can interact. In this case there is an activity for choosing the camera to connect, see figure~\ref{fig:android-client3}.
 
-    \putimage[4]{android-client}{Android Client}
+    \putimage[16]{android-client3}{Android Client}
 
-The other activity makes the a \gls{ws} connection and process the data in real time so the different frames can be visualized in gray-scale (figure~\ref{fig:android-client2}).
-
-    \putimage[4]{android-client2}{Android Client}
+The other activity makes the a \gls{ws} connection and process the data in real time so the different frames can be visualized in gray-scale (figure~\ref{fig:android-client3}).
 
 To achieve this \gls{android} allows to extend \gls{ui} elements with new behavior. In this case "ImageView" class is extended to add a \gls{ws} connection and fill the image with an array of binary data from this connection (same than in the python application section~\ref{sec:websocket-python-client}), in listing~\ref{listing:cameraview} the "CameraView" class meets this behavior using "WebsocketConnection" to get data from sensors (listing~\ref{listing:websocketconnection}) and "HighCamera" to represent a frame of the image (listing~\ref{listing:highcamera}). All of these listing can be found in appendix~\ref{appx:androidclient}.
 
@@ -1181,7 +1179,43 @@ On the final implementation the server side application was written in \gls{js} 
 
 
 \subsection{Python Flask}
-Flask is a \gls{python} framework for web development which allows to write web applications back-ends and is specially useful to create web \gls{api}s. this application use an \gls{http} approach as in section~\ref{sec:http} was described. It keeps a buffer of image data and commands, so that both sensor and client have to request continuously even though when there is no new data. 
+Flask is a \gls{python} framework for web development which allows to write web applications back-ends and is specially useful to create web \gls{api}s. this application use an \gls{http} approach as described in section~\ref{sec:http} to communicate client side and sensor side applications must implement the mentioned approach as well.
+
+This keeps a queue buffer of image data and commands, so that both sensor and client have to request continuously even though when there is no new data. In listing~\ref{listing:flask} a simplification of this Flask application is shown, the buffer and commands are hold in the \texttt{data\_queue} and \texttt{parameters}.
+
+\putcode{flask}{\gls{http} - buffer approach}[language=Python,style=styleprogramming]^
+app = Flask(__name__)
+parameters = {}
+data_queue = Queue(5)
+
+@app.route('/video/buffer', methods=['POST'])
+def submit_buff():
+    data = request.data
+    logging.debug("data:%s", data)
+    if data_queue.full():
+        logging.debug('queue is full. dropping 1')
+        data_queue.get() # drop 1 buffer
+    
+    data_queue.put(data)
+    return jsonify(**parameters)
+
+
+@app.route('/video/buffer', methods=['GET'])
+def obtain_buff():
+    global parameters
+    print request.args
+    for k, v in request.args.items():
+        parameters[k] = v
+        
+    if data_queue.empty():
+        logging.debug('queue is empty, sending 0 ...')
+        return '0'
+    else:
+        return data_queue.get()
+^
+Using the \texttt{/video/buffer} endpoint it is possible to send data to it using a 'POST' \gls{http} requests continuously from the sensor side and to send 'GET' requests to get image data in the client side, if a client wants to send a command (called parameter in this application) it can be sent as query parameter in the 'GET' request, for example \texttt{www.example.com/video/buffer?command0=value0\&command1=value1\&...}
+
+A good thing about flask is its straightforward \gls{api} as seen in listing~\ref{listing:flask}, defining a route to an endpoint is very easy because takes advantage of the decorators \texttt{@app.route} and result in a quite clear code.
 
 \subsection{Node js Server Application}
 \gls{nodejs} is a \gls{js} runtime which allows to create server-side applications, the main reason of why one would choose \gls{nodejs} over other well know options such as \gls{apache} + \gls{php} is the non-blocking model \gls{nodejs} is based on. This let make asynchronous code easily and it is quite fast~\cite[p.12]{nodejs}~\cite{nodeblocking}.
