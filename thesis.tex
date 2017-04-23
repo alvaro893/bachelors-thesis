@@ -1440,6 +1440,26 @@ At the end the \gls{nodejs} application turned out to work better and faster. so
 
 \clearpage\chapter{Discussion}\label{sec:discussion}
 %What do the results mean?
+On this chapter is discussed how the results may be used. The sections here are more based on speculation rather than experimentation and proposed lines of research.
+
+\section{Use in the Nokia Innovation Platform}
+The Nokia Innovation Platform is a trial environment for teams and star-ups that are related to \gls{iot} projects specially projects that use cell-phone network as \gls{lte}. This project is part of this Nokia Innovation Platform hence there is some ongoing use cases. Some of the sensors has been placed on different places to test its functionality and investigate further the uses of this communication channel.
+
+	\putimage{people}{People in a room}
+	
+On the figure~\ref{fig:people} some persons can be seen clearly and in the figure~\ref{fig:analysed} is shown the same situation plus running a computer vision software to detect how many people in the room.
+
+	\putimage{analysed}{Analize image to detect heat points in the room}
+
+Computer vision can be used to track people and research their behavior storing big quantities of tracking date may allow to make predictions of many kinds. On the next sections some scenarios are proposed where this could be useful.
+
+\subsection{Shopping center}
+On crowded surfaces such as shopping centers, stadiums, summer festivals may be useful to observe patterns and even detect or predict dangerous situations.
+\subsection{Festivals / concerts}
+\subsection{Collecting information}
+Patterns, big data
+
+
 \section{Use in health care}
 In this section different uses in health care of the sensor communication channel will be discussed. As mentioned on the introduction chapter~\ref{sec:introduction} these sensors do not capture light but heat, thus making patients impossible to recognize from a distance, this can be considered an advantage since most of the people do not feel comfortable with the idea of being watched or video-recorded. Also when using Image Processing techniques an \gls{ir} image can be easier for a computer to "understand" in other words to analyze especially when it is possible to add limits to the maximum and minimum temperature so that a range of temperature can be interesting while the rest is removed. figure~\ref{fig:setminimum}.
     
@@ -1451,6 +1471,12 @@ On table~\ref{table:commands} in chapter~\ref{sec:methods-and-materials} the ava
 
 In addiction to set the minimums and maximums it is possible to change the bit density of the image so we get less data and probably making the image analysis a little easier as it is shown in figure~\ref{fig:2bit}.
 
+Another approach could be use ir image to see things that usually are not visible at a glance like for example veins and arteries as seen in figure~\ref{fig:vein}.
+
+	\putimage{vein}{arteries and veins in human arm}
+	
+Unfortunately on this thesis it were not enough time to do a proper research of health care uses. Nevertheless on the next sections there is some propositions to for further investigation.
+
 \subsection{Bed patient care}
 A use case may be for monitoring patients on bed, either hospital or home bed. Using image analysis software nurses or doctor could obtain data from multiple patients at the same time. since the sensors can detect heat this could trigger some alarm on high temperature or if the patient is missing for a long period of time.
 
@@ -1458,10 +1484,13 @@ A use case may be for monitoring patients on bed, either hospital or home bed. U
     
 In the figure~\ref{fig:fiber-detector-prototype} we can see a prototype with temperature graphics and other indicators.
     
-\subsection{Nursing homes / Residential care}
+\subsection{Nursing homes / Psychiatric hospitals}
 The same principle could be applied to nursing or residential homes where there is a number of people inside a room or outside in a backyard. Then trough image analysis it can be detected how many persons there are, if someone is too still or passed out, etc.
-\subsection{Psychiatric hospital}
+
 As in nursing homes, psychiatric hospital could have this kind of system. It could detect potential dangerous situations in this case.
+
+
+
 
 \section{Other uses}
 \subsection{Self-driven vehicles}
