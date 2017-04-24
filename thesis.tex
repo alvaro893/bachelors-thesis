@@ -4,7 +4,7 @@
 
 \def\thesislang{english} %change this depending on your language
 \author{Álvaro Bolaños Rodríguez}
-\def\thesis{Opinnäytetyö/Thesis}
+\def\thesis{Bachelor's Thesis}
 \def\alaotsikko{Creating a cloud based communication channel}
 
 %Finnish section
@@ -531,13 +531,15 @@ xleftmargin=1cm
   Instructor(s) & \metropoliainstructors
   \\ \hline
   \multicolumn{2}{|p{15cm}|}{\begin{singlespacing}\vspace{-22pt}
-  \paragraph{}	
- The objective of this thesis was to develop a bidirectional communication system for \gls{ir} cameras using \gls{iot} modules to connect them through mobile networks and creating all the software solutions to accomplish it; this is mainly a sensor-side, a client-side and a server-side application, using also cloud based tools.
-  \paragraph{}
-  One of the key points of \gls{ir} cameras is the privacy. Unlike normal cameras, generally, people cannot be recognized. Applications of this in health care and well-being are discussed on chapter~\ref{sec:discussion}, these application are mostly related to monitoring patients e.g. trigger alarm when a patient does not move for a while, control the number of people in a room, etc.
-  \paragraph{}
-  This project is focused on the technical details of the communication system and the different methods used.
-  
+
+ The objective of this thesis was to develop an effective bidirectional communication system for IR sensors from the company LeViteZer using an IoT approach and connecting them through cloud services and mobile networks provided by the Nokia Innovation Platform.\newline
+\newline
+ On the thesis there is described different methods to build this communication channel from a full stack point of view. In this case there are a sensor-side, a client-side and a server-side methods.\newline
+\newline
+ The outcome of this project was an set of pieces of applications to make the communication system using technologies and frameworks available to any software developer. This communication system as the date of the publication of this thesis was tested and met the expectations set on business challenge on the Introduction chapter and it is likely to be continued its development.\newline
+  \newline
+ It is discussed possible applications of this system in the context of the Nokia Innovation Platform, Well-being services and some other cases.
+
   \end{singlespacing}} \\[14cm] \hline
   Keywords & \metropoliakeywords
   \\ \hline
@@ -615,19 +617,14 @@ xleftmargin=1cm
 \chapter{Introduction}\label{sec:introduction}
 
 
-Thermal images have a number of advantages over conventional light-based video camera images. These thermal images can tell not only whether there are living people or animals but also whether there is any temperature anomaly on them. They can be used to make assumptions about their physical state using image processing software.
+Thermal images have a number of advantages over conventional light-based video camera images. These thermal images can tell not only whether there are living people or animals but also whether there is any temperature anomaly on them. They can be used to make assumptions about their physical state or understand how a group of individuals move or behave using Computer Vision software.
 
-Finland is one of the most rapidly aging country in Europe and the costs in elder and mental health care are becoming more expensive. Health care entities may decrease their costs by search for new ideas in the field of IT. In the discussion chapter some ideas to use \gls{ir} sensors and the communication channel are explained~\cite{agingeuropa}.
+Keeping into account that Nordic European countries and specially Finland are rapidly aging, costs in elder and general health care are becoming more expensive. Health care entities may decrease their costs by search for new ideas in the field of IT. In the discussion chapter some ideas to use \gls{ir} sensors and the communication channel are explained~\cite{agingeuropa}.
 
 Here is where \gls{iot} comes into play, Nowadays the Internet is very accessible and fast. Almost every conceivable device: phones, watches, televisions, speakers, cameras, etc can be connected, send and receive continuously big amounts of data.
 
 Although with \gls{iot} it comes the process of defining a communication channel between the \gls{iot} devices, services, clients, databases, etc. In order to manipulate, visualize, store and distribute data from them. On this thesis it is explained the steps that were followed to develop the solutions to these topics and what alternatives were tried and what tools/technologies were used to carry out the project.
 
-
-%% TODO: mention nokia in introduction?
-
-%Finland is nowadays facing a difficult issue in the area of well-being. The population is aging and the costs in elder health and mental health care are sky-rocketing. This is why health care entities in Finland are looking into decrease their costs by search for new ideas in the field of IT.
-%This thesis discusses also how \gls{ir} sensors could be exploited in the case company to decrease costs and improving monitoring of patients.
 
 \section{Background of the case company}
 The thesis originates in a collaboration with the case company called LeViteZer (\url{http://www.levitezer.com/}), Metropolia and Nokia.
@@ -1440,28 +1437,24 @@ At the end the \gls{nodejs} application turned out to work better and faster. so
 
 \clearpage\chapter{Discussion}\label{sec:discussion}
 %What do the results mean?
-On this chapter is discussed how the results may be used. The sections here are more based on speculation rather than experimentation and proposed lines of research.
+On this chapter is discussed how the results may be used, specially alongside Computer Vision. The sections here are more based on speculation rather than experimentation and proposed lines of research.
 
-\section{Use in the Nokia Innovation Platform}
-The Nokia Innovation Platform is a trial environment for teams and star-ups that are related to \gls{iot} projects specially projects that use cell-phone network as \gls{lte}. This project is part of this Nokia Innovation Platform hence there is some ongoing use cases. Some of the sensors has been placed on different places to test its functionality and investigate further the uses of this communication channel.
+\section{Use in the Nokia Innovation Platform}\label{sec:use-in-the-nokia-innovation-platform}
+The Nokia Innovation Platform is a trial environment for teams and star-ups that are related to \gls{iot} projects specially projects that use cell-phone network as \gls{lte}. This project is part of the Nokia Innovation Platform hence there is some ongoing use cases. Some of the sensors has been placed on different places to test its functionality and investigate further the uses of this communication channel.
 
 	\putimage{people}{People in a room}
 	
-On the figure~\ref{fig:people} some persons can be seen clearly and in the figure~\ref{fig:analysed} is shown the same situation plus running a computer vision software to detect how many people in the room.
+On the figure~\ref{fig:people} some people can be seen clearly and in the figure~\ref{fig:analysed} is shown the same situation plus running a Computer Vision software to detect how many people in the room.
 
-	\putimage{analysed}{Analize image to detect heat points in the room}
+	\putimage{analysed}{Analyzed image to detect heat points in the room}
 
-Computer vision can be used to track people and research their behavior storing big quantities of tracking date may allow to make predictions of many kinds. On the next sections some scenarios are proposed where this could be useful.
+Computer vision can be used to track people and research their behavior storing big amounts of tracking data may allow to make predictions of many sorts. On the next sections some scenarios are proposed where this could be useful.
 
-\subsection{Shopping center}
-On crowded surfaces such as shopping centers, stadiums, summer festivals may be useful to observe patterns and even detect or predict dangerous situations.
-\subsection{Festivals / concerts}
-\subsection{Collecting information}
-Patterns, big data
+On crowded surfaces such as shopping centers, stadiums, summer festivals may be useful to observe patterns and even detect or predict dangerous situations. This is an interesting research topic and could be a continuation of this final year project.
 
 
 \section{Use in health care}
-In this section different uses in health care of the sensor communication channel will be discussed. As mentioned on the introduction chapter~\ref{sec:introduction} these sensors do not capture light but heat, thus making patients impossible to recognize from a distance, this can be considered an advantage since most of the people do not feel comfortable with the idea of being watched or video-recorded. Also when using Image Processing techniques an \gls{ir} image can be easier for a computer to "understand" in other words to analyze especially when it is possible to add limits to the maximum and minimum temperature so that a range of temperature can be interesting while the rest is removed. figure~\ref{fig:setminimum}.
+In this section different uses in health care of the sensor communication channel will be discussed. As mentioned on the introduction chapter~\ref{sec:introduction} these sensors do not capture light but heat, thus making patients impossible to recognize from a distance, this can be considered an advantage since most of the people do not feel comfortable with the idea of being watched or video-recorded. Also when using Computer Vision techniques an \gls{ir} image can be easier for a computer to "understand" in other words to analyze especially when it is possible to add limits to the maximum and minimum temperature so that a range of temperature can be interesting while the rest is removed. figure~\ref{fig:setminimum}.
     
     \putimage{setminimum}{Minimum set to human temperature}
 
@@ -1480,16 +1473,17 @@ Unfortunately on this thesis it were not enough time to do a proper research of 
 \subsection{Bed patient care}
 A use case may be for monitoring patients on bed, either hospital or home bed. Using image analysis software nurses or doctor could obtain data from multiple patients at the same time. since the sensors can detect heat this could trigger some alarm on high temperature or if the patient is missing for a long period of time.
 
+Also as discussed in previous sections it may be interesting to seek patterns how a patients moves through time and even how long patients are not in bed.
+
     \putimage{fiber-detector-prototype}{Analysis program prototype}
     
 In the figure~\ref{fig:fiber-detector-prototype} we can see a prototype with temperature graphics and other indicators.
     
 \subsection{Nursing homes / Psychiatric hospitals}
-The same principle could be applied to nursing or residential homes where there is a number of people inside a room or outside in a backyard. Then trough image analysis it can be detected how many persons there are, if someone is too still or passed out, etc.
 
-As in nursing homes, psychiatric hospital could have this kind of system. It could detect potential dangerous situations in this case.
+The same principle discussed in section~\ref{sec:use-in-the-nokia-innovation-platform} may be applied to nursing or residential homes where there is a number of people inside a room or outside in a backyard. Then trough Computer Vision it can be detected how many persons there are, if someone is too still or passed out, etc. This detection could trigger certain alarms which will warn the caretakers in the facility
 
-
+As in nursing homes, psychiatric hospitals could have this kind of system. It could detect potential dangerous situations in this case.
 
 
 \section{Other uses}
@@ -1498,12 +1492,12 @@ Self-driven public transport vehicles could benefit with this system too, since 
 
     \putimage{robo-bussi}{self-driven bus in Otaniemi}
     
-On figure~\ref{fig:robo-bussi} is the "robobussi" moving around Otaniemi campus in Espoo.
+On figure~\ref{fig:robo-bussi} is the "Robot bus" moving around Otaniemi campus in Espoo.
 
 \subsection{General surveillance}
 Surveillance is usually help by regular light based cameras plus sometimes some \gls{ir} LEDs which allows them see during night time, However since humans emit heat they can be easily spotted with \gls{ir} sensors instead.
 
-\section{Possible changes in the future}
+\section{Possible additions in the future}
 \subsection{3D Heat map using multiple sensors}
 When using several sensors, it could be possible to create 3D heat map with all the data similar to figure~\ref{fig:heatmap}.
 
@@ -1518,9 +1512,11 @@ Since this project uses already web technologies such as \gls{ws} it will not di
 The server-side application could be extended to support \gls{udp} protocols as \gls{rtp} which can be used to multi-cast video stream to a big number of clients that for example need the video image but no control the sensor~\cite[298]{hardy2013networks}. Commands can be still sent through \gls{ws} 
 
 \clearpage\chapter{Conclusions}
-As stated in the business challenge this project was about "create a effective communication channel between ir sensors and clients such as computers, laptops, etc and use it on Well-being services" which can be concluded that it is done even beyond the original requirements. Chapters \ref{sec:results} and \ref{sec:discussion} have the information on what was done and propositions to use it in health care and well-being. Note that this is still a outgoing project and development is likely to continue even after this thesis is published.
+As stated in the business challenge this project was about "create a effective communication channel between ir sensors and clients such as computers, laptops, etc and use it on Well-being services" which can be concluded that it is done even beyond the original requirements. Chapters \ref{sec:results} and \ref{sec:discussion} have the information on what was done and propositions to use the ir cameras with the communication system. It was intended to deepen much more on the use cases, unfortunately there was no time for more research on this. Perhaps other students' thesis might continue this part.
 
-The communication channel has been created, it has been tested and  it works. Please refer to section~\ref{sec:software} in chapter~\ref{sec:results} to obtain the last version of the code created in this project.
+Note that although the project is done, development may continue as an Nokia Innovation Platform project with LeViteZer.
+
+Please refer to section~\ref{sec:software} in chapter~\ref{sec:results} to obtain the last version of the code created in this project.
 
 \clearpage\chapter{Acknowledgments}
 I want to thank to Jukka Honkaniemi and Tero Nurminen (Metropolia) for let me be part of this project and their guidance. Also I want to Thanks to Kim Janson (LeViteZer) for all I learn during last months in this project.
@@ -1730,17 +1726,17 @@ def is_raspberry_command(s):
 
 \end{lstlisting}\vspace{14pt}
 
+%\clearpage
+%\liite{2}
+%
+%% TODO: Python client appendix
+%\chapter{Python Client listings}\label{appx:pythonclient}
+%\addtocontents{toc}{\vspace{11pt}}
+
+
+
 \clearpage
 \liite{2}
-
-% TODO: Python client appendix
-\chapter{Python Client listings}\label{appx:pythonclient}
-\addtocontents{toc}{\vspace{11pt}}
-
-
-
-\clearpage
-\liite{3}
 
 \chapter{Android Client listings}\label{appx:androidclient}
 \addtocontents{toc}{\vspace{11pt}}
@@ -2086,7 +2082,7 @@ public class WebsocketConnection extends WebSocketListener {
 \end{lstlisting}\vspace{14pt}
 
 \clearpage
-\liite{4}
+\liite{3}
 
 \chapter{Node.js application listings}\label{appx:nodejsapp}
 \addtocontents{toc}{\vspace{11pt}}
