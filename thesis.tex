@@ -389,11 +389,7 @@ xleftmargin=1cm
 	name=LabVIEW, 
 	description={environment for visual programming language used for instrument control}
 }
-\newglossaryentry{thesis}{
-	name=Thesis, 
-	description={A final year project report for a university degree},
-	plural=Theses
-}
+
 \newglossaryentry{tcpip}
 {
     name=TCP/IP,
@@ -477,6 +473,7 @@ xleftmargin=1cm
 
 % BEGIN OF DOCUMENT
 \begin{document}
+\renewcommand\bibname{References}
 \counterwithout{lstlisting}{chapter}
 \lstdefinestyle{styleprogramming}{
 	basicstyle=\ttfamily\small\captionsetup{justification=centering},
@@ -589,10 +586,10 @@ xleftmargin=1cm
 	\IfLanguageName {finnish} {
 		\printacronyms[title=Lyhenteet]
 	}{
-		\printacronyms[title=Abbreviations]
+		\printacronyms[title=Abbreviations and Terms]
 	}
 	\setlist[description]{leftmargin=!, labelwidth=7em}
-	\printglossary 
+	\printglossary[title=]
 	\setlist[description]{style=standard} % reset settings back to default
 }
 \end{singlespacing}
@@ -626,16 +623,17 @@ Here is where \gls{iot} comes into play, Nowadays the Internet is very accessibl
 Although with \gls{iot} it comes the process of defining a communication channel between the \gls{iot} devices, services, clients, databases, etc. In order to manipulate, visualize, store and distribute data from them. On this thesis it is explained the steps that were followed to develop the solutions to these topics and what alternatives were tried and what tools/technologies were used to carry out the project.
 
 
-\section{Background of the case company}
+\section*{Background of the case company}
 The thesis originates in a collaboration with the case company called LeViteZer (\url{http://www.levitezer.com/}), Metropolia and Nokia.
  LeViteZer is company that develops controllers for cameras for image stabilization such as gimbals~\cite{levitezer}. They provide the \gls{ir} sensors. Nokia with their innovation platform~\cite{nokiainnovation}, provides the cloud environment and the network. My part as Metropolia student is develop the mentioned communication channel.
 
 
 
-\section{Business Challenge}\label{sec:business-challenge}
+\section*{Business Challenge}\label{sec:business-challenge}
 %% improving costs by not having personal watching people all the time
 The case company wants to find a system which uses \gls{ir} sensors that allow us to monitor patients while keeping their privacy along with reducing costs by using less staff and improve the service quality. Moreover, it should be possible to access data from those sensors fro anywhere which make them very versatile and portable.
-\section{Objective and Outcome of the Study}
+
+\section*{Objective and Outcome of the Study}
 With the business challenge in mind, this study aims to answer the following question:
 \begin{displayquote}
 {\large  How to create an effective communication channel between ir sensors and clients such as computers, laptops, etc and use it on Well-being services?}
@@ -1518,9 +1516,6 @@ Note that although the project is done, development may continue as an Nokia Inn
 
 Please refer to section~\ref{sec:software} in chapter~\ref{sec:results} to obtain the last version of the code created in this project.
 
-\clearpage\chapter{Acknowledgments}
-I want to thank to Jukka Honkaniemi and Tero Nurminen (Metropolia) for let me be part of this project and their guidance. Also I want to Thanks to Kim Janson (LeViteZer) for all I learn during last months in this project.
-
 
 
 %----------------------------------------------------------------------------------------
@@ -1535,6 +1530,12 @@ I want to thank to Jukka Honkaniemi and Tero Nurminen (Metropolia) for let me be
 \bibliography{biblio}
 \end{singlespacing}
 \end{flushleft}
+
+%----------------------------------------------------------------------------------------
+%   ACKNOWLEDGMENTS 
+%----------------------------------------------------------------------------------------
+\clearpage\chapter*{Acknowledgments}
+I want to thank to Jukka Honkaniemi and Tero Nurminen (Metropolia) for let me be part of this project and their guidance. Also I want to Thanks to Kim Janson (LeViteZer) for all I learn during last months in this project.
 
 %for conting the pages
 \label{LastPage}~
