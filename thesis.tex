@@ -349,87 +349,48 @@ xleftmargin=1cm
 
 
 %Glossary entries
-\newglossaryentry{ws}{
-	name=Websocket, 
-	description={Application protocol build on top of TCP}
-}
-\newglossaryentry{github}{
-	name=GitHub, 
-	description={Hosting site for Git repositories}
-}
-\newglossaryentry{git}{
-	name=Git, 
-	description={Control version software}
-}
-\newglossaryentry{docker}{
-	name=Docker, 
-	description={Software container platform}
-}
-\newglossaryentry{kubernetes}{
-	name=Kubernetes, 
-	description={Automated container deployment, scaling, and management}
-}
-\newglossaryentry{apache}{
-	name=Apache, 
-	description={the most used web server software in the world}
-}
-\newglossaryentry{android}{
-	name=Android, 
-	description={Operative System used mainly in Smart-phones}
-}
-\newglossaryentry{matplotlib}{
-	name=Matplotlib, 
-	description={Plotting library for Python programming language}
-}
-\newglossaryentry{qt}{
-	name=Qt, 
-	description={Cross-platform application framework}
-}
-\newglossaryentry{labview}{
-	name=LabVIEW, 
-	description={environment for visual programming language used for instrument control}
-}
+\newacronym{ws}{Websocket}{Application protocol build on top of TCP}
 
-\newglossaryentry{tcpip}
-{
-    name=TCP/IP,
-    description={All the necessary layers to match the conceptual model of the Internet protocol suite}
-}
-\newglossaryentry{rs232}
-{
-    name=RS-232,
-    description={A standard for serial communications}
-}
-\newglossaryentry{java}
-{
-    name=Java,
-    description={Programming language able to run on most of the Operative Systems}
-}
-\newglossaryentry{javame}
-{
-    name=Java ME,
-    description={Java Micro Edition: Java version for mobile or embedded devices}
-}
-\newglossaryentry{midlet}
-{
-    name=MIDlet,
-    description=A MIDlet is an application that uses the Mobile Information Device Profile (MIDP) on Java ME environment
-}
-\newglossaryentry{js}
-{
-    name=Javascript,
-    description=Dynamic programming language used mostly in browsers although can be used in desktop and server applications.
-}
-\newglossaryentry{nodejs}
-{
-    name=Node.js,
-    description={Node.js is an open-source, cross-platform JavaScript runtime environment for developing server-side applications}
-}
-\newglossaryentry{python}
-{
-    name=Python,
-    description={Dynamic typed interpreted programming language}
-}
+\newacronym{github}{GitHub}{Hosting site for Git repositories}
+
+\newacronym{git}{Git} {Control version software}
+
+\newacronym{docker}{Docker}{Software container platform}
+
+\newacronym{kubernetes}{Kubernetes}{Automated container deployment, scaling, and management}
+
+\newacronym{apache}{Apache} {the most used web server software in the world}
+
+\newacronym{android}{Android} {Operative System used mainly in Smart-phones}
+
+\newacronym{matplotlib}{Matplotlib} {Plotting library for Python programming language}
+
+\newacronym{qt}{Qt}{Cross-platform application framework}
+
+\newacronym{labview}{LabVIEW} {environment for visual programming language used for instrument control}
+
+
+\newacronym{tcpip}
+{TCP/IP}{All the necessary layers to match the conceptual model of the Internet protocol suite}
+
+\newacronym{rs232}
+{RS-232}{A standard for serial communications}
+
+\newacronym{java}
+{Java}{Programming language able to run on most of the Operative Systems}
+
+\newacronym{javame}
+{Java ME}{Java Micro Edition: Java version for mobile or embedded devices}
+
+\newacronym{midlet}
+{MIDlet}{ A MIDlet is an application that uses the Mobile Information Device Profile (MIDP) on Java ME environment}
+\newacronym{js}
+{Javascript}{Dynamic programming language used mostly in browsers although can be used in desktop and server applications}
+\newacronym{nodejs}{Node.js}
+    {Node.js is an open-source, cross-platform JavaScript runtime environment for developing server-side applications}
+\newacronym{python}
+{Python}
+    {Dynamic typed interpreted programming language}
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -589,7 +550,7 @@ xleftmargin=1cm
 		\printacronyms[title=Abbreviations and Terms]
 	}
 	\setlist[description]{leftmargin=!, labelwidth=7em}
-	\printglossary[title=]
+	%\printglossary[title=]
 	\setlist[description]{style=standard} % reset settings back to default
 }
 \end{singlespacing}
@@ -614,7 +575,7 @@ xleftmargin=1cm
 \chapter{Introduction}\label{sec:introduction}
 
 
-Thermal images have a number of advantages over conventional light-based video camera images. These thermal images can tell not only whether there are living people or animals but also whether there is any temperature anomaly on them. They can be used to make assumptions about their physical state or understand how a group of individuals move or behave using Computer Vision software.
+Thermal images have a number of advantages over conventional light-based video camera images.   These thermal images can tell not only whether there are living people or animals but also whether there is any temperature anomaly on them. They can be used to make assumptions about their physical state or understand how a group of individuals move or behave using Computer Vision software.
 
 Keeping into account that Nordic European countries and specially Finland are rapidly aging, costs in elder and general health care are becoming more expensive. Health care entities may decrease their costs by search for new ideas in the field of IT. In the discussion chapter some ideas to use \gls{ir} sensors and the communication channel are explained~\cite{agingeuropa}.
 
@@ -1510,11 +1471,27 @@ Since this project uses already web technologies such as \gls{ws} it will not di
 The server-side application could be extended to support \gls{udp} protocols as \gls{rtp} which can be used to multi-cast video stream to a big number of clients that for example need the video image but no control the sensor~\cite[298]{hardy2013networks}. Commands can be still sent through \gls{ws} 
 
 \clearpage\chapter{Conclusions}
-As stated in the business challenge this project was about "create a effective communication channel between ir sensors and clients such as computers, laptops, etc and use it on Well-being services" which can be concluded that it is done even beyond the original requirements. Chapters \ref{sec:results} and \ref{sec:discussion} have the information on what was done and propositions to use the ir cameras with the communication system. It was intended to deepen much more on the use cases, unfortunately there was no time for more research on this. Perhaps other students' thesis might continue this part.
+%This section usually begins with a restatement of the goal of the project, and includes
+%a brief summary of the key results of the project and a conclusion about the
+%significance and implications of the results, for your client and perhaps the field in
+%general. Also mention strengths and limitations of the project and ways in which the
+%project could be changed and improved if carried out again. In the end recommend
+%further action, such as further study, if relevant.
+%Keep this section short (a few paragraphs, no subheadings), tie in and highlight the
+%main points of the project and its results and draw a clear conclusion.
+As an \gls{iot} project the purpose of this thesis was to find an effective communication channel between \gls{ir} sensors and clients, in other words, to create a system where clients can control these sensors and receive data simultaneously. The result was a complete communication system:
+\begin{itemize}
+	\item A sensor-side: which includes a \gls{python} application to read the sensor in a Raspberry Pi and service scripts to keep alive the connection to both the network and the Sensor.
+	\item A server-side: that uses cloud technologies offered by Nokia and also includes a \gls{nodejs} application that keeps sensors and clients connected.
+	\item A client-side: which includes a \gls{python} client application and an \gls{android} application able to connect to online sensors and control them.
+\end{itemize}
+ So far there are some sensors running on Nokia headquarters to test their usability.
+ 
+ Either LeViteZer and Nokia members have shown quite satisfied with the results and willing to continue working on this project beyond the scope of this thesis.
+ 
+ One of the distinctive things about the communication protocol on this project is the use of \gls{ws} outside a web browser which has been proven to work exceptionally good, better than expected. Also with this comes some limitations since \gls{ws} is not the best way to broadcast image from sensors to big sets of clients and that is something to be improved.
 
-Note that although the project is done, development may continue as an Nokia Innovation Platform project with LeViteZer.
-
-Please refer to section~\ref{sec:software} in chapter~\ref{sec:results} to obtain the last version of the code created in this project.
+ It was intended to deepen more on the use cases especially on well-being services, unfortunately there was no time for more research on this. Perhaps other students' thesis might continue this part.
 
 
 
