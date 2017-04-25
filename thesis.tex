@@ -5,7 +5,7 @@
 \def\thesislang{english} %change this depending on your language
 \author{Álvaro Bolaños Rodríguez}
 \def\thesis{Bachelor's Thesis}
-\def\alaotsikko{Creating a cloud based communication channel}
+\def\alaotsikko{}
 
 %Finnish section
 \def\otsikko{Opinnäytetyön otsikko}
@@ -20,12 +20,12 @@ Etunimi Sukunimi, Titteli
 \def\pvm{\specialdate\today}
 
 %English section, for abstract
-\title{IR camera in Well-being technology}
+\title{Cloud Communication Channel for IR Cameras}
 \def\metropoliadegree {Bachelor of Engineering}
 \def\metropoliadegreeprogramme {Information Technology}
 \def\metropoliaspecialisation {Software Engineer}
 \def\metropoliainstructors {
-Dr. Tero Nurminen, TKI-vastaava yliopettaja \newline
+Dr. Tero Nurminen, Principal Lecturer \newline
 }
 \def\metropoliakeywords {IoT, IR, sensor, cloud, full-stack, communication channel, websocket, http, LTE, Android, Python}
 \date{\today}
@@ -361,7 +361,7 @@ xleftmargin=1cm
 
 \newacronym{apache}{Apache} {the most used web server software in the world}
 
-\newacronym{android}{Android} {Operative System used mainly in Smart-phones}
+\newacronym{android}{Android} {Operative System used mainly in smartphones}
 
 \newacronym{matplotlib}{Matplotlib} {Plotting library for Python programming language}
 
@@ -617,7 +617,7 @@ Communications between devices is not a new topic, there are plenty of methods a
 
 
 
-\section{Communication between devices}
+\section{Communication Between Devices}
 % Talk about what is know about communication systems, full stack development, etc
 In order to establish a communication between two ends in a computer network or in Internet it is good to comprehend how the "Internet Protocol Architecture" or \gls{tcpip} stack works. Most of networks are based on it, including office and home networks~\cite[9]{tcpip}.
 
@@ -633,12 +633,12 @@ The \gls{tcp}/\gls{ip} stack is build in layers:
 
 Then, a way to communicate through the \gls{tcp}/\gls{ip} stack as shown in figure~\ref{fig:tcpip} must be found.
 
-\section{The medium}\label{sec:the-medium}
+\section{The Medium}\label{sec:the-medium}
 At this point it has to be decided what physical medium to \textit{access the network} (Network Access Layer in figure~\ref{fig:tcpip}). It could be a simple copper cable, Wi-Fi, microwaves, laser, etc. almost any kind of electromagnetic wave. But since this is an \gls{iot} project the best approach will be using \gls{ran} which it is accessible from cell antennas and nowadays provide great speeds and bandwidth.
 
 As stated in the Introduction, Nokia provides access to a mobile network. This network is called NetLeap which uses \gls{3g} and \gls{lte} technologies (the same that use mobile phones to connect to Internet). NetLeap is a closed network for research managed by Aalto University and Nokia~\cite{netleap}.
 
-\section{Network protocols}
+\section{Network {Protocols}
 The Internet Layer protocols usually rely in routers and other apparatus which are out of our control, hence the only concern is about transport and application layer.
 
 The idea is to use reliable application protocol to make the connections and this should be platform independent and a Internet standard, these protocol standards specifications are available officially in \url{https://www.rfc-editor.org/standards}. On the next sections are the protocols considered and the reasoning behind them.
@@ -652,7 +652,7 @@ The idea is to use reliable application protocol to make the connections and thi
 Then a \gls{udp} communication system may be suitable for this project since, what it is sending from the \gls{ir} sensors is a binary stream of images. Commands can be sent over \gls{udp} as well.
 This can be done sending packets between sensors and clients directly or through a server which could coordinate the data flow.
 
-\subsubsection{Port issues on remote hosts}\label{sec:port-issues-on-remote-hosts}
+\subsubsection{Port Issues on Remote Hosts}\label{sec:port-issues-on-remote-hosts}
 Routers and firewalls usually do not accept connection from ports other than 80 and 443. This is an issue when using \gls{udp} (or \gls{tcp}) sockets approaches. In a local network usually there are no such issues (although firewalls could be strict, depends upon the local network administrators), so a solution can be using a \gls{vpn} provider which allows remote computers act as if they where in a local network and increase the security as well.
 
 Another solution is \gls{udp} hole punching technique to establish bidirectional communication between hosts that are behind \gls{nat} routers by using a external host to keep track of the ports and addresses used in the \gls{nat} tables of both hosts routers.
@@ -698,7 +698,7 @@ The figure~\ref{fig:communication-channel} shows this idea.
 This chapter discuss about methods for each side of the communication system in detail.
 
 
-\section{The sensor}
+\section{The Sensor}
 The \gls{ir} sensor provided by LeViteZer delivers all infrared data in form of binary streams trough \gls{usb}.
 
  In order to make the an image it is necessary to process those streams. Every image or frame comes in 240 rows of 80 bytes of data separated by a delimiter of 3 bytes plus an extra byte that identify the row:
@@ -792,7 +792,7 @@ The commands are sent over the same serial \gls{usb} cable from which the frames
 
 Note: The frame-rate is 9 frames per second at maximum, although the sensor can be configured with an arbitrary delay time between frames.
 
-\subsubsection{Creating the image}\label{creatingimage}
+\subsubsection{Creating the Image}\label{creatingimage}
 Every frame has a size of 160x120 pixels, but the image data comes in a matrix of 80x239 (240 is the meta-data row) as equation~\ref{eq:sensor-stream} and \ref{eq:metadata-row} shown before. Each byte of data can be seen as a pixel in a gray-scale image, but in order to generate the correct image the "data matrix" must be reshaped to 160x120 as show in the figure~\ref{fig:sensor-image}. Every 2 row in the data matrix make 1 row in the image.
 \putimage{sensor-image}{Reshaping data}
 
@@ -854,10 +854,10 @@ Also note that in order to fill the "self.frame{\_}arr" matrix the function is m
 \section{Sensor Side Methods}
 The sensor has been described in the previous section. Here different methods to read the sensor are discussed, some worked better than others, nevertheless all of what was tried is included.
 
-\subsection{Android smart-phone as Gateway}
-Most of Android smart-phones have an \gls{otg} which allows to use \gls{usb} peripherals in the phone with the correspondent \gls{otg} adapter This can be used to develop an Android application to receive the data from the sensor and send it through Internet using any protocol, in this sense the cellphone act as a gateway to Internet, letting the sensor access the \gls{3g} or the \gls{lte} network.
+\subsection{Android Smartphone as Gateway}
+Most of Android smartphones have an \gls{otg} which allows to use \gls{usb} peripherals in the phone with the correspondent \gls{otg} adapter This can be used to develop an Android application to receive the data from the sensor and send it through Internet using any protocol, in this sense the cellphone act as a gateway to Internet, letting the sensor access the \gls{3g} or the \gls{lte} network.
 
-An advantage of this approach is that the smart-phone(including a \gls{sim} card) has all the hardware on it to make the communication. Hence there is only need to focus on the software part.
+An advantage of this approach is that the smartphone(including a \gls{sim} card) has all the hardware on it to make the communication. Hence there is only need to focus on the software part.
 
 This was tested using a \gls{php} file in a server on Metropolia UAS alongside an Android Application I developed to send all the data from the sensor to server.
 
@@ -922,7 +922,7 @@ public void onNewData(final byte[] data) {
 Notice in line 3 that it is in reality quite simple to receive binary data in form of an byte array.
 
 
-\subsection{Lte module}
+\subsection{LTE Module}
 \acrfull{lte} modules work as a phone: They need a \gls{sim} card to connect to network, they can be integrated in a board. Typically these modules have a number of interfaces such as \gls{usb}, rs-232, \gls{spi}, etc to connect peripherals.
 
 
@@ -930,7 +930,7 @@ In order to set a route between your device and a service on Internet or your ow
 
 
 
-\subsubsection{Gemalto Lte module}
+\subsubsection{Gemalto LTE Module}
 
 
 This is not a simple modem that allows other machines to be connected to Internet, it has a complete \gls{tcpip} stack which means that protocols of the transport layer such as \gls{tcp} and \gls{udp} and application layer such as \gls{http} and \gls{https} can be used as well all in very small compact chip as it is seen in figure~\ref{fig:lte_module}.
@@ -992,7 +992,7 @@ A Raspberry pi is a credit card sized computer and on its model 3B includes amon
 
 \putimage{raspberry}{Raspberry Pi Physical appearance}
 
-\subsubsection{The reader program}
+\subsubsection{The Reader Program}
 The programming language chosen to communicate with the sensor from the raspberry pi was \gls{python} since it has a number of libraries available to use. Then it is necessary to point what features are suitable for a program which reads the sensor and open a connection to the server side:
 \begin{itemize}
     \item Needs to communicate both ways trough \gls{usb}.
@@ -1117,12 +1117,12 @@ To achieve this \gls{android} allows to extend \gls{ui} elements with new behavi
 \section{Server Side Methods}\label{sec:server-side-methods} 
 On this section describes the different approaches tested to created the middle point between sensors and clients. The server side application must be hosted somewhere, in this case a cloud environment described in the next section.
 
-\subsection{The communication channel}\label{sec:the-communication-channel}
+\subsection{The Communication Channel}\label{sec:the-communication-channel}
 Regardless what technology it is used for coding, build and maintain the cloud application, and before start coding it should define how different components are related between each other.
 Let’s start by defining the following entities:
 \begin{itemize}
     \item Sensor: It represents a single sensor connected to a raspberry pi, although it could a normal computer. The sensor itself does not connect to networks, thus it needs a middle hardware but it is considered as whole “entity” here.
-    \item Client: A client can be anything that can connect to a sensor by \gls{http} request. A desktop computer, a smart-phone, etc. The client must create frames from sensor and send commands using a \gls{ws}.
+    \item Client: A client can be anything that can connect to a sensor by \gls{http} request. A desktop computer, a smartphone, etc. The client must create frames from sensor and send commands using a \gls{ws}.
     \item Cloud: It is what holds all the sensor entities and their clients on it.
     The channel should support an unlimited number of sensors which can hold an unlimited number of clients.
 \end{itemize}
@@ -1173,7 +1173,7 @@ Using the \texttt{/video/buffer} endpoint it is possible to send data to it usin
 
 A good thing about flask is its straightforward \gls{api} as seen in listing~\ref{listing:flask}, defining a route to an endpoint is very easy because takes advantage of the decorators \texttt{@app.route} and result in a quite clear code.
 
-\subsection{Node js Server Application}
+\subsection{\gls{nodejs} Server Application}
 \gls{nodejs} is a \gls{js} runtime which allows to create server-side applications, the main reason of why one would choose \gls{nodejs} over other well know options such as \gls{apache} + \gls{php} is the non-blocking model \gls{nodejs} is based on. This let make asynchronous code easily and it is quite fast~\cite[p.12]{nodejs}~\cite{nodeblocking}.
 In addiction to this there are other options to consider working with \gls{nodejs}:
 \begin{itemize}
@@ -1286,7 +1286,7 @@ The process of updating the server side application is through a OpenShift mecha
 %% TODO: \subsection{Communication sensor-client}
 %\putimage{communication_udp}{Diagram of the communication using the module and UDP}
 
-\section{Other Tools used}
+\section{Other Tools Used}
 
 \subsection{Control Version}
 On any serious software development project there must be a \gls{cvs} which allows keep tracking of any changes in the code (or other files) and reversed if necessary. On this project the popular control version tool "Git" was used, which has many features but the one that makes it more special is its decentralized repository model which means that every repository copy has all the history changes.
@@ -1330,7 +1330,7 @@ As stated in chapter~\ref{sec:methods-and-materials} all the code is in \gls{git
 The code shown in the appendixes is in these repositories and up-to-date.
 
 
-\section{Web Api}\label{sec:web-api}
+\section{Web \gls{api}} \label{sec:web-api}
 In order to provide communication with both sensors and clients a web \gls{api} can be the most convenient way to expose the services of the application providing certain endpoints to register sensors, clients and to access information about the application itself, the information retrieved is in \gls{json} format.
 
 The endpoints are defined as \gls{uri}s. A complete \gls{uri} looks like this:
@@ -1377,20 +1377,20 @@ For example \texttt{ws://localhost:8080/camera?pass=d8n2d0\&camera\_name=corner-
 
 \section{Discarded Methods}
 
-\subsection{android smart-phone gateway solution}
+\subsection{Android Smartphone Gateway Solution}
 This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as \gls{java}.
 
-\subsection{LTE module solution}
+\subsection{LTE Module Solution}
 This method could have been the ideal solution to read a sensor and connect it to Internet, but there were multiple issues regarding this method:
 \begin{itemize}
     \item It turned out that the module did not support the \gls{lte} frequency bands of the mobile provider Netleap see section~\ref{sec:the-medium} of chapter~\ref{sec:theoretical-background}.
     \item It was hard to set-up a developing environment for it.
 \end{itemize} 
 
-\subsection{UDP protocols}
+\subsection{UDP Protocols}
 There were many test to use \gls{udp} for communications but for the issues mentioned in section~\ref{sec:port-issues-on-remote-hosts} of chapter~\ref{sec:theoretical-background} and because \gls{ws} worked very good. any \gls{udp} was dropped.
 
-\subsection{python flask server-side application}
+\subsection{Python Flask Server-Side Application}
 At the end the \gls{nodejs} application turned out to work better and faster. so the flask application was not further developed.
 
 
@@ -1412,7 +1412,7 @@ Computer vision can be used to track people and research their behavior storing 
 On crowded surfaces such as shopping centers, stadiums, summer festivals may be useful to observe patterns and even detect or predict dangerous situations. This is an interesting research topic and could be a continuation of this final year project.
 
 
-\section{Use in health care}
+\section{Use in Health Care}
 In this section different uses in health care of the sensor communication channel will be discussed. As mentioned on the introduction chapter~\ref{sec:introduction} these sensors do not capture light but heat, thus making patients impossible to recognize from a distance, this can be considered an advantage since most of the people do not feel comfortable with the idea of being watched or video-recorded. Also when using Computer Vision techniques an \gls{ir} image can be easier for a computer to "understand" in other words to analyze especially when it is possible to add limits to the maximum and minimum temperature so that a range of temperature can be interesting while the rest is removed. figure~\ref{fig:setminimum}.
     
     \putimage{setminimum}{Minimum set to human temperature}
@@ -1429,7 +1429,7 @@ Another approach could be use ir image to see things that usually are not visibl
 	
 Unfortunately on this thesis it were not enough time to do a proper research of health care uses. Nevertheless on the next sections there is some propositions to for further investigation.
 
-\subsection{Bed patient care}
+\subsection{Bed Patient Care}
 A use case may be for monitoring patients on bed, either hospital or home bed. Using image analysis software nurses or doctor could obtain data from multiple patients at the same time. since the sensors can detect heat this could trigger some alarm on high temperature or if the patient is missing for a long period of time.
 
 Also as discussed in previous sections it may be interesting to seek patterns how a patients moves through time and even how long patients are not in bed.
@@ -1438,36 +1438,36 @@ Also as discussed in previous sections it may be interesting to seek patterns ho
     
 In the figure~\ref{fig:fiber-detector-prototype} we can see a prototype with temperature graphics and other indicators.
     
-\subsection{Nursing homes / Psychiatric hospitals}
+\subsection{Nursing Homes / Psychiatric Hospitals}
 
 The same principle discussed in section~\ref{sec:use-in-the-nokia-innovation-platform} may be applied to nursing or residential homes where there is a number of people inside a room or outside in a backyard. Then trough Computer Vision it can be detected how many persons there are, if someone is too still or passed out, etc. This detection could trigger certain alarms which will warn the caretakers in the facility
 
 As in nursing homes, psychiatric hospitals could have this kind of system. It could detect potential dangerous situations in this case.
 
 
-\section{Other uses}
-\subsection{Self-driven vehicles}
+\section{Other Uses}
+\subsection{Self-driven Vehicles}
 Self-driven public transport vehicles could benefit with this system too, since that there is no driver nor any other worker on the vehicle, accessible remotely \gls{ir} sensor can give valuable data to an hypothetically station in charge of the security of such vehicles and trigger an alarm in case of any dangerous situation.
 
     \putimage{robo-bussi}{self-driven bus in Otaniemi}
     
 On figure~\ref{fig:robo-bussi} is the "Robot bus" moving around Otaniemi campus in Espoo.
 
-\subsection{General surveillance}
+\subsection{General Surveillance}
 Surveillance is usually help by regular light based cameras plus sometimes some \gls{ir} LEDs which allows them see during night time, However since humans emit heat they can be easily spotted with \gls{ir} sensors instead.
 
-\section{Possible additions in the future}
-\subsection{3D Heat map using multiple sensors}
+\section{Possible Additions in the Future}
+\subsection{3D Heat Map Using Multiple Sensors}
 When using several sensors, it could be possible to create 3D heat map with all the data similar to figure~\ref{fig:heatmap}.
 
     \putimage[10]{heatmap}{Heat map concept}
     
 This can be used to have a better understanding of how heat behaves in a particular area.
 
-\subsection{HTML5 application}
+\subsection{HTML5 Application}
 Since this project uses already web technologies such as \gls{ws} it will not difficult to create an \gls{html}5 client application for connecting to the different sensors able to do the same as the python client, however the user does not need to install anything to make it work, only an up to day Internet browser.
 
-\subsection{Using RTP to broadcast video to clients}
+\subsection{Using RTP to Broadcast Video to Clients}
 The server-side application could be extended to support \gls{udp} protocols as \gls{rtp} which can be used to multi-cast video stream to a big number of clients that for example need the video image but no control the sensor~\cite[298]{hardy2013networks}. Commands can be still sent through \gls{ws} 
 
 \clearpage\chapter{Conclusions}
@@ -1552,7 +1552,7 @@ I want to thank to Jukka Honkaniemi and Tero Nurminen (Metropolia) for let me be
 
 
 
-\chapter{Sensor reader listings}\label{appx:reader}
+\chapter{Sensor Reader Listings}\label{appx:reader}
 
 \addtocontents{toc}{\vspace{11pt}}
 
