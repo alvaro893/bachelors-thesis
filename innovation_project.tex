@@ -1,32 +1,8 @@
-%----------------------------------------------------------------------------------------
-%	Metropolia Thesis LaTeX Template
-%----------------------------------------------------------------------------------------
-% License:
-% This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
-%
-% Authors:
-% Panu Leppäniemi, Patrik Luoto and Patrick Ausderau
-%
-% Credits:
-% Panu Leppäniemi: abstract, def, cleaning,...
-% Patrik Luoto: title page, abstract in Finnish, abbreviation, math,...
-% Patrick Ausderau: initial version, style, table of content, bibliography, figure, appendix, table, source code listing...
-%
-% Please:
-% If you find mistakes, improve this template and alike, please contribute by sharing your improvements and/or send us your feedback there: https://github.com/panunu/metropolia-thesis-latex
-% And of course, if you improve it, add yourself as an author.
+
 %
 % Compiler:
 % Use XeLaTeX as a compiler.
 
-%----------------------------------------------------------------------------------------
-%    ToDo
-%----------------------------------------------------------------------------------------
-% % % TÄRKEÄT
-% % Odotetaan 29.11.2013 asti äikänmaikkojen ja viestinnän mahdollisia kommentteja.
-%   %done?
-%
-% % % Vähemmän tärkeät
 
 
 %----------------------------------------------------------------------------------------
@@ -51,12 +27,12 @@
 \def\pvm{\specialdate\today}
 
 %English section, for abstract
-\title{body temperature measurement with IR camera}
+\title{Body Temperature Analysis with IR Camera}
 \def\metropoliadegree {Bachelor of Engineering}
 \def\metropoliadegreeprogramme {Information Technology}
 \def\metropoliaspecialisation {Software Engineer}
 \def\metropoliainstructors {
-	Antti Piironen, Title \newline
+	Antti Piironen, Principa Lecturer \newline
 }
 \def\metropoliakeywords {Keywords}
 \date{\today}
@@ -142,6 +118,56 @@
 
 \newcommand\tn[1]{\textnormal{#1}} %use \tn instead of \textnormal
 \newcommand\reaction[1]{\begin{equation}\ce{#1}\end{equation}} %\reaction{} for chemical reactions
+
+%----------------------------------------------
+% CUSTOM COMMANDS
+%----------------------------------------------
+\newcommand{\putimage}[3][10] %[3]: 3 parameters, [10] default value for 1st parameter is 10
+{
+    \begin{figure}[h]
+        \centering
+        \captionsetup{justification=centering}
+        \includegraphics[width=#1cm]{#2}
+        \caption{#3}
+        \label{fig:#2}
+    \end{figure}
+}
+% idea for this command from http://tex.stackexchange.com/questions/25597/wrapping-code-listings-verbatim-or-other-method-inside-a-newcommand
+\ExplSyntaxOn
+\NewDocumentCommand{\putcode}{m m O{} +v }
+{
+    \begin{figure}[h]
+        %		\centering
+        %		\captionsetup{justification=centering}
+        \newlinechar=\endlinechar
+        \exp_args:Nx \scantokens
+        {
+            \string\begin{lstlisting}[caption={#2},label={listing:#1},\unexpanded{#3}]
+            #4
+            \string\end{lstlisting}
+        }
+        
+        %		\caption{#2}
+        %		\label{fig:#1}
+    \end{figure}\vspace{-17pt}
+}
+\ExplSyntaxOff
+
+%PROGRAMMING LANGUAGE DEFINITIONS
+\lstdefinelanguage{JavaScript}{
+    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, const, var, if, in, while, do, else, case, break},
+    keywordstyle=\color{blue}\bfseries,
+    ndkeywords={class, export, boolean, throw, implements, import, this},
+    ndkeywordstyle=\color{darkgray}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=false,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{purple}\ttfamily,
+    stringstyle=\color{red}\ttfamily,
+    morestring=[b]',
+    morestring=[b]"
+}
 
 %NORMAL TEXT
 %all text, title, etc. in the same font: Arial
@@ -285,37 +311,43 @@ BoldItalicFont=LiberationSans-BoldItalic.ttf]
 \newacronym{ram}{RAM}{Random Access Memory}
 \newacronym{php}{PHP}{Hypertext Preprocessor}
 \newacronym{lte}{LTE}{Long Term Evolution}
-\newacronym{3g}{3G}{Third generation}
+\newacronym{3g}{3G}{Third Generation Mobile Network}
 \newacronym{ir}{IR}{Infrared}
 \newacronym{iot}{IoT}{Internet of Things}
 \newacronym{usb}{USB}{Universal Serial Bus}
-\newacronym{otg}{OTG}{On The Go}
 \newacronym{sim}{SIM}{subscriber identity module}
 \newacronym{spi}{SPI}{Serial Peripheral Interface}
 \newacronym{api}{API}{Application Program Interface}
-
-
-%Glossary entries
-\newglossaryentry{part_key}{
-	name={partition key}, 
-	description={a column or set of columns from the same table whose consolidated value decide the partition for a given data}
-}
-\newglossaryentry{thesis}{
-	name=thesis, 
-	description={a written essay one submitted for a university degree},
-	plural=theses
-}
-\newglossaryentry{latex}
-{
-	name=\LaTeX{},
-	description={Is a mark up language specially suited for scientific documents}
-}
-
-\newglossaryentry{maths}
-{
-	name=mathematics,
-	description={Mathematics is what mathematicians do}
-}
+\newacronym{otg}{OTG}{USB On-The-Go}
+\newacronym{ui}{UI}{User Interface}
+\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
+\newacronym{https}{HTTPS}{HTTP over SSL}
+\newacronym{tcp}{TCP}{Transmission Control Protocol}
+\newacronym{udp}{UDP}{User Datagram Protocol}
+\newacronym{rtp}{RTP}{Real Time Transport Protocol}
+\newacronym{uml}{UML}{Unified Modeling Language}
+\newacronym{er}{ER Diagram}{Entity Relationship Diagram}
+\newacronym{paas}{PaaS}{Platform As A Service}
+\newacronym{saas}{SaaS}{Software As A Service}
+\newacronym{iaas}{IaaS}{Infrastructure As A Service}
+\newacronym{cpu}{CPU}{Central Process Unit}
+\newacronym{ssh}{SSH}{Secure Shell}
+\newacronym{oop}{OOP}{Object Oriented Programming}
+\newacronym{cpp}{C++}{C plus plus}
+\newacronym{xml}{XML}{Extensible Markup Language}
+\newacronym{json}{JSON}{JavaScript Object Notation}
+\newacronym{uri}{URI}{Uniform Resource Identifier}
+\newacronym{npm}{NPM}{Node Packet Manager}
+\newacronym{ip}{IP}{Internet Protocol}
+\newacronym{ran}{RAN}{Radio Access Network}
+\newacronym{s2i}{S2I}{Source-to-Image}
+\newacronym{cvs}{CVS}{Control Version System}
+\newacronym{voip}{VoIp}{Voice over IP}
+\newacronym{nat}{NAT}{Network Address Translation}
+\newacronym{vpn}{VPN}{Virtual Private Network}
+\newacronym{www}{WWW}{World Wide Web}
+\newacronym{pdf}{PDF}{Portable Document Format}
+\newacronym{ascii}{ASCII}{American Standard Code for Information Interchange}
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -477,29 +509,39 @@ BoldItalicFont=LiberationSans-BoldItalic.ttf]
 	\sloppy % enforce alignment to fully justified
 	
 	\chapter{Introduction}
-	
-	
-
-	
-	\section{Raspberry Pi and Lte dongle}
-	
-	\chapter{Connectivity Methods: protocols}
-	
-	\section{UDP}
-	
-	\subsection{The NAT problem}
-	
-	\section{http/s}
-	\cite{http-rfc}
-	
-	\section{Websockets}
-	\cite[p.~30]{rfc6455}
-	
+    
+    \clearpage	
 	\chapter{Theoretical Background}
+    \section{Image Processing}
+    \section{Computer Vision}
+    \section{LeViteZer Cameras}
+    \subsection{Low Resolution Camera}
+    Absolute temperatures.
+    \putimage{low-resolution}{Low Resolution camera front view}
+    \putimage{hand}{A hand viewed from The camera}
+    \subsection{High Resolution Camera}
+    Difference of temperatures only.
+    
+    \clearpage
 	\chapter{Methods and Materials}
+    \section{Computer Vision}
+    \subsection{installing and compiling OpenCV}
+    \subsection{Detection}
+    \subsection{Blob}
+    \subsection{Color}
+    \subsection{Background Subtraction}
+    \subsection{Tracking}
+    \section{Body measurement}
+    \subsection{Detecting Fiber}
+    \subsection{history of temperature}
+    \section{Application prototype}
+    \subsection{UI}
+    \subsection{Link To OpenCV}
+    
+    \clearpage
 	\chapter{Results}
-	\chapter{Discussion}
-	\chapter{Conclusions}
+    \section{Use in Bachelor's Thesis}
+    \section{Use in Well-being}
 	
 	
 	
@@ -508,7 +550,7 @@ BoldItalicFont=LiberationSans-BoldItalic.ttf]
 	%----------------------------------------------------------------------------------------
 	%   BIBLIOGRAPHY 
 	%----------------------------------------------------------------------------------------
-	
+	\clearpage
 	\IfLanguageName{finnish}{\bibliographystyle{vancouver_fi}}{\bibliographystyle{vancouver}}
 	%line space
 	%\singlespacing %removed otherwise the appendix are also single space
@@ -570,14 +612,5 @@ BoldItalicFont=LiberationSans-BoldItalic.ttf]
 	
 	\clearpage % avoid that the last page of previous appendix get this header
 	\liite{2}
-	
-	
-	
-	\chapter{Appendix 2}\label{appx:second}
-	\addtocontents{toc}{\vspace{11pt}}
-	
-	content here 
-	
-	\clearpage
-	\liite{3}
+
 \end{document}
