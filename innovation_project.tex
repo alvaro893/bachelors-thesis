@@ -11,8 +11,8 @@
 
 \def\thesislang{english} %change this depending on your language
 \author{Álvaro Bolaños Rodríguez}
-\def\thesis{Innovation Project}
-\def\alaotsikko{Innovation Project}
+\def\thesis{}
+\def\alaotsikko{}
 
 %Finnish section
 \def\otsikko{Opinnäytetyön otsikko}
@@ -27,7 +27,7 @@
 \def\pvm{\specialdate\today}
 
 %English section, for abstract
-\title{Body Temperature Analysis with IR Camera}
+\title{Body Temperature Analysis with Thermal Camera}
 \def\metropoliadegree {Bachelor of Engineering}
 \def\metropoliadegreeprogramme {Information Technology}
 \def\metropoliaspecialisation {Software Engineer}
@@ -515,12 +515,15 @@ BoldItalicFont=LiberationSans-BoldItalic.ttf]
     \section{Image Processing}
     \section{Computer Vision}
     \section{LeViteZer Cameras}
+    The cameras which were provide by LeViteZer are two different versions, both work with the same serial / \gls{usb} interface but different way to generate the image. Note that the names of "low resolution camera" and "high resolution camera" are not official but a form to differentiate from each other. 
     \subsection{Low Resolution Camera}
-    Absolute temperatures.
+    This camera is made of 3 sensors able to detect accurate temperature in a matrix of XxY per sensor making a total of NxM pixels in total. The main advantage of this camera is that every pixel gives absolute temperatures which means that the sensor does not detect difference of temperature but real ones which make it useful in health-care applications. % TODO: get low sensor resolution
     \putimage{low-resolution}{Low Resolution camera front view}
     \putimage{hand}{A hand viewed from The camera}
     \subsection{High Resolution Camera}
-    Difference of temperatures only.
+    It provides a larger resolution (160x120 pixels) compared to the other one making it more suitable for medium distance analysis  and detecting several persons at the same time. These sensor were use intensely in my own Bachelor's Thesis project were it is explain how to create a communication system between clients and the sensors among other things like generating the image. 
+    
+    One important difference of this sensor respect the low camera is that it only detects difference of temperature, thus in reality it is not possible to know the temperature of a body but the difference respect another body.
     
     \clearpage
 	\chapter{Methods and Materials}
