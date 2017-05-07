@@ -320,7 +320,7 @@ xleftmargin=1cm
 %\newacronym{spi}{SPI}{Serial Peripheral Interface}
 %\newacronym{api}{API}{Application Program Interface}
 %\newacronym{otg}{OTG}{USB On-The-Go}
-%\newacronym{ui}{UI}{User Interface}
+\newacronym{ui}{UI}{User Interface}
 %\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
 %\newacronym{https}{HTTPS}{HTTP over SSL}
 %\newacronym{tcp}{TCP}{Transmission Control Protocol}
@@ -564,8 +564,10 @@ In order to do all of this Python programming language was chosen for coding, it
     \label{table:libraries}
 \end{table}
 
+To read both cameras the class SerialCommunication can be used see listing~\ref{listing:serialcommunication} On the appendix~\ref{appx:first} this class use the library "pyserial" in a separated thread, a callback function is executed providing data as arguments and must be passed to the  the SerialCommunication class before start the reading. To make the image of the low resolution camera the class "LowCamera" can be used see listing~\ref{listing:lowcamera} on appendix~\ref{appx:first}. The high resolution use a different but similar code and it is explained on my Bachelor's thesis "Cloud Communication Chanel for Thermal Cameras"~\cite{alvaroCloud}.
 
-\section{Body measurement with low resolution IR camera}
+
+\section{Body Measurement with Low Resolution Camera}\label{sec:body-measurement-with-low-resolution-ir-camera}
 This is an application that has the following features:
 \begin{itemize}
     \item tracking of the maximum temperature.
@@ -623,9 +625,9 @@ There is a very simple indicator on the application to display how close the per
     \putimage{fever}{Scale of temperature}
 Then if the maximum temperature is above 36°C the bar in figure~\ref{fig:fever} will be filled indicating that something is wrong. If the maximum temperature is below 30°C it means that there is nobody in the place and the indicator of "Person present" will be off. Therefore a "normal" situation could be that the person is present and the bar is not filled. Otherwise an alarm could be activated, although this was not implemented.
 \subsection*{history of temperature}
-In order to comprehend better what is going on the place the maximum and mean temperature are being continusly plotted, having a short history of the temperature.
+In order to comprehend better what is going on with the person temperature the maximum and average temperature are being continusly plotted, having a short history of the temperature.
     \putimage{history}{Plot of history temperature}
-On figure~\ref{fig:history} can be seen such plots and on listing~\ref{listing:history} the code to make them
+On figure~\ref{fig:history} can be seen such plots and on listing~\ref{listing:history} the code to make them using "matplotlib" library.
 
 \begin{lstlisting}[label={listing:history},caption={Class to plot the graphic of temperatures},language=Python, style=styleprogramming]
 class TempCanvas(MplCanvas):
@@ -641,17 +643,34 @@ class TempCanvas(MplCanvas):
         self.axes.tick_params(axis='both', which='minor', labelsize=fsize - 2)
         self.th = TempHistory((self.figure, self.axes))
 \end{lstlisting}
-\section{Application prototype}
-\subsection*{UI}
-\subsection*{Link To OpenCV}
 
-\section{Detection and Tracking of People with IR High Resolution Camera}
+The history of temperatures could be used to improve how fever is detected and other data analysis.
+
+\subsection*{Application prototype}
+Now all the pieces of the application must be added together in a window using a \gls{ui} framework. In this case the powerful QT framework was used. QT is a C++ multi-platform framework and can be used in python (using the "PyQt4" bindings), libraries like "matplotlib" can be integrated in it and the interface can kept in a xml file edited by another application (*.ui files).
+
+\putimage[16]{fiber-detector-prototype}{Body temperature measurement application}
+
+In order to start, the camera has to be connected to the computer and then after pushing the start button, as seen on figure~\ref{fig:fiber-detector-prototype} the application receives the stream of data and makes the graphics and the fiver detection continuously.
+% TODO: change application image
+
+
+\section{Detection and Tracking of People with High Resolution Camera}
+This a different application from the previous section~\ref{sec:body-measurement-with-low-resolution-ir-camera} taking advantage of the Python application made in my Bachelor's thesis project on Nokia's Innovation Platform to extend it and perform detection and tracking of people using computer vision.
+
 \subsection*{installing and compiling OpenCV}
 \subsection*{Detection}
-\subsection*{Blob}
-\subsection*{Color}
+
+\begin{lstlisting}[label={listing:history},caption={Class to plot the graphic of temperatures},language=Python, style=styleprogramming]
+\end{lstlisting}
 \subsection*{Background Subtraction}
+
+\begin{lstlisting}[label={listing:history},caption={Class to plot the graphic of temperatures},language=Python, style=styleprogramming]
+\end{lstlisting}
 \subsection*{Tracking}
+
+\begin{lstlisting}[label={listing:history},caption={Class to plot the graphic of temperatures},language=Python, style=styleprogramming]
+\end{lstlisting}
 
 \clearpage
 \chapter{Results}
