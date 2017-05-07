@@ -11,7 +11,7 @@
 
 \def\thesislang{english} %change this depending on your language
 \author{Álvaro Bolaños Rodríguez}
-\def\thesis{}
+\def\thesis{Innovation Project}
 \def\alaotsikko{}
 
 %Finnish section
@@ -20,8 +20,8 @@
 \def\kohjelma{Koulutusohjelma}
 \def\suuntautumis{Suuntautumisvaihtoehto}
 \def\ohjaajat{
-	Etunimi Sukunimi, Titteli\newline
-	Etunimi Sukunimi, Titteli
+Etunimi Sukunimi, Titteli\newline
+Etunimi Sukunimi, Titteli
 }
 \def\avainsanat{avainsanat}
 \def\pvm{\specialdate\today}
@@ -32,7 +32,7 @@
 \def\metropoliadegreeprogramme {Information Technology}
 \def\metropoliaspecialisation {Software Engineer}
 \def\metropoliainstructors {
-	Antti Piironen, Principa Lecturer \newline
+Antti Piironen, Principa Lecturer \newline
 }
 \def\metropoliakeywords {Keywords}
 \date{\today}
@@ -61,6 +61,7 @@
 \usepackage{pgfplotstable}
 \usepackage{tikz} % mindmaps, flowcharts, piecharts, examples at http://www.texample.net/tikz/examples/
 \usepackage{csquotes}
+\usepackage{tabu}
 \usetikzlibrary{shapes.geometric, arrows}
 
 
@@ -108,9 +109,9 @@
 
 % citep-macro for reference with period inside square brackets [1.]
 \newcommand{\citep}[1]{
-	\renewcommand\citeright{.]}
-	\cite{#1}
-	\renewcommand\citeright{]}
+\renewcommand\citeright{.]}
+\cite{#1}
+\renewcommand\citeright{]}
 }
 
 %set date format to D.M.YYYY
@@ -124,49 +125,49 @@
 %----------------------------------------------
 \newcommand{\putimage}[3][10] %[3]: 3 parameters, [10] default value for 1st parameter is 10
 {
-    \begin{figure}[h]
-        \centering
-        \captionsetup{justification=centering}
-        \includegraphics[width=#1cm]{#2}
-        \caption{#3}
-        \label{fig:#2}
-    \end{figure}
+\begin{figure}[h]
+    \centering
+    \captionsetup{justification=centering}
+    \includegraphics[width=#1cm]{#2}
+    \caption{#3}
+    \label{fig:#2}
+\end{figure}
 }
 % idea for this command from http://tex.stackexchange.com/questions/25597/wrapping-code-listings-verbatim-or-other-method-inside-a-newcommand
 \ExplSyntaxOn
 \NewDocumentCommand{\putcode}{m m O{} +v }
 {
-    \begin{figure}[h]
-        %		\centering
-        %		\captionsetup{justification=centering}
-        \newlinechar=\endlinechar
-        \exp_args:Nx \scantokens
-        {
-            \string\begin{lstlisting}[caption={#2},label={listing:#1},\unexpanded{#3}]
-            #4
-            \string\end{lstlisting}
-        }
-        
-        %		\caption{#2}
-        %		\label{fig:#1}
-    \end{figure}\vspace{-17pt}
+\begin{figure}[h]
+    %		\centering
+    %		\captionsetup{justification=centering}
+    \newlinechar=\endlinechar
+    \exp_args:Nx \scantokens
+    {
+        \string\begin{lstlisting}[caption={#2},label={listing:#1},\unexpanded{#3}]
+        #4
+        \string\end{lstlisting}
+    }
+    
+    %		\caption{#2}
+    %		\label{fig:#1}
+\end{figure}\vspace{-17pt}
 }
 \ExplSyntaxOff
 
 %PROGRAMMING LANGUAGE DEFINITIONS
 \lstdefinelanguage{JavaScript}{
-    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, const, var, if, in, while, do, else, case, break},
-    keywordstyle=\color{blue}\bfseries,
-    ndkeywords={class, export, boolean, throw, implements, import, this},
-    ndkeywordstyle=\color{darkgray}\bfseries,
-    identifierstyle=\color{black},
-    sensitive=false,
-    comment=[l]{//},
-    morecomment=[s]{/*}{*/},
-    commentstyle=\color{purple}\ttfamily,
-    stringstyle=\color{red}\ttfamily,
-    morestring=[b]',
-    morestring=[b]"
+keywords={typeof, new, true, false, catch, function, return, null, catch, switch, const, var, if, in, while, do, else, case, break},
+keywordstyle=\color{blue}\bfseries,
+ndkeywords={class, export, boolean, throw, implements, import, this},
+ndkeywordstyle=\color{darkgray}\bfseries,
+identifierstyle=\color{black},
+sensitive=false,
+comment=[l]{//},
+morecomment=[s]{/*}{*/},
+commentstyle=\color{purple}\ttfamily,
+stringstyle=\color{red}\ttfamily,
+morestring=[b]',
+morestring=[b]"
 }
 
 %NORMAL TEXT
@@ -208,23 +209,23 @@ BoldItalicFont=LiberationSans-BoldItalic.ttf]
 \definecolor{darkgray}{rgb}{.4,.4,.4}
 \definecolor{purple}{rgb}{0.65, 0.12, 0.82}
 \lstset{
-	extendedchars=true,
-	captionpos=b,
-	caption=\footnotesize,
-	basicstyle=\singlespacing\ttfamily,%\small\fontfamily{"Courier"}\selectfont,
-	keywordstyle=\color{blue}\bfseries,
-	commentstyle=\color{purple}\itshape,
-	identifierstyle=\color{black},
-	stringstyle=\color{red},
-	showstringspaces=false,
-	showspaces=false,
-	numbers=left,
-	numberstyle=\footnotesize,
-	numbersep=9pt,
-	breaklines=true,
-	tabsize=2,
-	showtabs=false,
-	xleftmargin=1cm
+extendedchars=true,
+captionpos=b,
+caption=\footnotesize,
+basicstyle=\singlespacing\ttfamily,%\small\fontfamily{"Courier"}\selectfont,
+keywordstyle=\color{blue}\bfseries,
+commentstyle=\color{purple}\itshape,
+identifierstyle=\color{black},
+stringstyle=\color{red},
+showstringspaces=false,
+showspaces=false,
+numbers=left,
+numberstyle=\footnotesize,
+numbersep=9pt,
+breaklines=true,
+tabsize=2,
+showtabs=false,
+xleftmargin=1cm
 }
 \IfLanguageName {finnish} {\renewcommand{\lstlistingname}{Listaus}} {} % what is a good translation for this?
 %\counterwithout{lstlisting}{chapter}
@@ -251,7 +252,7 @@ BoldItalicFont=LiberationSans-BoldItalic.ttf]
 \renewcommand{\aftertoctitle}{\vspace*{-22pt}\afterchaptertitle}
 %spacing afer a chapter in toc
 \preto\section{%
-	\ifnum\value{section}=0\addtocontents{toc}{\vskip11pt}\fi
+\ifnum\value{section}=0\addtocontents{toc}{\vskip11pt}\fi
 }
 %spacing afer a section in toc
 \renewcommand{\cftsectionaftersnumb}{\vspace*{-3pt}}
@@ -259,8 +260,8 @@ BoldItalicFont=LiberationSans-BoldItalic.ttf]
 \renewcommand{\cftsubsectionaftersnumb}{\vspace*{-1pt}}
 %appendix in toc with "Appendix " + num
 \IfLanguageName {finnish} {
-	\renewcommand*{\cftappendixname}{Liite\space}
-	\renewcommand{\appendixtocname}{Liitteet}
+\renewcommand*{\cftappendixname}{Liite\space}
+\renewcommand{\appendixtocname}{Liitteet}
 }{\renewcommand*{\cftappendixname}{Appendix\space}}
 %appendix header
 \IfLanguageName {finnish} {\def\appname{Liite\space}}{\def\appname{Appendix\space}}
@@ -284,7 +285,7 @@ BoldItalicFont=LiberationSans-BoldItalic.ttf]
 %QUOTE
 \renewenvironment{quote}
 {\list{}{\rightmargin=0pt\leftmargin=1cm\topsep=-10pt}%
-	\item\relax\fontsize{10pt}{10pt}\singlespacing}
+\item\relax\fontsize{10pt}{10pt}\singlespacing}
 {\endlist}
 
 %BIBLIOGRAPHY
@@ -305,79 +306,79 @@ BoldItalicFont=LiberationSans-BoldItalic.ttf]
 \makeglossaries
 
 %Acronyms, abbreviations, etc. definitions
-\newacronym{html}{HTML}{HyperText Markup Language}
-\newacronym{sql}{SQL}{Structured Query Language}
-\newacronym{io}{I/O}{Input/Output}
-\newacronym{ram}{RAM}{Random Access Memory}
-\newacronym{php}{PHP}{Hypertext Preprocessor}
-\newacronym{lte}{LTE}{Long Term Evolution}
-\newacronym{3g}{3G}{Third Generation Mobile Network}
+%\newacronym{html}{HTML}{HyperText Markup Language}
+%\newacronym{sql}{SQL}{Structured Query Language}
+%\newacronym{io}{I/O}{Input/Output}
+%\newacronym{ram}{RAM}{Random Access Memory}
+%\newacronym{php}{PHP}{Hypertext Preprocessor}
+%\newacronym{lte}{LTE}{Long Term Evolution}
+%\newacronym{3g}{3G}{Third Generation Mobile Network}
 \newacronym{ir}{IR}{Infrared}
-\newacronym{iot}{IoT}{Internet of Things}
+%\newacronym{iot}{IoT}{Internet of Things}
 \newacronym{usb}{USB}{Universal Serial Bus}
-\newacronym{sim}{SIM}{subscriber identity module}
-\newacronym{spi}{SPI}{Serial Peripheral Interface}
-\newacronym{api}{API}{Application Program Interface}
-\newacronym{otg}{OTG}{USB On-The-Go}
-\newacronym{ui}{UI}{User Interface}
-\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
-\newacronym{https}{HTTPS}{HTTP over SSL}
-\newacronym{tcp}{TCP}{Transmission Control Protocol}
-\newacronym{udp}{UDP}{User Datagram Protocol}
-\newacronym{rtp}{RTP}{Real Time Transport Protocol}
-\newacronym{uml}{UML}{Unified Modeling Language}
-\newacronym{er}{ER Diagram}{Entity Relationship Diagram}
-\newacronym{paas}{PaaS}{Platform As A Service}
-\newacronym{saas}{SaaS}{Software As A Service}
-\newacronym{iaas}{IaaS}{Infrastructure As A Service}
-\newacronym{cpu}{CPU}{Central Process Unit}
-\newacronym{ssh}{SSH}{Secure Shell}
-\newacronym{oop}{OOP}{Object Oriented Programming}
-\newacronym{cpp}{C++}{C plus plus}
-\newacronym{xml}{XML}{Extensible Markup Language}
-\newacronym{json}{JSON}{JavaScript Object Notation}
-\newacronym{uri}{URI}{Uniform Resource Identifier}
-\newacronym{npm}{NPM}{Node Packet Manager}
-\newacronym{ip}{IP}{Internet Protocol}
-\newacronym{ran}{RAN}{Radio Access Network}
-\newacronym{s2i}{S2I}{Source-to-Image}
-\newacronym{cvs}{CVS}{Control Version System}
-\newacronym{voip}{VoIp}{Voice over IP}
-\newacronym{nat}{NAT}{Network Address Translation}
-\newacronym{vpn}{VPN}{Virtual Private Network}
-\newacronym{www}{WWW}{World Wide Web}
-\newacronym{pdf}{PDF}{Portable Document Format}
-\newacronym{ascii}{ASCII}{American Standard Code for Information Interchange}
+%\newacronym{sim}{SIM}{subscriber identity module}
+%\newacronym{spi}{SPI}{Serial Peripheral Interface}
+%\newacronym{api}{API}{Application Program Interface}
+%\newacronym{otg}{OTG}{USB On-The-Go}
+%\newacronym{ui}{UI}{User Interface}
+%\newacronym{http}{HTTP}{Hypertext Transfer Protocol}
+%\newacronym{https}{HTTPS}{HTTP over SSL}
+%\newacronym{tcp}{TCP}{Transmission Control Protocol}
+%\newacronym{udp}{UDP}{User Datagram Protocol}
+%\newacronym{rtp}{RTP}{Real Time Transport Protocol}
+%\newacronym{uml}{UML}{Unified Modeling Language}
+%\newacronym{er}{ER Diagram}{Entity Relationship Diagram}
+%\newacronym{paas}{PaaS}{Platform As A Service}
+%\newacronym{saas}{SaaS}{Software As A Service}
+%\newacronym{iaas}{IaaS}{Infrastructure As A Service}
+%\newacronym{cpu}{CPU}{Central Process Unit}
+%\newacronym{ssh}{SSH}{Secure Shell}
+%\newacronym{oop}{OOP}{Object Oriented Programming}
+%\newacronym{cpp}{C++}{C plus plus}
+%\newacronym{xml}{XML}{Extensible Markup Language}
+%\newacronym{json}{JSON}{JavaScript Object Notation}
+%\newacronym{uri}{URI}{Uniform Resource Identifier}
+%\newacronym{npm}{NPM}{Node Packet Manager}
+%\newacronym{ip}{IP}{Internet Protocol}
+%\newacronym{ran}{RAN}{Radio Access Network}
+%\newacronym{s2i}{S2I}{Source-to-Image}
+%\newacronym{cvs}{CVS}{Control Version System}
+%\newacronym{voip}{VoIp}{Voice over IP}
+%\newacronym{nat}{NAT}{Network Address Translation}
+%\newacronym{vpn}{VPN}{Virtual Private Network}
+%\newacronym{www}{WWW}{World Wide Web}
+%\newacronym{pdf}{PDF}{Portable Document Format}
+%\newacronym{ascii}{ASCII}{American Standard Code for Information Interchange}
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------
 \makeatletter
 \renewcommand{\maketitle}{
-	\thispagestyle{empty}
-	\ThisCenterWallPaper{1}{viiva}
-	%
-	\vspace*{9.5cm}
-	\tn{\LARGE\@author\\[22pt]\Huge\IfLanguageName {finnish}{\otsikko}{\@title}\\[22pt]\LARGE\alaotsikko\\[1.75cm]}
-	
-	\parbox{.7\linewidth}{
-		\IfLanguageName {finnish}{
-			Metropolia Ammattikorkeakoulu\\
-			\tutkinto \\
-			\kohjelma \\
-			\thesis\\
-			\pvm
-		} {
-			Helsinki Metropolia University of Applied Sciences\\
-			\metropoliadegree \\
-			\metropoliadegreeprogramme \\
-			\thesis\\
-			\specialdate\today % D.M.YYYY date format
-		}
+\thispagestyle{empty}
+\ThisCenterWallPaper{1}{viiva}
+%
+\vspace*{9.5cm}
+\tn{\LARGE\@author\\[22pt]\Huge\IfLanguageName {finnish}{\otsikko}{\@title}\\[22pt]\LARGE\alaotsikko\\[1.75cm]}
+
+\parbox{.7\linewidth}{
+	\IfLanguageName {finnish}{
+		Metropolia Ammattikorkeakoulu\\
+		\tutkinto \\
+		\kohjelma \\
+		\thesis\\
+		\pvm
+	} {
+		Helsinki Metropolia University of Applied Sciences\\
+		\metropoliadegree \\
+		\metropoliadegreeprogramme \\
+		\thesis\\
+		\specialdate\today % D.M.YYYY date format
 	}
-	\ThisLRCornerWallPaper{1}{metropolia}
-	%
-	\clearpage
+}
+\ThisLRCornerWallPaper{1}{metropolia}
+%
+\clearpage
 }
 \makeatother
 
@@ -390,235 +391,473 @@ BoldItalicFont=LiberationSans-BoldItalic.ttf]
 \makeoddhead{abstract}{}{}{Abstract}
 
 \begin{document}
-	\counterwithout{lstlisting}{chapter}
+\counterwithout{lstlisting}{chapter}
+\lstdefinestyle{styleprogramming}{
+    basicstyle=\ttfamily\small\captionsetup{justification=centering},
+    commentstyle=\ttfamily\color{violet}
+}
+
+%page number always on the top right, clear the "chapter/section" head
+\pagestyle{myheadings}
+\markright{}
+%clear chapter "title" foot page
+\makeevenfoot{plain}{}{}{}
+\makeoddfoot{plain}{}{}{}
+
+
+
+\maketitle
+\newpage
+\LRCornerWallPaper{1}{footer}
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\pagestyle{abstract}
+\begin{tabular}{ | p{4,7cm} | p{10,3cm} |}
+	\hline
+	Author(s) \newline
+	Title \newline\newline 
+	Number of Pages \newline
+	Date
+	& 
+	\makeatletter
+	\@author \newline
+	\@title \newline\newline
+	\pageref*{LastPage} pages + \total{chapter} appendices \newline %! if no appendices, risk to count total of chapter :D
+	\IfLanguageName {finnish} {\foreignlanguage{english}{\longdate\@date}} {\@date}
+	\makeatother
+	\\ \hline
+	Degree & \metropoliadegree
+	\\ \hline
+	Degree Programme & \metropoliadegreeprogramme
+	\\ \hline
+	Specialisation option & \metropoliaspecialisation
+	\\ \hline
+	Instructor(s) & \metropoliainstructors
+	\\ \hline
+	\multicolumn{2}{|p{15cm}|}{\begin{singlespacing}\vspace{-22pt}
+			The objective of this Innovation Project was to find Image processing and computer vision methods to generate useful data from LeViteZer thermal cameras. Analysis of image is in form of video stream, and it is used some image analysis techniques such as blob detection and background subtraction.\newline
+			\newline
+			This Innovation Project also complements my bachelor's thesis related to building a cloud based communication system with the mentioned LeViteZer thermal cameras taking advantage of some of the use cases proposed on the thesis.\newline
+            \newline				
+			The outcome of this project is an application to measure the temperature using the low resolution thermal camera and trigger an alarm when the temperature is above the supposed limits and other analysis. Also an algorithm to detect people using computer vision with the high resolution camera.
+			
+	\end{singlespacing}} \\[14cm] \hline
+	Keywords & \metropoliakeywords
+	\\ \hline
+\end{tabular}
+\clearpage
+
+%----------------------------------------------------------------------------------------
+%	Acknowledgement ?
+%----------------------------------------------------------------------------------------
+%\chapter*{Acknowledgement}
+%Thanks to my cat
+%\clearpage
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS
+%----------------------------------------------------------------------------------------
+
+\makeevenhead{plain}{}{}{}
+\makeoddhead{plain}{}{}{}
+\pagestyle{empty} %remove page number in toc (if longer than 2 pages)
+\tableofcontents*
+\pagestyle{empty} %remove page number in toc (if longer than 1 pages)
+
+
+\clearpage
+%Uncomment this line if you do not have Abbreviations list.
+%\pagestyle{plain}
+
+%list of figure, tables comes here...
+
+
+%----------------------------------------------------------------------------------------
+%    Lyhenteet / Abbreviation
+%----------------------------------------------------------------------------------------
+
+\begin{singlespacing}
 	
-	%page number always on the top right, clear the "chapter/section" head
-	\pagestyle{myheadings}
-	\markright{}
-	%clear chapter "title" foot page
-	\makeevenfoot{plain}{}{}{}
-	\makeoddfoot{plain}{}{}{}
+	\glsaddall
 	
-	
-	
-	\maketitle
-	\newpage
-	\LRCornerWallPaper{1}{footer}
-	
-	%----------------------------------------------------------------------------------------
-	%	ABSTRACT
-	%----------------------------------------------------------------------------------------
-	
-	\pagestyle{abstract}
-	\begin{tabular}{ | p{4,7cm} | p{10,3cm} |}
-		\hline
-		Author(s) \newline
-		Title \newline\newline 
-		Number of Pages \newline
-		Date
-		& 
-		\makeatletter
-		\@author \newline
-		\@title \newline\newline
-		\pageref*{LastPage} pages + \total{chapter} appendices \newline %! if no appendices, risk to count total of chapter :D
-		\IfLanguageName {finnish} {\foreignlanguage{english}{\longdate\@date}} {\@date}
-		\makeatother
-		\\ \hline
-		Degree & \metropoliadegree
-		\\ \hline
-		Degree Programme & \metropoliadegreeprogramme
-		\\ \hline
-		Specialisation option & \metropoliaspecialisation
-		\\ \hline
-		Instructor(s) & \metropoliainstructors
-		\\ \hline
-		\multicolumn{2}{|p{15cm}|}{\begin{singlespacing}\vspace{-22pt}
-				The objective of this Innovation Project was to find Image processing and computer vision methods to generate useful data from LeViteZer thermal cameras. Analysis of image is in form of video stream, and it is used some image analysis techniques such as blob detection and background subtraction.
-				
-				This Innovation Project also complements my bachelor's thesis related to building a cloud based communication system with the mentioned LeViteZer thermal cameras taking advantage of some of the use cases proposed on the thesis.
-				
-				The outcome of this project is an application to measure the temperature using the low resolution thermal camera and trigger an alarm when the temperature is above the supposed limits and other analysis. Also an algorithm to detect people using computer vision with the high resolution camera.
-				
-		\end{singlespacing}} \\[14cm] \hline
-		Keywords & \metropoliakeywords
-		\\ \hline
-	\end{tabular}
-	\clearpage
-	
-	%----------------------------------------------------------------------------------------
-	%	Acknowledgement ?
-	%----------------------------------------------------------------------------------------
-	%\chapter*{Acknowledgement}
-	%Thanks to my cat
-	%\clearpage
-	
-	%----------------------------------------------------------------------------------------
-	%	TABLE OF CONTENTS
-	%----------------------------------------------------------------------------------------
-	
-	\makeevenhead{plain}{}{}{}
-	\makeoddhead{plain}{}{}{}
-	\pagestyle{empty} %remove page number in toc (if longer than 2 pages)
-	\tableofcontents*
-	\pagestyle{empty} %remove page number in toc (if longer than 1 pages)
-	
-	
-	\clearpage
-	%Uncomment this line if you do not have Abbreviations list.
-	%\pagestyle{plain}
-	
-	%list of figure, tables comes here...
-	
-	
-	%----------------------------------------------------------------------------------------
-	%    Lyhenteet / Abbreviation
-	%----------------------------------------------------------------------------------------
-	
-	\begin{singlespacing}
-		
-		\glsaddall
-		
-		{
-			\titleformat{\section}
-			{\fontsize{13pt}{13pt}\bfseries\linespread{1}}
-			{\thesection}{.5cm}{}
-			%Adapt labelwidth (sorry for the ugly hack)
-			\setlist[description]{leftmargin=!, labelwidth=4em}
-			\IfLanguageName {finnish} {
-				\printacronyms[title=Lyhenteet]
-			}{
-				\printacronyms[title=Abbreviations]
-			}
-			\setlist[description]{leftmargin=!, labelwidth=7em}
-			\printglossary 
-			\setlist[description]{style=standard} % reset settings back to default
+	{
+		\titleformat{\section}
+		{\fontsize{13pt}{13pt}\bfseries\linespread{1}}
+		{\thesection}{.5cm}{}
+		%Adapt labelwidth (sorry for the ugly hack)
+		\setlist[description]{leftmargin=!, labelwidth=4em}
+		\IfLanguageName {finnish} {
+			\printacronyms[title=Lyhenteet]
+		}{
+			\printacronyms[title=Abbreviations]
 		}
-	\end{singlespacing}
-	%Seems that bug is in sharelatex. Compile fine with TexLive >= 2014
-	
-	
-	\newpage
-	
-	%page number always on top right; also for chapter "title" page
-	\pagestyle{plain}
-	\makeevenhead{plain}{}{}{\thepage}
-	\makeoddhead{plain}{}{}{\thepage}
-	
-	\setcounter{page}{1} %page 1 should be Introduction
-	\ClearWallPaper
-	%----------------------------------------------------------------------------------------
-	%	CONTENT
-	%----------------------------------------------------------------------------------------
-	
-	\sloppy % enforce alignment to fully justified
-	
-	\chapter{Introduction}
-	
-    
-    \clearpage	
-	\chapter{Theoretical Background}
-    \section{Image Processing}
-    \section{Computer Vision}
-    \section{LeViteZer Cameras}
-    The cameras which were provide by LeViteZer are two different versions, both work with the same serial / \gls{usb} interface but different way to generate the image. Note that the names of "low resolution camera" and "high resolution camera" are not official but a form to differentiate from each other. 
-    \subsection{Low Resolution Camera}
-    This camera is made of 3 sensors able to detect accurate temperature in a matrix of XxY per sensor making a total of NxM pixels in total. The main advantage of this camera is that every pixel gives absolute temperatures which means that the sensor does not detect difference of temperature but real ones which make it useful in health-care applications. % TODO: get low sensor resolution
+		\setlist[description]{leftmargin=!, labelwidth=7em}
+		\printglossary 
+		\setlist[description]{style=standard} % reset settings back to default
+	}
+\end{singlespacing}
+%Seems that bug is in sharelatex. Compile fine with TexLive >= 2014
+
+
+\newpage
+
+%page number always on top right; also for chapter "title" page
+\pagestyle{plain}
+\makeevenhead{plain}{}{}{\thepage}
+\makeoddhead{plain}{}{}{\thepage}
+
+\setcounter{page}{1} %page 1 should be Introduction
+\ClearWallPaper
+%----------------------------------------------------------------------------------------
+%	CONTENT
+%----------------------------------------------------------------------------------------
+
+\sloppy % enforce alignment to fully justified
+
+\chapter{Introduction}
+
+
+\clearpage	
+\chapter{LeViteZer Cameras}\label{sec:theoretical-background}
+%    \section{Image Processing}
+%    \section{Computer Vision}
+
+The cameras which were provide by LeViteZer are two different versions, both work with the same serial / \gls{usb} interface but a different way to generate the image. Note that the names of "low resolution camera" and "high resolution camera" are not official but a form to differentiate from each other. Also Note that the sensor of the cameras provide a matrix of temperatures which can be interpreted as an gray-scale image by treating components of this matrix as pixels. Color can be added before to have a better visualization of the intensity of temperature like in the figure~\ref{fig:people}.
+
+\section{Low Resolution Camera}
+This camera is made of stacked 3 sensors able to detect accurate temperature in a matrix of 15x4 (60) per sensor making a total of 15x12 (180) pixels in total. The main advantage of this camera is that every pixel gives absolute temperatures which means that the sensor does not detect difference of temperature but real ones which might make it useful in health-care applications.
+
     \putimage{low-resolution}{Low Resolution camera front view}
-    \putimage{hand}{A hand viewed from The camera}
-    \subsection{High Resolution Camera}
-    It provides a larger resolution (160x120 pixels) compared to the other one making it more suitable for medium distance analysis  and detecting several persons at the same time. These sensor were use intensely in my own Bachelor's Thesis project were it is explain how to create a communication system between clients and the sensors among other things like generating the image. 
+
+This camera sends approximately 4 frames in a second but in small chunks of 80 bytes. Also Because there are three sensors (see figure~\ref{fig:low-resolution}) every frame has to be assembled taking this into account. 
+
+\section{High Resolution Camera}
+It provides a larger resolution (160x120 pixels) at a maximum of 9 frames per second. Compared to the other one making it more suitable for medium distance analysis  and detecting several persons at the same time. These sensor were use intensely in my own Bachelor's Thesis project were it is explain how to create a communication system between clients and the sensors among other things like generating the image. 
+
+    \putimage{people}{People seen from the high resolution camera}
     
-    One important difference of this sensor respect the low camera is that it only detects difference of temperature, thus in reality it is not possible to know the temperature of a body but the difference respect another body.
+One important difference of this sensor respect the low camera is that it only detects difference of temperature, thus in reality it is not possible to know the temperature of a body but the difference respect another body.
+
+\clearpage
+\chapter{Methods and Materials}
+As seen in chapter~\ref{sec:theoretical-background} these 2 cameras have different capabilities. The low resolution sensor is going to be used for analyzing temperature in a single person. The high resolution on the other hand is better suitable for detection and tracking of several persons who real temperatures are not that important, although it is still possible to know if someone is hotter or colder than the others.
+
+In order to do all of this Python programming language was chosen for coding, it has all the tools and libraries necessaries to make the mentioned tasks. In table~\ref{table:libraries} are the libraries and for what they were used.
+
+\begin{table}[h]
+    \centering
+    \begin{tabu}{| l | l |}
+        \hline
+        \rowfont[c]{\bfseries} Library & Description \\ \hline
+      
+        pyserial & Open a serial connection to LeViteZer camera \\
+        matplotlib & high quality plotting: graphics and \gls{ir} image \\
+        OpenCV & Computer vision which has several algorithms implemented: detect and tracking \\
+        pyQt4  & binding for the QT framework to create user interfaces \\
+
+        \hline
+    \end{tabu}
+    \caption{Libraries used on the project}
+    \label{table:libraries}
+\end{table}
+
+
+\section{Body measurement with low resolution IR camera}
+This is an application that has the following features:
+\begin{itemize}
+    \item tracking of the maximum temperature.
+    \item tracking of the average temperature.
+    \item fiber detection.
+    \item \gls{ir} image of person.
+\end{itemize}
+With every frame comes metadata information about the frame itself as the maximum, minimum and average temperature. The image itself is a matrix of temperatures thus it looks something similar to equation~\ref{eq:matrix} where every value is a temperature in Celsius degrees.
+\begin{equation}
+\label{eq:matrix}
+D = 
+\begin{pmatrix}
+21 & 21 & 23 & \cdots \\
+22 & 21 & 26 & \cdots \\
+21 & 24 & 27 & \cdots \\
+\vdots & \vdots  & \vdots  & \ddots   \\
+
+\end{pmatrix}
+\end{equation}
+
+When plotting this data we will obtain an image as in figure~\ref{fig:ir-hand} where the person to analyze will be shown.
+
+    \putimage{ir-hand}{A hand viewed from the low resolution camera}
+
+To create the image it necessary to map the temperature values between the minimum and maximum to a range between 0-255 and apply colors for the different values. Fortunately matplotlib does this for us.
+
+\begin{lstlisting}[label={listing:image},caption={Class to get serial data from the cameras},language=Python, style=styleprogramming]
+class MplCanvasLowCamera(MplCanvas):
+    def __init__(self, port=None, *args, **kwargs):
+        MplCanvas.__init__(self, title=port, camera=LowCamera(port), *args, **kwargs)
+        arr = self.camera.last_frame
+        
+        # configure row and columns of plots
+        self.image = self.axes.imshow(arr,
+        interpolation="bilinear",
+        clim=[arr.min(), arr.max()],
+        cmap="rainbow",
+        origin='lower')
+        
+        self.figure.colorbar(self.image, ax=self.axes)
+        self.axes.set_xlim((0, self.camera.x_lim))
     
-    \clearpage
-	\chapter{Methods and Materials}
-    \section{Computer Vision}
-    \subsection{installing and compiling OpenCV}
-    \subsection{Detection}
-    \subsection{Blob}
-    \subsection{Color}
-    \subsection{Background Subtraction}
-    \subsection{Tracking}
-    \section{Body measurement}
-    \subsection{Detecting Fiber}
-    \subsection{history of temperature}
-    \section{Application prototype}
-    \subsection{UI}
-    \subsection{Link To OpenCV}
-    
-    \clearpage
-	\chapter{Results}
-    \section{Use in Bachelor's Thesis}
-    \section{Use in Well-being}
-	
-	
-	
-	
-	
-	%----------------------------------------------------------------------------------------
-	%   BIBLIOGRAPHY 
-	%----------------------------------------------------------------------------------------
-	\clearpage
-	\IfLanguageName{finnish}{\bibliographystyle{vancouver_fi}}{\bibliographystyle{vancouver}}
-	%line space
-	%\singlespacing %removed otherwise the appendix are also single space
-	\begin{flushleft}
-		\begin{singlespacing}
-			\bibliography{biblio}
-		\end{singlespacing}
-	\end{flushleft}
-	
-	%for conting the pages
-	\label{LastPage}~
-	
-	
-	%----------------------------------------------------------------------------------------
-	%   APPENDICES 
-	%----------------------------------------------------------------------------------------
-	%avoid that the last page of bib get appendix header
-	\clearpage
-	%start appendix
-	\appendix
-	%no page number for appendix in table of content
-	\addtocontents{toc}{\cftpagenumbersoff{chapter}}
-	%appendix sections and subsections not in table of content
-	\settocdepth{chapter}
-	%add "Appendices" in the table of content
-	\addappheadtotoc
-	%force smaller vertical spacing in table of content
-	%!!! There can be some fun depending if the appendices have (sub)sections or not :D
-	% You will have to play with these numbers and eventually copy the \pretocmd line on before some \chapter and force another number.
-	\addtocontents{toc}{\vspace{11pt}}
-	\pretocmd{\chapter}{\addtocontents{toc}{\protect\vspace{-24pt}}}{}{}
-	%have Appendix 1 (instead of Appendix A)
-	\renewcommand{\thechapter}{\arabic{chapter}} 
-	
-	\newcommand\liite[1]{
-		%each appendix restart page num to one
-		\setcounter{page}{1}
-		%special counter for appendix TODO: this is a ugly quick hack :( Should find a better way to count the page per appendix.
-		\newtotcounter{appx#1}
-		%overwrite the header
-		\makeevenhead{plain}{}{}{\appname \thechapter \\ \thepage\,(\stepcounter{appx#1}\total{appx#1})}
-		\makeoddhead{plain}{}{}{\appname \thechapter \\ \thepage\,(\stepcounter{appx#1}\total{appx#1})}}
-	
-	\liite{1}
-	\chapter{Appendix}\label{appx:first}
-	
-	% Note that every appendix will be a chapter.
-	
-	% Sorry for the ugly hack on how to count the total pages per appendix.
-	
-	
-	% Of course with section and subsection.
-	
-	\section{Appendix Section}
-	
-	% And you can cite \cite{tobias:book} stuff, it will go into the main bibliography.
-	
-	\subsection{With a Subsection}
-	
-	\clearpage % avoid that the last page of previous appendix get this header
-	\liite{2}
+    def update_figure(self, new_arr):
+            self.image.set_array(new_arr)
+            self.image.set_clim([new_arr.min(), new_arr.max()])  # autoscale
+            self.draw()
+
+\end{lstlisting}
+
+On the listing~\ref{listing:image} there is class to perform the image creation. It can be easily applied a color map to the grayscale image and scaling between minimum and maximum values using the function "imshow" on line 6.
+
+
+\subsection*{Detecting a Patient and Fiber}
+There is a very simple indicator on the application to display how close the person is near to a temperature of fiber. The average internal human temperature is around 37°C and it considerer fiber above 39°C. Nonetheless this is for internal temperature, the skin which is what the camera will detect, has a lower temperature. It is around 34°C on average and extrapolating this tho the fever temperature above 36°C we might consider as fiver.
+    \putimage{fever}{Scale of temperature}
+Then if the maximum temperature is above 36°C the bar in figure~\ref{fig:fever} will be filled indicating that something is wrong. If the maximum temperature is below 30°C it means that there is nobody in the place and the indicator of "Person present" will be off. Therefore a "normal" situation could be that the person is present and the bar is not filled. Otherwise an alarm could be activated, although this was not implemented.
+\subsection*{history of temperature}
+In order to comprehend better what is going on the place the maximum and mean temperature are being continusly plotted, having a short history of the temperature.
+    \putimage{history}{Plot of history temperature}
+On figure~\ref{fig:history} can be seen such plots and on listing~\ref{listing:history} the code to make them
+
+\begin{lstlisting}[label={listing:history},caption={Class to plot the graphic of temperatures},language=Python, style=styleprogramming]
+class TempCanvas(MplCanvas):
+    def __init__(self, *args, **kwargs):
+        fsize = 10
+        super(TempCanvas, self).__init__(*args, **kwargs)
+        self.axes.set_title(kwargs['title'], fontsize=fsize)
+        
+        self.axes.set_ylabel("Temp(celsius)", fontsize=fsize)
+        self.axes.grid(True, linestyle='-', color='0.75')
+        self.axes.get_xaxis().set_ticks([])
+        self.axes.tick_params(axis='both', which='major', labelsize=fsize - 2)
+        self.axes.tick_params(axis='both', which='minor', labelsize=fsize - 2)
+        self.th = TempHistory((self.figure, self.axes))
+\end{lstlisting}
+\section{Application prototype}
+\subsection*{UI}
+\subsection*{Link To OpenCV}
+
+\section{Detection and Tracking of People with IR High Resolution Camera}
+\subsection*{installing and compiling OpenCV}
+\subsection*{Detection}
+\subsection*{Blob}
+\subsection*{Color}
+\subsection*{Background Subtraction}
+\subsection*{Tracking}
+
+\clearpage
+\chapter{Results}
+\section{Use in Bachelor's Thesis}
+\section{Use in Well-being}
+
+
+
+
+
+%----------------------------------------------------------------------------------------
+%   BIBLIOGRAPHY 
+%----------------------------------------------------------------------------------------
+\clearpage
+\IfLanguageName{finnish}{\bibliographystyle{vancouver_fi}}{\bibliographystyle{vancouver}}
+%line space
+%\singlespacing %removed otherwise the appendix are also single space
+\begin{flushleft}
+	\begin{singlespacing}
+		\bibliography{biblio}
+	\end{singlespacing}
+\end{flushleft}
+
+%for conting the pages
+\label{LastPage}~
+
+
+%----------------------------------------------------------------------------------------
+%   APPENDICES 
+%----------------------------------------------------------------------------------------
+%avoid that the last page of bib get appendix header
+\clearpage
+%start appendix
+\appendix
+%no page number for appendix in table of content
+\addtocontents{toc}{\cftpagenumbersoff{chapter}}
+%appendix sections and subsections not in table of content
+\settocdepth{chapter}
+%add "Appendices" in the table of content
+\addappheadtotoc
+%force smaller vertical spacing in table of content
+%!!! There can be some fun depending if the appendices have (sub)sections or not :D
+% You will have to play with these numbers and eventually copy the \pretocmd line on before some \chapter and force another number.
+\addtocontents{toc}{\vspace{11pt}}
+\pretocmd{\chapter}{\addtocontents{toc}{\protect\vspace{-24pt}}}{}{}
+%have Appendix 1 (instead of Appendix A)
+\renewcommand{\thechapter}{\arabic{chapter}} 
+
+\newcommand\liite[1]{
+	%each appendix restart page num to one
+	\setcounter{page}{1}
+	%special counter for appendix TODO: this is a ugly quick hack :( Should find a better way to count the page per appendix.
+	\newtotcounter{appx#1}
+	%overwrite the header
+	\makeevenhead{plain}{}{}{\appname \thechapter \\ \thepage\,(\stepcounter{appx#1}\total{appx#1})}
+	\makeoddhead{plain}{}{}{\appname \thechapter \\ \thepage\,(\stepcounter{appx#1}\total{appx#1})}}
+
+\liite{1}
+\chapter{Coding}\label{appx:first}
+
+ \begin{lstlisting}[label={listing:serialcommunication},caption={Class to get serial data from the cameras},language=Python, style=styleprogramming]
+ import logging
+ import os
+ import threading
+ from threading import Thread
+ 
+ import serial
+ 
+ from Constants import INITIAL_SEQUENCE, BAUD_SPEED
+ 
+ __author__ = 'Alvaro'
+ 
+ 
+ def read_hex(data):
+ logging.warn(' '.join(x.encode('hex') for x in data))
+ 
+ 
+ class SerialCommunication(Thread):
+ def __init__(self, process_callback, port, get_raw_data_only=False):
+ Thread.__init__(self, name="SerialThread")
+ self.get_raw_data_only = get_raw_data_only
+ self.lastline = b''
+ self.process_callback = process_callback
+ self.ser = serial.Serial(port, BAUD_SPEED)
+ self.setDaemon(True)
+ self.start()
+ print("serial port:", port, " ", BAUD_SPEED, " ", os.name)
+ 
+ def run(self):
+ remains = b''
+ while self.ser.is_open:
+ try:
+ one_byte = self.ser.read(1)  # necessary to block thread (in_waiting method doesn't block)
+ n_bytes = self.ser.in_waiting
+ bytes_read = one_byte + self.ser.read(n_bytes)
+ 
+ if self.get_raw_data_only:
+ data = bytes_read
+ self.process_callback(bytearray(data))
+ else:
+ data = remains + bytes_read
+ remains = self.consume_data(data)
+ 
+ except serial.SerialException as e:
+ logging.error(e.message)
+ if len(data) > 0:
+ pass
+ else:
+ break
+ 
+ def consume_data(self, data):
+ machs = data.split(INITIAL_SEQUENCE)
+ last_ind = len(machs) - 1
+ for ind, line in enumerate(machs):
+ if ind == last_ind: continue
+ self.process_callback(bytearray(line))
+ return machs[-1]
+ 
+ 
+ def start_reading(self):
+ Thread.start(self)
+ 
+ def write_to_serial(self, text):
+ if self.ser.is_open:
+ self.ser.write(text)
+ 
+ def stop(self):
+ if self.ser.is_open:
+ self.ser.close()
+ 
+ \end{lstlisting}
+
+\begin{lstlisting}[label={listing:lowcamera},caption={Processing of the Low camera},language=Python, style=styleprogramming]
+from __future__ import division
+import logging
+import numpy as np
+from Camera import Camera
+
+__author__ = 'Alvaro'
+
+raw_min = [0,0,0]
+raw_max = [0,0,0]
+raw_mean = [0,0,0]
+X_LENGTH = 15
+Y_LENGTH = 12
+SENSOR_POSITIONS = (4, 0, 8)
+
+class LowCamera(Camera):
+def __init__(self, *args, **kwargs):
+kwargs['y_length'] = Y_LENGTH; kwargs['x_length'] = X_LENGTH
+Camera.__init__(self,  *args, **kwargs)
+self.x_lim = X_LENGTH
+
+def get_absolute_values(self):
+return min(raw_min), max(raw_max), np.mean(raw_mean)
+
+
+def process_telemetry(self, data, sensor_number):
+global raw_min, raw_max, raw_mean
+raw_min[sensor_number] = (data[0] + 256 * data[1]) / 100
+raw_max[sensor_number] = (data[3] + 256 * data[4]) / 100
+raw_mean[sensor_number] = (data[6] + 256 * data[7]) / 100
+# print "telemetry values: ", raw_min, raw_max, raw_mean
+
+
+def get_actual_temperature(self, raw_value, arr_max, arr_min, sensor_number):
+temp = (raw_max[sensor_number] - raw_min[sensor_number]) * (raw_value / (arr_max - arr_min)) + raw_min[sensor_number]
+return temp
+
+def frame_callback(self, raw_frame):
+""" sends raw frame to network and call process frame """
+logging.debug(raw_frame)
+if self.only_send_data:
+if self.use_http:
+self.network_thread.add_to_buffer(raw_frame)
+else:
+self.network_thread.send_to_socket(raw_frame)
+else:
+self.last_frame = self.process_frame(raw_frame)
+self.frame_ready_callback()
+
+
+def process_frame(self,raw_frame):
+if len(raw_frame) < 70:
+return
+
+# convert to bytes
+bytes_matrix = np.array([raw_frame[49:64],
+raw_frame[33:48],
+raw_frame[17:32],
+raw_frame[1:16]])
+sensor_number = raw_frame[0] - 1 # sensors are numbered from 1 to 3, must subtract 1
+self.process_telemetry(np.array(raw_frame[65:]), sensor_number)
+arr_max = bytes_matrix.max()
+arr_min = bytes_matrix.min()
+
+for j in range(0, 4):
+y_coord = j + SENSOR_POSITIONS[sensor_number]
+for i in range(0, X_LENGTH):
+temp = self.get_actual_temperature(bytes_matrix[j][i], arr_max, arr_min, sensor_number)
+self.frame_arr[y_coord][i] = temp
+return self.frame_arr
+
+\end{lstlisting}
+
+\clearpage % avoid that the last page of previous appendix get this header
+\liite{2}
 
 \end{document}
