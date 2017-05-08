@@ -34,7 +34,7 @@ Etunimi Sukunimi, Titteli
 \def\metropoliainstructors {
 Antti Piironen, Principa Lecturer \newline
 }
-\def\metropoliakeywords {Keywords}
+\def\metropoliakeywords {thermal cameras, computer vision, image analysis, USB, QT, Python, UI, tracking, algorithm}
 \date{\today}
 
 %----------------------------------------------------------------------------------------
@@ -442,7 +442,7 @@ xleftmargin=1cm
 			\newline
 			This Innovation Project also complements my bachelor's thesis related to building a cloud based communication system with the mentioned LeViteZer thermal cameras taking advantage of some of the use cases proposed on the thesis.\newline
             \newline				
-			The outcome of this project is an application to measure the temperature using the low resolution thermal camera and trigger an alarm when the temperature is above the supposed limits and other analysis. Also an algorithm to detect people using computer vision with the high resolution camera.
+			The outcome of this project is an application to measure the temperature using the low resolution thermal camera and make some analysis about it. Also an algorithm to detect people using computer vision with the high resolution camera.
 			
 	\end{singlespacing}} \\[14cm] \hline
 	Keywords & \metropoliakeywords
@@ -518,24 +518,26 @@ xleftmargin=1cm
 \sloppy % enforce alignment to fully justified
 
 \chapter{Introduction}
+This Innovation Project report shows methods to analyze video stream from thermal \gls{ir} cameras from LeViteZer. This company offered to make my Bachelor's thesis and Innovation Project with them. The first and more complicated part was creating a communication channel for this cameras and that is the topic of the thesis, however on this Innovation project the topic is about using the thermal cameras for something useful as image analysis.
 
+There are basically two parts on this report: one that explains analysis with the LeViteZer's low resolution camera and other that explains the analysis with the LeViteZer's high resolution camera.
 
 \clearpage	
 \chapter{LeViteZer Cameras}\label{sec:theoretical-background}
 %    \section{Image Processing}
 %    \section{Computer Vision}
 
-The cameras which were provide by LeViteZer are two different versions, both work with the same serial / \gls{usb} interface but a different way to generate the image. Note that the names of "low resolution camera" and "high resolution camera" are not official but a form to differentiate from each other. Also Note that the sensor of the cameras provide a matrix of temperatures which can be interpreted as an gray-scale image by treating components of this matrix as pixels. Color can be added before to have a better visualization of the intensity of temperature like in the figure~\ref{fig:people}.
+The cameras which were provide by LeViteZer are two different versions, both work with the same serial / \gls{usb} interface but the way of process it is different. Note that the names of "low resolution camera" and "high resolution camera" are not official but a form to differentiate from each other. Also Note that the sensor of the cameras provide a matrix of temperatures which can be interpreted as an gray-scale image by treating components of this matrix as pixels. Color can be added before to have a better visualization of the temperature intensity like in the figure~\ref{fig:people}.
 
 \section{Low Resolution Camera}
-This camera is made of stacked 3 sensors able to detect accurate temperature in a matrix of 15x4 (60) per sensor making a total of 15x12 (180) pixels in total. The main advantage of this camera is that every pixel gives absolute temperatures which means that the sensor does not detect difference of temperature but real ones which might make it useful in health-care applications.
+This camera is made of three sensors able to detect accurate temperature in a matrix of 15x4 (60) per sensor making a total of 15x12 (180) pixels in total. The main advantage of this camera is that every pixel is an absolute temperature which means that the sensor does not detect difference of temperature but real ones which might make it useful in health-care applications.
 
     \putimage{low-resolution}{Low Resolution camera front view}
 
-This camera sends approximately 4 frames in a second but in small chunks of 80 bytes. Also Because there are three sensors (see figure~\ref{fig:low-resolution}) every frame has to be assembled taking this into account. 
+This camera sends approximately 4 frames in a second but in small chunks of 84 bytes. Also Because there are three sensors (see figure~\ref{fig:low-resolution}) every frame has to be assembled taking this into account. 
 
 \section{High Resolution Camera}
-It provides a larger resolution (160x120 pixels) at a maximum of 9 frames per second. Compared to the other one making it more suitable for medium distance analysis  and detecting several persons at the same time. These sensor were use intensely in my own Bachelor's Thesis project were it is explain how to create a communication system between clients and the sensors among other things like generating the image. 
+It provides a larger resolution (160x120 pixels) at a maximum of 9 frames per second. Compared to the other one making it more suitable for medium distance analysis  and detecting several persons at the same time. These sensor were use intensely in my own Bachelor's Thesis project as explained in the Introduction. 
 
     \putimage{people}{People seen from the high resolution camera}
     
@@ -543,7 +545,7 @@ One important difference of this sensor respect the low camera is that it only d
 
 \clearpage
 \chapter{Methods and Materials}
-As seen in chapter~\ref{sec:theoretical-background} these 2 cameras have different capabilities. The low resolution sensor is going to be used for analyzing temperature in a single person. The high resolution on the other hand is better suitable for detection and tracking of several persons who real temperatures are not that important, although it is still possible to know if someone is hotter or colder than the others.
+As seen in chapter~\ref{sec:theoretical-background} these 2 cameras have different capabilities. The low resolution sensor is going to be used for analyzing temperature for one person. The high resolution on the other hand is better suitable for detection and tracking of several persons who real temperatures are not that important, although it is still possible to know if someone is hotter or colder than the others.
 
 In order to do all of this Python programming language was chosen for coding, it has all the tools and libraries necessaries to make the mentioned tasks. In table~\ref{table:libraries} are the libraries and for what they were used.
 
@@ -553,7 +555,7 @@ In order to do all of this Python programming language was chosen for coding, it
         \hline
         \rowfont[c]{\bfseries} Library & Description \\ \hline
       
-        pyserial & Open a serial connection to LeViteZer camera \\
+        pyserial & Open a serial connection to a device\\
         matplotlib & high quality plotting: graphics and \gls{ir} image \\
         OpenCV & Computer vision which has several algorithms implemented: detect and tracking \\
         pyQt4  & binding for the QT framework to create user interfaces \\
@@ -564,7 +566,7 @@ In order to do all of this Python programming language was chosen for coding, it
     \label{table:libraries}
 \end{table}
 
-To read both cameras the class SerialCommunication can be used see listing~\ref{listing:serialcommunication} On the appendix~\ref{appx:first} this class use the library "pyserial" in a separated thread, a callback function is executed providing data as arguments and must be passed to the  the SerialCommunication class before start the reading. To make the image of the low resolution camera the class "LowCamera" can be used see listing~\ref{listing:lowcamera} on appendix~\ref{appx:first}. The high resolution use a different but similar code and it is explained on my Bachelor's thesis "Cloud Communication Chanel for Thermal Cameras"~\cite{alvaroCloud}.
+To read both cameras the class SerialCommunication can be used see listing~\ref{listing:serialcommunication} On the appendix this class use the library "pyserial" in a separated thread, a callback function is executed providing data as arguments and must be passed to the  the SerialCommunication class before start the reading. To make the image of the low resolution camera the class "LowCamera" can be used see listing~\ref{listing:lowcamera} on the  appendix. The high resolution use a different but similar code and it is explained on my Bachelor's thesis "Cloud Communication Channel for Thermal Cameras"~\cite{alvaroCloud}.
 
 
 \section{Body Measurement with Low Resolution Camera}\label{sec:body-measurement-with-low-resolution-ir-camera}
@@ -572,7 +574,7 @@ This is an application that has the following features:
 \begin{itemize}
     \item tracking of the maximum temperature.
     \item tracking of the average temperature.
-    \item fiber detection.
+    \item fever detection.
     \item \gls{ir} image of person.
 \end{itemize}
 With every frame comes metadata information about the frame itself as the maximum, minimum and average temperature. The image itself is a matrix of temperatures thus it looks something similar to equation~\ref{eq:matrix} where every value is a temperature in Celsius degrees.
@@ -592,7 +594,7 @@ When plotting this data we will obtain an image as in figure~\ref{fig:ir-hand} w
 
     \putimage{ir-hand}{A hand viewed from the low resolution camera}
 
-To create the image it necessary to map the temperature values between the minimum and maximum to a range between 0-255 and apply colors for the different values. Fortunately matplotlib does this for us.
+To create the image it is necessary to map the temperature values between the minimum and maximum to a range between 0-255 and apply colors for the different values. Fortunately matplotlib does this for us.
 
 \begin{lstlisting}[label={listing:image},caption={Class to get serial data from the cameras},language=Python, style=styleprogramming]
 class MplCanvasLowCamera(MplCanvas):
@@ -620,12 +622,12 @@ class MplCanvasLowCamera(MplCanvas):
 On the listing~\ref{listing:image} there is class to perform the image creation. It can be easily applied a color map to the grayscale image and scaling between minimum and maximum values using the function "imshow" on line 6.
 
 
-\subsection*{Detecting a Patient and Fiber}
-There is a very simple indicator on the application to display how close the person is near to a temperature of fiber. The average internal human temperature is around 37°C and it considerer fiber above 39°C. Nonetheless this is for internal temperature, the skin which is what the camera will detect, has a lower temperature. It is around 34°C on average and extrapolating this tho the fever temperature above 36°C we might consider as fiver.
+\subsection{Detecting a Person and Fever}
+There is a very simple indicator on the application to display how close the person is near to a temperature of fever. The average internal human temperature is around 37°C and it is considerer fever above 39°C. Nonetheless this is for internal temperature, the skin which is what the camera will detect, has a lower temperature. It is around 34°C on average and extrapolating this to the fever temperature above 36°C we might consider as fever~\cite{abantyTemp}.
     \putimage{fever}{Scale of temperature}
 Then if the maximum temperature is above 36°C the bar in figure~\ref{fig:fever} will be filled indicating that something is wrong. If the maximum temperature is below 30°C it means that there is nobody in the place and the indicator of "Person present" will be off. Therefore a "normal" situation could be that the person is present and the bar is not filled. Otherwise an alarm could be activated, although this was not implemented.
-\subsection*{history of temperature}
-In order to comprehend better what is going on with the person temperature the maximum and average temperature are being continusly plotted, having a short history of the temperature.
+\subsection{history of temperature}
+In order to comprehend better what is going on with the person temperature the maximum and average temperature are being continuously plotted, having a short history of the temperature.
     \putimage{history}{Plot of history temperature}
 On figure~\ref{fig:history} can be seen such plots and on listing~\ref{listing:history} the code to make them using "matplotlib" library.
 
@@ -646,37 +648,95 @@ class TempCanvas(MplCanvas):
 
 The history of temperatures could be used to improve how fever is detected and other data analysis.
 
-\subsection*{Application prototype}
+\subsection{Application prototype}
 Now all the pieces of the application must be added together in a window using a \gls{ui} framework. In this case the powerful QT framework was used. QT is a C++ multi-platform framework and can be used in python (using the "PyQt4" bindings), libraries like "matplotlib" can be integrated in it and the interface can kept in a xml file edited by another application (*.ui files).
 
-\putimage[16]{fiber-detector-prototype}{Body temperature measurement application}
+\putimage[16]{monitor}{Body temperature measurement application}
 
-In order to start, the camera has to be connected to the computer and then after pushing the start button, as seen on figure~\ref{fig:fiber-detector-prototype} the application receives the stream of data and makes the graphics and the fiver detection continuously.
+In order to start, the camera has to be connected to the computer and then after pushing the start button, as seen on figure~\ref{fig:monitor} the application receives the stream of data and makes the graphics and the fever detection continuously.
 % TODO: change application image
 
 
 \section{Detection and Tracking of People with High Resolution Camera}
-This a different application from the previous section~\ref{sec:body-measurement-with-low-resolution-ir-camera} taking advantage of the Python application made in my Bachelor's thesis project on Nokia's Innovation Platform to extend it and perform detection and tracking of people using computer vision.
+This a different application from the previous section~\ref{sec:body-measurement-with-low-resolution-ir-camera} taking advantage of the Python application made in my Bachelor's thesis to extend it, perform detection and tracking of people using computer vision.
 
-\subsection*{installing and compiling OpenCV}
-\subsection*{Detection}
+\subsection{Detection}
+The first step is to detect individuals on the image. For this purpose an already implemented algorithm in OpenCV is used, it is called "SimpleBlobDetector" which will detect any pseudo-circular group of pixels called "blob" in a gray scale image~\cite{satyaBlob}.
 
-\begin{lstlisting}[label={listing:history},caption={Class to plot the graphic of temperatures},language=Python, style=styleprogramming]
+\putimage{analysed}{Detection using blobs}
+
+The parameters of how much is something circular can be adjusted. Those parameters are the following:
+\begin{itemize}
+    \item Threshold. How much gray the blob should be the blob to be detected.
+    \item Area. How big or small should the blob be.
+    \item Circularity. How close the shape is to be a circle.
+    \item Convexity. How much concave or convex.
+    \item Inertia Ratio. How much the shape is close to an ellipse.
+\end{itemize}
+
+When using the correct values for these parameters it is possible to detect small human shapes roughly. The best way to find which are the best values is through experimentation since it depends upon the camera's position and how far are people to analyze.
+
+\putimage[10]{analysis-control}{Blob parameters}
+
+In order to experiment with different values some sliders were add to change the parameters on real time as seen in figure~\ref{fig:analysis-control}. The code to detect blobs in the image is show in the appendix on listing~\ref{listing:blobdetection} The tracking part shown in the method "onframe" is explained on section~\ref{sec:tracking}.
+
+
+\subsection{Background Subtraction}
+Background subtraction is a technique to detect movement based on the stillness of the video stream, if the scene is stable with no new elements the background subtractor will return a black image meaning that there is nothing interesting there. OpenCV provides several algorithms to do this~\cite{opencvBackgrounds}. On listing~\ref{listing:background} the BackgroundSubtractorMOG2 algorithm is applied to every frame of the video.
+\begin{lstlisting}[label={listing:background},caption={Background Subsration Code},language=Python, style=styleprogramming]
+class BackgroundSubtraction:
+    def __init__(self, source):
+        self.processed_frame = source
+        self.last_frame = source
+        self.mog_activated = True
+        self.backgroundsubtraction_activated = True
+        self.substractor = cv2.createBackgroundSubtractorMOG2(detectShadows=False)
+    
+    def on_frame(self, frame):
+        if not self.backgroundsubtraction_activated:
+            return frame
+        
+        if self.mog_activated:
+            self.processed_frame = self.substractor.apply(frame)
+        else:
+            self.processed_frame = self.last_frame - frame
+        
+        self.last_frame = self.processed_frame
+        return self.processed_frame
 \end{lstlisting}
-\subsection*{Background Subtraction}
 
-\begin{lstlisting}[label={listing:history},caption={Class to plot the graphic of temperatures},language=Python, style=styleprogramming]
-\end{lstlisting}
-\subsection*{Tracking}
+\subsection{Tracking Algorithm}\label{sec:tracking}
+After detecting individual spots on the image it will be interesting to track the movement of such point which represents a person after all. By tracking these points it is possible to calculate a particular person speed and predict where is going to be on the next frame. By storing multiple trajectories through time it be possible to make studies of the people to analyze maybe using mathematical models.
 
-\begin{lstlisting}[label={listing:history},caption={Class to plot the graphic of temperatures},language=Python, style=styleprogramming]
-\end{lstlisting}
+But tracking any single blobs is not easy since there will be probably a lot of them, then it is necessary to estimate where this detection will occur on the next frame. The blob detector returns an array of 'keypoint' objects which the most useful variables it have are the coordinates of the detection and size of the blob. Using the coordinate and the size I created a simple score based algorithm to track blobs and calculate their speed graphically, tracing a line from the position on the previous frame to the current one.
+
+The algorithm goes as described here (for every frame):
+\begin{itemize}
+    \item There is list of positions which are being tracked. If the list is empty add all position detected and skip the next steps. Otherwise continue.
+    \item new members added to this list receive a score of 3
+    \item Iterate over the list, for every position on the list:
+    \begin{itemize}[leftmargin=.5in]
+        \item Iterate over the new detected keypoints and find one inside of the position size area.
+        \item if found update coordinates and draw a line to visualize the speed.
+        \item or else subtract 1 to the position score
+        \item if the position reach score 0 delete it.
+    \end{itemize}
+    \item the remain detected keypoints are added as new positions with score 3
+\end{itemize}
+
+On figure~\ref{fig:tracking} the tracking algorithm is in action alongside the background subtraction therefore people standing still will not be detected, only the moving ones. Thanks to the algorithm it is possible to see the direction and speed. The red line is opposed to movement direction and the longest this line is the greatest is the speed.
+
+    \putimage{tracking}{Tracking people in restaurant with background subtraction}
+
+An implementation of this algorithm is in listing~\ref{listing:tracking} on the appendix.
 
 \clearpage
 \chapter{Results}
-\section{Use in Bachelor's Thesis}
-\section{Use in Well-being}
-
+On this report there were discussed how to analyzed video stream from thermal cameras based in their resolution and capabilities to detect actual temperatures or only difference of temperatures. The result were:
+\begin{itemize}
+    \item  A Python program to measure and visualize one person temperature like a patient in bed.
+    \item An extension to the solution software made in my bachelor's thesis to detect people by using a computer vision library (OpenCV) in thermal plus an algorithm to track them and obtain different information like the speed and direction of any person on the image.
+\end{itemize}
 
 
 
@@ -729,77 +789,74 @@ This a different application from the previous section~\ref{sec:body-measurement
 	\makeoddhead{plain}{}{}{\appname \thechapter \\ \thepage\,(\stepcounter{appx#1}\total{appx#1})}}
 
 \liite{1}
-\chapter{Coding}\label{appx:first}
+\chapter{Appendix: Coding}\label{appx:first}
 
  \begin{lstlisting}[label={listing:serialcommunication},caption={Class to get serial data from the cameras},language=Python, style=styleprogramming]
  import logging
  import os
  import threading
  from threading import Thread
- 
  import serial
- 
  from Constants import INITIAL_SEQUENCE, BAUD_SPEED
- 
  __author__ = 'Alvaro'
  
- 
+
  def read_hex(data):
  logging.warn(' '.join(x.encode('hex') for x in data))
  
  
  class SerialCommunication(Thread):
- def __init__(self, process_callback, port, get_raw_data_only=False):
- Thread.__init__(self, name="SerialThread")
- self.get_raw_data_only = get_raw_data_only
- self.lastline = b''
- self.process_callback = process_callback
- self.ser = serial.Serial(port, BAUD_SPEED)
- self.setDaemon(True)
- self.start()
- print("serial port:", port, " ", BAUD_SPEED, " ", os.name)
- 
- def run(self):
- remains = b''
- while self.ser.is_open:
- try:
- one_byte = self.ser.read(1)  # necessary to block thread (in_waiting method doesn't block)
- n_bytes = self.ser.in_waiting
- bytes_read = one_byte + self.ser.read(n_bytes)
- 
- if self.get_raw_data_only:
- data = bytes_read
- self.process_callback(bytearray(data))
- else:
- data = remains + bytes_read
- remains = self.consume_data(data)
- 
- except serial.SerialException as e:
- logging.error(e.message)
- if len(data) > 0:
- pass
- else:
- break
- 
- def consume_data(self, data):
- machs = data.split(INITIAL_SEQUENCE)
- last_ind = len(machs) - 1
- for ind, line in enumerate(machs):
- if ind == last_ind: continue
- self.process_callback(bytearray(line))
- return machs[-1]
- 
- 
- def start_reading(self):
- Thread.start(self)
- 
- def write_to_serial(self, text):
- if self.ser.is_open:
- self.ser.write(text)
- 
- def stop(self):
- if self.ser.is_open:
- self.ser.close()
+     def __init__(self, process_callback, port, get_raw_data_only=False):
+         Thread.__init__(self, name="SerialThread")
+         self.get_raw_data_only = get_raw_data_only
+         self.lastline = b''
+         self.process_callback = process_callback
+         self.ser = serial.Serial(port, BAUD_SPEED)
+         self.setDaemon(True)
+         self.start()
+         print("serial port:", port, " ", BAUD_SPEED, " ", os.name)
+     
+     def run(self):
+         remains = b''
+         while self.ser.is_open:
+             try:
+                 one_byte = self.ser.read(1) 
+                 n_bytes = self.ser.in_waiting
+                 bytes_read = one_byte + self.ser.read(n_bytes)
+     
+             if self.get_raw_data_only:
+                 data = bytes_read
+                 self.process_callback(bytearray(data))
+             else:
+                 data = remains + bytes_read
+                 remains = self.consume_data(data)
+     
+             except serial.SerialException as e:
+                 logging.error(e.message)
+             if len(data) > 0:
+                 pass
+             else:
+                 break
+     
+     def consume_data(self, data):
+         machs = data.split(INITIAL_SEQUENCE)
+         last_ind = len(machs) - 1
+         for ind, line in enumerate(machs):
+             if ind == last_ind: continue
+                 self.process_callback(bytearray(line))
+         return machs[-1]
+     
+     
+     def start_reading(self):
+         Thread.start(self)
+     
+     def write_to_serial(self, text):
+         if self.ser.is_open:
+             self.ser.write(text)
+     
+     def stop(self):
+         if self.ser.is_open:
+             self.ser.close()
  
  \end{lstlisting}
 
@@ -819,60 +876,223 @@ Y_LENGTH = 12
 SENSOR_POSITIONS = (4, 0, 8)
 
 class LowCamera(Camera):
-def __init__(self, *args, **kwargs):
-kwargs['y_length'] = Y_LENGTH; kwargs['x_length'] = X_LENGTH
-Camera.__init__(self,  *args, **kwargs)
-self.x_lim = X_LENGTH
+    def __init__(self, *args, **kwargs):
+        kwargs['y_length'] = Y_LENGTH; kwargs['x_length'] = X_LENGTH
+        Camera.__init__(self,  *args, **kwargs)
+        self.x_lim = X_LENGTH
+    
+    def get_absolute_values(self):
+        return min(raw_min), max(raw_max), np.mean(raw_mean)
+    
+    
+    def process_telemetry(self, data, sensor_number):
+        global raw_min, raw_max, raw_mean
+        raw_min[sensor_number] = (data[0] + 256 * data[1]) / 100
+        raw_max[sensor_number] = (data[3] + 256 * data[4]) / 100
+        raw_mean[sensor_number] = (data[6] + 256 * data[7]) / 100
+        # print "telemetry values: ", raw_min, raw_max, raw_mean
+    
+    
+    def get_actual_temperature(self, raw_value, arr_max, arr_min, sensor_number):
+        temp = (raw_max[sensor_number] - raw_min[sensor_number]) * (raw_value / (arr_max - arr_min)) + raw_min[sensor_number]
+        return temp
+    
+    def frame_callback(self, raw_frame):
+        """ sends raw frame to network and call process frame """
+        logging.debug(raw_frame)
+        if self.only_send_data:
+            if self.use_http:
+                self.network_thread.add_to_buffer(raw_frame)
+            else:
+                self.network_thread.send_to_socket(raw_frame)
+        else:
+            self.last_frame = self.process_frame(raw_frame)
+            self.frame_ready_callback()
+    
+    
+    def process_frame(self,raw_frame):
+        if len(raw_frame) < 70:
+            return
+    
+        # convert to bytes
+        bytes_matrix = np.array([raw_frame[49:64],
+        raw_frame[33:48],
+        raw_frame[17:32],
+        raw_frame[1:16]])
+        sensor_number = raw_frame[0] - 1 # sensors are numbered from 1 to 3, must subtract 1
+        self.process_telemetry(np.array(raw_frame[65:]), sensor_number)
+        arr_max = bytes_matrix.max()
+        arr_min = bytes_matrix.min()
+        
+        for j in range(0, 4):
+            y_coord = j + SENSOR_POSITIONS[sensor_number]
+            for i in range(0, X_LENGTH):
+                temp = self.get_actual_temperature(bytes_matrix[j][i], arr_max, arr_min, sensor_number)
+                self.frame_arr[y_coord][i] = temp
+        return self.frame_arr
+\end{lstlisting}
 
-def get_absolute_values(self):
-return min(raw_min), max(raw_max), np.mean(raw_mean)
+\begin{lstlisting}[label={listing:blobdetection},caption={Blob detector class},language=Python, style=styleprogramming]
+from __future__ import print_function
+import cv2
+import logging
+import numpy as np
+
+from imageprocessing.Tracker import Tracker
 
 
-def process_telemetry(self, data, sensor_number):
-global raw_min, raw_max, raw_mean
-raw_min[sensor_number] = (data[0] + 256 * data[1]) / 100
-raw_max[sensor_number] = (data[3] + 256 * data[4]) / 100
-raw_mean[sensor_number] = (data[6] + 256 * data[7]) / 100
-# print "telemetry values: ", raw_min, raw_max, raw_mean
+class BlobDetector:
+    def __init__(self, source):
+        # self.callback = callback
+        self.processed_frame = source
+        self.tracking_enabled = True
+        self.max_threshold = 200
+        self.max_area = 50
+        self.min_area =  0
+        self.inertia = 0
+        self.convexity = 0
+        self.circularity = 0
+        self.detected = 0
+        self.params = cv2.SimpleBlobDetector_Params()
+        self.tracker = Tracker()
+    
+    def set_callback(self, callback):
+        self.callback = callback
+    
+    def _update_parameters(self):
+        # Change thresholds
+        self.params.minThreshold = 10
+        self.params.maxThreshold = self.max_threshold
+        
+        # Filter by Area.
+        self.params.filterByArea = True
+        self.params.minArea = self.min_area
+        self.params.maxArea = self.max_area
+        
+        # Filter by Circularity
+        self.params.filterByCircularity = True
+        self.params.minCircularity = self.circularity / 10.0
+        
+        # Filter by Convexity
+        self.params.filterByConvexity = True
+        self.params.minConvexity = self.convexity / 100.0
+        
+        # Filter by Inertia
+        self.params.filterByInertia = True
+        self.params.minInertiaRatio = self.inertia / 100.0
+        
+        def on_frame(self, original, foreground):
+        # print(self.source_frame)
+        im = foreground.astype(np.uint8)
+        
+        self._update_parameters()
+        
+        # Create a detector with the parameters
+        detector = cv2.SimpleBlobDetector_create(self.params)
+        
+        # Invert colors and Detect blobs.
+        invert = 255 - im
+        keypoints = detector.detect(invert)
+        
+        # Draw detected blobs as circles.
+        # cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS ensures the size of the circle corresponds to the size of blob
+        im_with_keypoints = cv2.drawKeypoints(original.astype(np.uint8), keypoints, np.array([]), (0, 0, 255),
+        cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+        # track objects
+        if self.tracking_enabled:
+        self.tracker.next_frame(im_with_keypoints, keypoints)
+        
+        
+        # save blobs detected
+        self.detected = len(keypoints)
 
+        self.processed_frame = im_with_keypoints
+        return self.processed_frame
+\end{lstlisting}
 
-def get_actual_temperature(self, raw_value, arr_max, arr_min, sensor_number):
-temp = (raw_max[sensor_number] - raw_min[sensor_number]) * (raw_value / (arr_max - arr_min)) + raw_min[sensor_number]
-return temp
+\begin{lstlisting}[label={listing:tracking},caption={Implementation of the tracking algorithm},language=Python, style=styleprogramming]
+import cv2
+import logging
 
-def frame_callback(self, raw_frame):
-""" sends raw frame to network and call process frame """
-logging.debug(raw_frame)
-if self.only_send_data:
-if self.use_http:
-self.network_thread.add_to_buffer(raw_frame)
-else:
-self.network_thread.send_to_socket(raw_frame)
-else:
-self.last_frame = self.process_frame(raw_frame)
-self.frame_ready_callback()
+import numpy as np
+from numpy.random import rand
+import math
 
-
-def process_frame(self,raw_frame):
-if len(raw_frame) < 70:
-return
-
-# convert to bytes
-bytes_matrix = np.array([raw_frame[49:64],
-raw_frame[33:48],
-raw_frame[17:32],
-raw_frame[1:16]])
-sensor_number = raw_frame[0] - 1 # sensors are numbered from 1 to 3, must subtract 1
-self.process_telemetry(np.array(raw_frame[65:]), sensor_number)
-arr_max = bytes_matrix.max()
-arr_min = bytes_matrix.min()
-
-for j in range(0, 4):
-y_coord = j + SENSOR_POSITIONS[sensor_number]
-for i in range(0, X_LENGTH):
-temp = self.get_actual_temperature(bytes_matrix[j][i], arr_max, arr_min, sensor_number)
-self.frame_arr[y_coord][i] = temp
-return self.frame_arr
+class Position:
+    INITIAL_SCORE = 3
+    def __init__(self, keypoint):
+        self.id = rand()
+        self.x = int(keypoint.pt[0])
+        self.y = int(keypoint.pt[1])
+        self.size = int(keypoint.size)
+        self.score = self.INITIAL_SCORE
+    
+    def distance(self, other_position):
+        delta_x = other_position.x - self.x
+        delta_y = other_position.y - self.y
+        return math.sqrt(delta_x ** 2 + delta_y ** 2)
+    
+    def is_inside(self, position):
+        dx = position.x
+        dy = position.y
+        x0 = self.x - self.size; x1 = self.x + self.size
+        y0 = self.y - self.size; y1 = self.y + self.size
+        return x0 < dx < x1 and y0 < dy < y1
+    
+    def trace_line(self, img, position):
+        color = (255,0,0)
+        thickness = 1
+        cv2.line(img, (self.x, self.y), (position.x, position.y), color, thickness)
+    
+    def update_to(self, position):
+        self.x = position.x
+        self.y = position.y
+        self.size = position.size
+        self.score = self.INITIAL_SCORE
+    
+    
+class Tracker:
+    def __init__(self):
+        self.positions = []
+        self.img = None
+    
+    def _get_position_index(self, position_id):
+        for index, position in enumerate(self.positions):
+            if position.id == position_id:
+                return index
+    
+    def _try_to_delete(self, position):
+        position.score -= 1
+        if position.score < 1:
+            self.positions.pop(self._get_position_index(position.id))
+    
+    def _try_update_position(self, position, keypoints):
+        for index, keypoint in enumerate(keypoints):
+            new_position = Position(keypoint)
+            if new_position.is_inside(position):
+                position.trace_line(self.img, new_position)
+                position.update_to(new_position)
+                keypoints.pop(index) # remove from keypoints
+                return True  # position was updated
+        return False # position was not updated
+    
+    
+    def _add_keypoints(self, keypoints):
+        for position in self.positions:
+            was_updated = self._try_update_position(position, keypoints)
+            if not was_updated:
+                self._try_to_delete(position)
+    
+    # remain keypoints are add as new positions
+    for keypoint in keypoints:
+        self.positions.append(Position(keypoint))
+    
+    
+    def next_frame(self, img, new_keypoints):
+        self.img = img
+        self._add_keypoints(new_keypoints)
+        
+        print "positions:", len(self.positions)
 
 \end{lstlisting}
 
