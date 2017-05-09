@@ -27,7 +27,7 @@ Etunimi Sukunimi, Titteli
 \def\metropoliainstructors {
 Dr. Tero Nurminen, Principal Lecturer \newline
 }
-\def\metropoliakeywords {IoT, IR, sensor, cloud, full-stack, communication channel, websocket, http, LTE, Android, Python}
+\def\metropoliakeywords {IoT, IR, thermal, sensor, cloud, full-stack, communication channel, websocket, http, LTE, Android, Python}
 \date{\today}
 
 %----------------------------------------------------------------------------------------
@@ -582,7 +582,7 @@ xleftmargin=1cm
 Thermal images have a number of advantages over conventional light-based video camera images.   These thermal images can tell not only whether there are living people or animals but also whether there is any temperature anomaly on them. They can be used to make assumptions about their physical state or understand how a group of individuals moves or behaves using Computer Vision software.
 
 Taking into account that the population in the northern European countries and especially Finland is rapidly aging, costs in elderly and general health care are becoming more expensive. Health care entities may decrease their costs by searching for new ideas in the field of IT.
-%In the discussion chapter some ideas to use thermal or \gls{ir} sensors and the communication channel are explained~\cite{agingeuropa}
+%In the discussion chapter some ideas to use thermal or thermal sensors and the communication channel are explained~\cite{agingeuropa}
 
 Here is where the \gls{iot} comes into play. Nowadays the Internet is very accessible and fast. Almost every conceivable device such as phones, watches, televisions, speakers and cameras, can be connected, can send and can receive continuously big amounts of data.
 
@@ -591,23 +591,23 @@ Here is where the \gls{iot} comes into play. Nowadays the Internet is very acces
 
 \section*{Background of the case company}
 The thesis originates in collaboration with the case company called LeViteZer (\url{http://www.levitezer.com/}), Metropolia and Nokia.
- LeViteZer is a company that develops controllers for cameras for image stabilization such as gimbals~\cite{levitezer}. They provide the \gls{ir} sensors. Nokia with their innovation platform~\cite{nokiainnovation}, provides the cloud environment and the network. My part as Metropolia student is develop the mentioned communication channel.
+ LeViteZer is a company that develops controllers for cameras for image stabilization such as gimbals~\cite{levitezer}. They provide the thermal sensors. Nokia with their innovation platform~\cite{nokiainnovation}, provides the cloud environment and the network. My part as Metropolia student is develop the mentioned communication channel.
 
 
 
 \section*{Business Challenge}\label{sec:business-challenge}
 %% improving costs by not having personal watching people all the time
-The case company wants to find a system which uses \gls{ir} sensors that allow us to monitor patients while keeping their privacy along with reducing costs by using less staff and improve the service quality. Moreover, it should be possible to access data from those sensors fro anywhere which make them very versatile and portable.
+The case company wants to find a system which uses thermal sensors that allow us to monitor patients while keeping their privacy along with reducing costs by using less staff and improve the service quality. Moreover, it should be possible to access data from those sensors fro anywhere which make them very versatile and portable.
 
 With the business challenge in mind, this study aims to answer the following question:
 \begin{displayquote}
-{ How to create an effective communication channel between \gls{ir} sensors and clients such as computers, laptops, etc and use it on Well-being services?}
+{ How to create an effective communication channel between thermal sensors and clients such as computers, laptops, etc and use it on Well-being services?}
 \end{displayquote}
 
 %The outcome of this study is:
 %\begin{enumerate}
 %\item Different client-side applications able to connect to sensors.
-%\item An web \gls{api} that connect \gls{ir} sensors to a cloud hence to clients.
+%\item An web \gls{api} that connect thermal sensors to a cloud hence to clients.
 %\item Proposals to use the resulting communication system on health care institutions.
 %\end{enumerate}
 
@@ -623,7 +623,7 @@ Communications between devices is not a new topic, there are plenty of methods a
 
 \section{Communication Between Devices}
 % Talk about what is know about communication systems, full stack development, etc
-In order to establish a communication between two ends in a computer network or in Internet it is good to comprehend how the "Internet Protocol Architecture" or TCP/IP stack works. Most of networks are based on it, including office and home networks~\cite[9]{tcpip}.
+In order to establish a communication between two ends in a computer network or on the Internet it is good to comprehend how the "Internet Protocol Architecture" or TCP/IP stack works. Most of networks are based on it, including office and home networks~\cite[9]{tcpip}.
 
 	\putimage[5]{tcpip}{\gls{tcp}/\gls{ip} Architecture}
 
@@ -640,7 +640,7 @@ Then, a way to communicate through the \gls{tcp}/\gls{ip} stack as shown in figu
 \section{The Medium}\label{sec:the-medium}
 At this point it has to be decided what physical medium to \textit{access the network} (Network Access Layer in figure~\ref{fig:tcpip}). It could be a simple copper cable, Wi-Fi, microwaves, laser, etc. almost any kind of electromagnetic wave. But since this is an \gls{iot} project the best approach will be using \gls{ran} which it is accessible from cell antennas and nowadays provide great speeds and bandwidth.
 
-As stated in the Introduction, Nokia provides access to a mobile network. This network is called NetLeap which uses \gls{3g} and \gls{lte} technologies (the same that use mobile phones to connect to Internet). NetLeap is a closed network for research managed by Aalto University and Nokia~\cite{netleap}.
+As stated in the Introduction, Nokia provides access to a mobile network. This network is called NetLeap which uses \gls{3g} and \gls{lte} technologies (the same that use mobile phones to connect to the Internet). NetLeap is a closed network for research managed by Aalto University and Nokia~\cite{netleap}.
 
 \section{Network Protocols}
 The Internet Layer protocols usually rely in routers and other apparatus which are out of our control, hence the only concern is about transport and application layer.
@@ -653,7 +653,7 @@ The idea is to use reliable application protocol to make the connections and thi
 
 \gls{udp} is commonly used to provide real communication such as time video stream on protocols as \gls{rtp}, it is also used in \gls{voip} to deliver telephone calls over network. They take advantage about the connectionless nature of \gls{udp} which despite  the mentioned disadvantages it has a low latency. On the other hand losing some packets during a call or video retransmission is not a big deal. 
 
-Then a \gls{udp} communication system may be suitable for this project since, what it is sending from the \gls{ir} sensors is a binary stream of images. Commands can be sent over \gls{udp} as well.
+Then a \gls{udp} communication system may be suitable for this project since, what it is sending from the thermal sensors is a binary stream of images. Commands can be sent over \gls{udp} as well.
 This can be done sending packets between sensors and clients directly or through a server which could coordinate the data flow.
 
 \subsubsection{Port Issues on Remote Hosts}\label{sec:port-issues-on-remote-hosts}
@@ -670,7 +670,7 @@ Another solution is \gls{udp} hole punching technique to establish bidirectional
 \subsubsection{Http}\label{sec:http}
 \gls{http} and \gls{https} is application layer protocol made on top of \gls{tcp}. \gls{http} is meant to request resources such as \gls{html} documents, \gls{xml}, \gls{json} or plain text. Any request has a response which can contain a body of data and response code (like the famous "404 not found")~\cite{http-rfc}.
 
-\gls{http} is strongly related to the www, on most of routers and firewalls the port 80 (\gls{http}) and 443 (\gls{https}) are allowed. In addiction, the \gls{http} responses can be used to receive data from the other end indirectly. This could be used for a request-response sensor-client communication approach using a third party like a server.
+\gls{http} is strongly related to the www, on most of routers and firewalls the port 80 (\gls{http}) and 443 (\gls{https}) are allowed. In addition, the \gls{http} responses can be used to receive data from the other end indirectly. This could be used for a request-response sensor-client communication approach using a third party like a server.
 
 \putimage[14]{http-approach}{Http/s approach}
 
@@ -705,7 +705,7 @@ This chapter discusses the methods for each side of the communication system in 
 
 
 \section{The Sensor}
-The \gls{ir} sensor provided by LeViteZer delivers all infrared data in binary streams through the \gls{usb}.
+The thermal sensor provided by LeViteZer delivers all infrared data in binary streams through the \gls{usb}.
 
  In order to make an image it is necessary to process those streams. Every image or frame comes in 240 rows of 80 bytes of data separated by a delimiter of 3 bytes plus an extra byte that identifies the row:
 
@@ -1063,27 +1063,24 @@ Although there was no intention to use LabVIEW for the purposes of this thesis, 
 %\subsection{\gls{udp} Java client}
 \subsection{Websocket Python Client}\label{sec:websocket-python-client}
 The websocket python client application was intended to have the characteristics of the LabVIEW's mentioned on the previous section and provide it with connectivity to a cloud service for remote communication. The application was written in python taking advantage of the multiple libraries that the community offers for free as open source.
-%%%%%% HERE
 
 \subsubsection{Design}
 In a relatively complex application as this one  \gls{oop} is the most convenient way to go when designing the application.
 
-As data sources in this application, it can be from directly \gls{usb} or from network, for those purposes the class "SerialConnection" will be in charge of communicate with a \gls{ir} sensor connected to the computer directly over \gls{usb} (for testing) see listing~\ref{listing:serial-reader} in appendix~\ref{appx:reader}, this class is the same that is used in the raspberry side to read the sensor. On the other hand "WebsocketConnection" mimics roughly the behavior of "SerialConnection" however it makes the connection over Internet using the \gls{ws} protocol.
-
-Once a connection is made the class "Camera" and its children will handle data processing to make array frames as it was explained in section~\ref{creatingimage}.
-
     \putimage[15]{python-uml}{UML diagram (simplified)}
     
-As seen in figure~\ref{fig:python-uml} it shows the most important components of the application and its relations, it can be noticed that there is a separation between \gls{ui} components and logical ones.
+In order to make a more flexible application, source of data (thermal image) can be either from \gls{usb} or from  a network, for those purposes the class "SerialConnection" will be in charge of communicate with a thermal sensor connected to the computer directly over \gls{usb} (see listing~\ref{listing:serial-reader} in appendix~\ref{appx:reader}). This class is the same that is used on the Raspberry Pi to read the sensor. On the other hand "WebsocketConnection" mimics roughly the behavior of "SerialConnection". However it makes the connection over the Internet using the \gls{ws} protocol.
+    
+Figure~\ref{fig:python-uml}  shows the most important components of the application and its relations. It can be noticed that there is a separation between \gls{ui} components and logical ones.
 
 \subsubsection{User Interface}
-The user interface is implemented using the known Qt framework which is uses \gls{cpp} but there is a python bindings package to use in a python application without writing a single line of \gls{cpp} code~\cite{riverbank}.
+The user interface is implemented using the known Qt framework which is uses \gls{cpp} but there is a python bindings package to use in a Python application without writing a single line of \gls{cpp} code~\cite{riverbank}.
 
 Advantages of using qt are among others:
 \begin{itemize}
-    \item cross-platform: same code works on any operative system where the framework is available.
-    \item it is possible to design the interface using a designer program (see figure~\ref{fig:qt-designer}) and save it as a \gls{xml} file that can be read from the application, saving a lot of time on development stage.
-    \item it is a well known framework and there is plenty of information available about it.
+    \item Cross-platform: the same code works on any operative system where the framework is available.
+    \item It is possible to design the interface using a designer program (see figure~\ref{fig:qt-designer}) and save it as a \gls{xml} file that can be read from the application, saving much time on the development stage.
+    \item It is a well known framework and there is plenty of information available about it.
 \end{itemize}
 
     \putimage{qt-designer}{QT designer}
@@ -1092,60 +1089,66 @@ The sensor image itself is made using a plotting library named Matplotlib used i
 
     \putimage{python-client}{Python Client Application}
     
-As seen in figure~\ref{fig:python-client} the application client has 2 well differenced parts. On the left it is the image displayed as a colored gray-scale image in figure~\ref{fig:ir-image}. Matplotlib let us apply color maps on the image very easily, also to add an interpolation to improve the image quality, in this case there is a Bicubic interpolation~\cite{matplotlibinter}.
+As seen in figure~\ref{fig:python-client} the application client has two well-differentiated parts. On the left  is the image displayed as a colored gray-scale image in figure~\ref{fig:ir-image}. Matplotlib let us apply color maps on the image very easily and also to add an interpolation to improve image quality, in this case there is a bicubic interpolation~\cite{matplotlibinter}.
 
-    \putimage[5]{ir-image}{Ir image}
+    \putimage[5]{ir-image}{Thermal image}
 
-On the left side there is a control panel (figure~\ref{fig:control-panel}) which displays meta-data information and buttons that can send commands to the sensor as described in section~\ref{commands}, on the right of some buttons there are input fields to enter the arguments to the commands that required it alongside the current value of the argument (current argument values are meta-data as well).
+On the left side there is a control panel (figure~\ref{fig:control-panel}) which displays meta-data information and buttons that can send commands to the sensor as described in section~\ref{commands}. On the right of some buttons there are input fields to enter the arguments to the commands that required it alongside the current value of the argument (current argument values are meta-data as well).
+\clearpage
 
     \putimage{control-panel}{Control panel}
     
-There is a separate section for special buttons to control a Raspberry Pi in the case the sensor is connected to a one.
+There is a separate section for special buttons to control a Raspberry Pi. These commands are shutdown, reboot and update.
 
 
 \subsection{Android Client}
-During the development of the project I found attractive the idea of having a client application on the phone and after finishing the python client described in the previous section I started to develop a simple but powerful Android application. It let connect to any camera already registered in the cloud (At this stage the cloud allows multiple sensors see. section~\ref{sec:server-side-methods}).
+During the development of the project It was proposed to make a mobile client application and after finishing the Python client described in the previous section I started to develop a simple but useful Android application. It lets connect to any camera already registered in the cloud (see  section~\ref{sec:server-side-methods}).
 
-As in the python client, it is necessary to code:
+As in the Python client, it is necessary to code:
 \begin{itemize}
     \item a class to connect to server or cloud through \gls{ws}.
     \item create the image from the data.
     \item allow to choose which camera to connect to.
 \end{itemize}
 
-Android application are slitted on different screens called Activities which contain \gls{ui} elements that the user can interact. In this case there is an activity for choosing the camera to connect, see figure~\ref{fig:android-client3}.
+Android applications are divided on different screens called Activities which contain \gls{ui} elements that the user can interact. In this case there is an activity for choosing the camera to connect, see figure~\ref{fig:android-client3}.
 
     \putimage[16]{android-client3}{Android Client}
 
-The other activity makes the a \gls{ws} connection and process the data in real time so the different frames can be visualized in gray-scale (figure~\ref{fig:android-client3}).
+The other activity makes the a \gls{ws} connection and processes the data in real time so the different frames can be visualized in gray-scale (figure~\ref{fig:android-client3}).
 
-To achieve this Android allows to extend \gls{ui} elements with new behavior. In this case "ImageView" class is extended to add a \gls{ws} connection and fill the image with an array of binary data from this connection (same than in the python application section~\ref{sec:websocket-python-client}), in listing~\ref{listing:cameraview} the "CameraView" class meets this behavior using "WebsocketConnection" to get data from sensors (listing~\ref{listing:websocketconnection}) and "HighCamera" to represent a frame of the image (listing~\ref{listing:highcamera}). All of these listing can be found in appendix~\ref{appx:androidclient}.
+To achieve this Android allows to extend \gls{ui} elements with new behavior. In this case "ImageView" class is extended to add a \gls{ws} connection and fill the image with an array of binary data from this connection (same as in the Python application section~\ref{sec:websocket-python-client}). In listing~\ref{listing:cameraview} the "CameraView" class meets this behavior using "WebsocketConnection" to get data from sensors (listing~\ref{listing:websocketconnection}) and "HighCamera" to represent a frame of the image (listing~\ref{listing:highcamera}). All of these listings can be found in appendix~\ref{appx:androidclient}.
 
 
 \section{Server Side Methods}\label{sec:server-side-methods} 
-On this section describes the different approaches tested to created the middle point between sensors and clients. The server side application must be hosted somewhere, in this case a cloud environment described in the next section.
+In this section the different approaches tested to created the middle point between sensors and clients will be described. The server side application must be hosted somewhere, in this case a cloud environment described in the next section.
 
 \subsection{The Communication Channel}\label{sec:the-communication-channel}
-Regardless what technology it is used for coding, build and maintain the cloud application, and before start coding it should define how different components are related between each other.
-Let’s start by defining the following entities:
+Regardless of which technology  is used for coding, building and maintaining the cloud application, and before starting coding it should be defined how different components are related between each other.
+Let us start by defining the following entities:
 \begin{itemize}
-    \item Sensor: It represents a single sensor connected to a Raspberry Pi, although it could a normal computer. The sensor itself does not connect to networks, thus it needs a middle hardware but it is considered as whole “entity” here.
-    \item Client: A client can be anything that can connect to a sensor by \gls{http} request. A desktop computer, a smartphone, etc. The client must create frames from sensor and send commands using a \gls{ws}.
+    \item Sensor: It represents a single sensor connected to a Raspberry Pi, although it could a be normal computer. The sensor itself does not connect to networks. Thus it needs middle hardware but it is considered a whole “entity” here.
+    \item Client: A client can be anything that can connect to a sensor by an \gls{http} request such as a desktop computer or a smartphone. The client must create video image from sensor and send commands using a \gls{ws}.
     \item Cloud: It is what holds all the sensor entities and their clients on it.
     The channel should support an unlimited number of sensors which can hold an unlimited number of clients.
 \end{itemize}
 \putimage[15]{channel-er}{\acrlong{er} of the communication channel}
 The channel should support an unlimited number of sensors which can hold an unlimited number of clients.
 The diagram in figure \ref{fig:channel-er} represents the general view of how entities are related to each other. This helps to develop a \gls{uml} Class Diagram which specifies how classes in an \gls{oop} language are related to each other. In figure~\ref{fig:channel-uml} there is such diagram simplified.
-On the final implementation the server side application was written in \gls{js} which is the Language for Node.js applications.
+
+
+\clearpage
 \putimage[15]{channel-uml}{\gls{uml} diagram}
+
+In the final implementation the server side application was written in \gls{js} which is the Language for Node.js applications.
+
 
 
 
 \subsection{Python Flask}
-Flask is a Python framework for web development which allows to write web applications back-ends and is specially useful to create web \gls{api}s. this application use an \gls{http} approach as described in section~\ref{sec:http} to communicate client side and sensor side applications must implement the mentioned approach as well.
+Flask is a Python framework for web development which allows to write web application back-ends and is especially useful to create web \gls{api}s. This application uses an \gls{http} approach, as described in section~\ref{sec:http}, to communicate. Client-side and sensor-side applications must implement the mentioned approach as well.
 
-This keeps a queue buffer of image data and commands, so that both sensor and client have to request continuously even though when there is no new data. In listing~\ref{listing:flask} a simplification of this Flask application is shown, the buffer and commands are hold in the \texttt{data\_queue} and \texttt{parameters}.
+The application keeps a queue buffer of image data and commands, so that both sensor and client have to request continuously even though when there is no new data. In listing~\ref{listing:flask} a simplification of this Flask application is shown, the buffer and commands are hold in the \texttt{data\_queue} and \texttt{parameters}.
 
 \putcode{flask}{\gls{http} - buffer approach}[language=Python,style=styleprogramming]^
 app = Flask(__name__)
@@ -1185,8 +1188,8 @@ A good thing about flask is its straightforward \gls{api} as seen in listing~\re
 Node.js is a Javascript runtime which allows to create server-side applications, the main reason of why one would choose Node.js over other well know options such as Apache + \gls{php} is the non-blocking model Node.js is based on. This let make asynchronous code easily and it is quite fast~\cite[p.12]{nodejs}~\cite{nodeblocking}.
 In addiction to this there are other options to consider working with Node.js:
 \begin{itemize}
-    \item It has big community.
-    \item It has likely the biggest open source library on Internet, accessible through \gls{npm}.
+    \item It has a big community.
+    \item It likely has the biggest open source library on the Internet, accessible through \gls{npm}.
     \item most of cloud providers offer it out of the box.
     \item It is very easy to start up and configure unlike options.
 \end{itemize}
@@ -1196,9 +1199,9 @@ To work with both \gls{ws} and \gls{http} protocols in a Node.js application it 
     \item ws. It is claimed to be the fastest \gls{ws} library \url{https://www.npmjs.com/package/ws}
     \item Express. Lightweight web framework for node. Probably the most used node web framework \url{https://www.npmjs.com/package/express}
 \end{itemize}
-Although this libraries are focused for web applications the clients described in section~\ref{sec:client-application-methods} do not need \gls{html} characteristics . However in the future a \gls{html} client application could be developed using the \gls{api} of this Node.js application.
+Although these libraries are focused on web applications, the clients described in section~\ref{sec:client-application-methods} do not need \gls{html} characteristics . However in the future a \gls{html} client application could be developed using the \gls{api} of this Node.js application.
 
-Since both protocols must be listen the same port, a \gls{http} server must be created using express then integrating it with the \gls{ws} one and finally listening to the desired port, see listing~\ref{listing:nodejs-example}.
+Since both protocols use the same port, an \gls{http} server can be created using express library and then integrating it with the \gls{ws} library (see listing~\ref{listing:nodejs-example}).
 
 \putcode{nodejs-example}{html and websocket server}[language=JavaScript, style=styleprogramming]$
 const express = require('express');
@@ -1226,22 +1229,22 @@ var wss = new WebSocket.Server({
 server.listen(port, ip);
 $
 
-Express and ws have events to handle the connections using callbacks to for any behavior one wants to add.
+Express and ws libraries have events to handle the connections using callbacks for any behavior one wants to add.
 
-A complete view of the main file application can be consulted in appendix~\ref{appx:nodejsapp} listing~\ref{listing:nodejsmain}
+A complete view of the main file application can be consulted in appendix~\ref{appx:nodejsapp} listing~\ref{listing:nodejsmain}.
 
 
 
 \section{Testing Methods}
-Testing is an important part of Software development process it gives insight about the quality and how much the software is error-prone, however creating test and maintaining after refactoring it is also a time consuming practice and since this project is carried out by one person rather than a team of developers there were added test only in the server-side of the whole communication system.
+Testing is an important part of the Software development process. It gives insight into the quality and how much the software is error-prone. However creating tests and maintaining after refactoring it is also a time-consuming practice. Since this project is carried out by one person rather than a team of developers there were added test only on the server-side of the whole communication system.
 
 \subsection{Unit Testing}
-Unit Testing is about testing modules or units which are single pieces of software that should work independently of others. In \gls{oop} this is usually a class, but it could be a single function or method. It is the developer who should define what is a single unit.
+Unit Testing is about testing modules or units which are single pieces of software that should work independently of others. In \gls{oop} this is usually a class, but it could be a single function or method. It is the developer who should define what a single unit is.
 \subsection{Acceptance Testing: Robot Framework}
-In order to test the server-side application with arbitrary number of clients and sensors with different configuration and backgrounds an acceptance testing approach is very convenient; acceptance testing features a more structured and complex way of testing which allows a efficient way of pinpointing application failure, automation and reusability~\cite{bisht2013robot}.
+In order to test the server-side application with an arbitrary number of clients and sensors with different configurations and backgrounds, an acceptance testing approach is very convenient. Acceptance testing features a more structured and complex way of testing which allows an efficient way of pinpointing application failure, automation and reusability~\cite{bisht2013robot}.
 
-For this purpose Robot Framework is a great tool, it is a open source for general purpose test automation. It is very flexible and it allows create test using a human friendly keywords and generate complete reports and logs about the test results. It can also be extended by adding existing libraries or creating them using Python or Java~\cite{robotframe}.
-A simple test file can be seen in listing~\ref{listing:robot-example}
+For this purpose Robot Framework is a great tool. It is a open-source for general purpose test automation. It is very flexible and it allows to create tests using human friendly-keywords and generate complete reports and logs about the test results. It can also be extended by adding existing libraries or creating them using Python or Java~\cite{robotframe}.
+A simple test file can be seen in listing~\ref{listing:robot-example}.
 
 \putcode{robot-example}{A example of robot framework}[style=styleprogramming]$
 Documentation     A test suite with a single test for valid login.
@@ -1257,37 +1260,42 @@ Welcome Page Should Be Open
 [Teardown]    Close Browser
 $
 
-Using the libraries already in the client python application in section~\ref{sec:websocket-python-client} and the Robot Framework \gls{api} I created a library to test \gls{ws} connections. Those connection are held in an array, created and deleted for every single test, see listing~\ref{listing:robotlib} for the whole library code in the appendix~\ref{appx:nodejsapp}.
+Using the libraries already in the client Python application (in section~\ref{sec:websocket-python-client}) and the Robot Framework \gls{api} I created a library to test \gls{ws} connections. Those connection are held in an array, created and deleted for every single test, see listing~\ref{listing:robotlib} for the whole library code in the appendix~\ref{appx:nodejsapp}.
 
-The library provide keywords like the ones in the listing~\ref{listing:robot-example} but a group of test cases have to be defined in addiction to define some local keywords to reuse behavior. see listing~\ref{listing:robottest} in appendix~\ref{appx:nodejsapp} for all test cases defined to test the server-side application. On this file it can be noticed several sections between triple asterisks:
+The library provides keywords like the ones in listing~\ref{listing:robot-example} but a group of test cases have to be defined in addition to some local keywords to reuse behavior. See listing~\ref{listing:robottest} in appendix~\ref{appx:nodejsapp} for all test cases defined to test the server-side application. In this file it can be noticed several sections between triple asterisks:
 \begin{itemize}
-    \item Variables. To define global variables which syntax is "\texttt{\$\{variable\_name\}}".
-    \item Settings. Define libraries which in addiction to my own \gls{ws} library there is also other to run processes, invoke operative system commands, \gls{http} requests, etc. Provide actions at beginning and the end of every test or even at the beginning and end of the whole test suite.
-    \item keywords. Here it is defined custom keywords out of other keywords, they can accept arguments and return values.
-    \item Test Cases. The last section show every test case. At the end will be shown either if the test was passed or failed.
+    \item Variables. To define global variables whose syntax is "\texttt{\$\{variable\_name\}}".
+    \item Settings. Import libraries, setup actions and teardown actions.
+%    Define libraries which in addition to my own \gls{ws} library there is also other to run processes, invoke operative system commands, \gls{http} requests, etc. Provide actions at beginning and the end of every test or even at the beginning and end of the whole test suite.
+    \item keywords. Here custom keywords can be defined made of keywords from other libraries. They can accept arguments and return values.
+    \item Test Cases. The last section shown every test case. In the end it will be shown if the test was passed or failed.
 \end{itemize}
 
-After the execution of tests an \gls{html} report file is generated (figure~\ref{fig:test-report}) along to a log one (figure~\ref{fig:test-log})
+After the execution of tests an \gls{html} report file will be generated (figure~\ref{fig:test-report}) along with a log one (figure~\ref{fig:test-log}).
 
-    \putimage[14]{test-report}{Test Report}
+    \putimage{test-report}{Test Report}
      
-The Report is general view of what happened during the test execution.
+The Report is a general view of what happened during the test execution.
      
-    \putimage[14]{test-log}{Test Logs}
+    \putimage{test-log}{Test Logs}
     
-The log file contain a more detailed information about the tests.
+The log file contains more detailed information about the tests.
 
 
 
 \section{Cloud methods}
-While the Server Side methods section~\ref{sec:server-side-methods} describes the application itself, it does not tell anything about where and how to host the code so that it is available everywhere from Internet.
+While the Server Side methods (section~\ref{sec:server-side-methods}) describes the application itself, it does not tell anything about where and how to host the code, so that it would be available everywhere on the Internet.
 
-"The cloud" is quite a broad concept which usually includes different service models as \gls{saas} which are hosted applications accessible from client applications, \gls{paas} which provides services for developers to create applications such as \gls{saas} ones, however the developer do not have access to the cloud infrastructure like the servers or the network, \gls{iaas}. Similar to \gls{paas} but with more control over the platform~\cite{petermelltimothygrance2011}.
+"The cloud" is quite a broad concept which usually includes different service models known as \gls{saas}, \gls{paas} and \gls{iaas}. 
+
+
+ \gls{saas} are hosted applications accessible from client applications. On the other hand \gls{paas}  provides services for developers to create applications such as \gls{saas} ones, however the developer do not have access to the cloud infrastructure like the servers or the network. \gls{iaas} is similar to \gls{paas} but with more control over the platform~\cite{petermelltimothygrance2011}.
 %\subsection{Google Cloud}
+
 \subsection*{OpenShift and Docker}
 OpenShift is a platform for the deployment of web applications and services. It takes advantage of technologies such as Kubernetes and Docker to run and manage application in containers~\cite{shipley2016openshift}. Nokia (which collaborates actively in this project) provides \gls{paas} as part of their Nokia Innovation Platform which aims to create solutions for \gls{iot}~\cite{nokiainnovation}.
 
-The process of updating the server side application is through a OpenShift mechanism called \gls{s2i} which allow creating containers from the application source code without using Docker files, it its simplest form a developer provides a Git repository to the platform and OpenShift takes cares of everything: building, deploying, routing, etc~\cite[5]{shipley2016openshift}.
+The process of updating the server side application is through an OpenShift mechanism called \gls{s2i} which allows creating containers from the application source code without using Docker files. In its simplest form a developer provides a Git repository to the platform and OpenShift takes cares of everything: building, deploying, routing, etc~\cite[5]{shipley2016openshift}.
 
 
 %\subsection{Communication sensor-client}
@@ -1297,56 +1305,56 @@ The process of updating the server side application is through a OpenShift mecha
 \section{Other Tools Used}
 
 \subsection{Control Version}
-On any serious software development project there must be a \gls{cvs} which allows keep tracking of any changes in the code (or other files) and reversed if necessary. On this project the popular control version tool "Git" was used, which has many features but the one that makes it more special is its decentralized repository model which means that every repository copy has all the history changes.
+In any serious software development project there must be a \gls{cvs} which allows to keep track of any changes in the code (or other files) and reversed if necessary. In this project the popular control version tool Git was used, which has many features but the one that makes it more special is its decentralized repository model which means that every repository copy has all the history changes.
 
-All the repositories to the applications developed in this thesis are hosted in GitHub which it is perfect for sharing or publish open source projects.
+All the repositories to the applications developed in this thesis are hosted on GitHub which it is perfect for sharing or publishing open-source projects.
 
 \subsection{Latex}
 % What is latex, what is tex
 % reasons to use latex, abreviations, commands etc, show figures
-To write this thesis \LaTeX was used which is a documentation preparation system rather than using the mainstream options which are LibreOffice or Office Word. The reasons for this was automation and the quality that can achieve.
+To write this thesis \LaTeX was used, which is a documentation preparation system rather than using the mainstream options which are LibreOffice or Office Word. The reasons for this was automation and the quality that can be achieved.
 
-    \putimage{latex-look}{How the document looks like}
+    \putimage{latex-look}{Source code of the document}
     
-In figure~\ref{fig:latex-look} it can be observed how the code looks like, it is just raw text with no style at all and it has to be compiled to generate a \gls{pdf} document.
+In figure~\ref{fig:latex-look} it can be observed how the code looks like. It is just raw text with no style at all and it has to be compiled to generate a \gls{pdf} document.
 %\subsection{IDE}
 %Pycharm
 %Visual Studio Code
 
 \clearpage\chapter{Results}\label{sec:results}
 %What was found/created/designed/produced?
-The results of this thesis is a set of pieces of software which together form the communication channel, being its central part the server-side hosted in cloud accessible through the web \gls{api} described on section~\ref{sec:web-api}.
+The result of this thesis is a set of pieces of software which together form the communication channel. Its central part is the server-side hosted in a cloud accessible through the web \gls{api} described in section~\ref{sec:web-api}.
 
 
 
 \section{Software}\label{sec:software}
-After solving some bugs in the server-side and the Raspberry Pi part the communication system can work continuously 24 hours a day with several cameras as 5.4.2017 the longest test in a sensor in the system has been 4 days and 19 hours. In figure~\ref{fig:multi-camera} can be seen a client application with sensors on different locations.
+After solving some bugs on the server-side and the Raspberry Pi part the communication system can work continuously 24 hours a day with several cameras. As of 5.4.2017 the longest test in a sensor in the system has been 4 days and 19 hours. In Figure~\ref{fig:multi-camera} a client application with sensors on different locations.
 
      \putimage{multi-camera}{Multiple sensors connected to a single client}
 
-As stated in chapter~\ref{sec:methods-and-materials} all the code is in GitHub repositories, here is a list with every repository for most of the software developed in this project.
+As stated in chapter~\ref{sec:methods-and-materials} all the code is in GitHub repositories. Here is a list with every repository for most of the software developed in this project.
 
 
 \begin{itemize}
     \item Android client application: \url{https://github.com/alvaro893/android-ir-sensor-client}
     \item Server-side Node.js application: \url{https://github.com/alvaro893/cloud_websocket}
     \item Python client application: \url{https://github.com/alvaro893/sensor_reader}
-    \item Sensor Reader application on Raspberry Pi side: \url{https://github.com/alvaro893/sensor-reader/tree/raspberry}
+    \item Sensor Reader application on the Raspberry Pi side: \url{https://github.com/alvaro893/sensor-reader/tree/raspberry}
     \item This Thesis: \url{https://github.com/alvaro893/bachelors-thesis}
 \end{itemize}
 
-The code shown in the appendixes is in these repositories and up-to-date.
+The code shown in appendixes are in these repositories and up-to-date.
 
 
 \section{Web \gls{api}} \label{sec:web-api}
 In order to provide communication with both sensors and clients a web \gls{api} can be the most convenient way to expose the services of the application providing certain endpoints to register sensors, clients and to access information about the application itself, the information retrieved is in \gls{json} format.
 
-The endpoints are defined as \gls{uri}s. A complete \gls{uri} looks like this:
+Every endpoint is defined as an \gls{uri}. A complete \gls{uri} looks like this:
 \begin{quote}
     \texttt{<protocol>://<domain>:<protocol><path>?<parameters>}
 \end{quote}
 
-Domain is provided by the cloud service, if the server-side application is running locally in a personal computer domain is "localhost". Paths accepted by the \gls{api} are shown in table~\ref{table:api}
+The domain is provided by the cloud service. If the server-side application is running locally on a personal computer the domain is "localhost". The paths accepted by the \gls{api} are shown in table~\ref{table:api}.
 
 \begin{table}[h]
     \centering
@@ -1386,97 +1394,94 @@ For example \texttt{ws://localhost:8080/camera?pass=d8n2d0\&camera\_name=corner-
 \section{Discarded Methods}
 
 \subsection*{Android Smartphone Gateway Solution}
-This method was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as Java.
+The android smartphone gateway solution was purely to test the sensors and to seek for a suitable network protocol rather than as a serious solution for the purposes of this thesis, nevertheless the outcomes were satisfactory and opened the door to a deeper understanding on how \gls{usb} communication can work using a High level language as Java.
 
 \subsection*{LTE Module Solution}
-This method could have been the ideal solution to read a sensor and connect it to Internet, but there were multiple issues regarding this method:
+The LTE module solution could have been the ideal solution to read a sensor and connect it to the Internet, but there were multiple issues regarding this method:
 \begin{itemize}
     \item It turned out that the module did not support the \gls{lte} frequency bands of the mobile provider Netleap see section~\ref{sec:the-medium} of chapter~\ref{sec:theoretical-background}.
     \item It was hard to set-up a developing environment for it.
 \end{itemize} 
 
 \subsection*{UDP Protocols}
-There were many test to use \gls{udp} for communications but for the issues mentioned in section~\ref{sec:port-issues-on-remote-hosts} of chapter~\ref{sec:theoretical-background} and because \gls{ws} worked very good. any \gls{udp} was dropped.
+There were many test to use UDP protocols for communications but for the issues mentioned in section~\ref{sec:port-issues-on-remote-hosts} of chapter~\ref{sec:theoretical-background} and because \gls{ws} worked very good. any \gls{udp} was dropped.
 
 \subsection*{Python Flask Server-Side Application}
-At the end the Node.js application turned out to work better and faster. so the flask application was not further developed.
+At the end the Node.js application turned out to work better and faster. so the Python Flask  server-side application was not further developed.
 
 
 \clearpage\chapter{Discussion}\label{sec:discussion}
 %What do the results mean?
-On this chapter is discussed how the results may be used, specially alongside Computer Vision. The sections here are more based on speculation rather than experimentation and proposed lines of research.
+This chapter includes discussion about how the results may be used, especially alongside Computer Vision. The sections here are more based on speculation rather than experimentation and proposed lines of research.
 
 \section{Use in the Nokia Innovation Platform}\label{sec:use-in-the-nokia-innovation-platform}
-The Nokia Innovation Platform is a trial environment for teams and star-ups that are related to \gls{iot} projects specially projects that use cell-phone network as \gls{lte}. This project is part of the Nokia Innovation Platform hence there is some ongoing use cases. Some of the sensors has been placed on different places to test its functionality and investigate further the uses of this communication channel.
+The Nokia Innovation Platform is a trial environment for teams and start-ups that are related to \gls{iot} projects especially projects that use cell-phone network like \gls{lte}. This project is part of the Nokia Innovation Platform and hence there is some ongoing use cases. Some of the sensors have been placed on different places to test their functionality and further investigate the uses of this communication channel.
 
-	\putimage{people}{People in a room}
+	\putimage[6]{people}{People in a room}
 	
-On the figure~\ref{fig:people} some people can be seen clearly and in the figure~\ref{fig:analysed} is shown the same situation plus running a Computer Vision software to detect how many people in the room.
+In figure~\ref{fig:people} some people can be seen clearly and in figure~\ref{fig:analysed} the same situation but running computing vision software to detect how many people in the room.
 
-	\putimage{analysed}{Analyzed image to detect heat points in the room}
+	\putimage[6]{analysed}{Analyzed image to detect heat points in the room}
 
-Computer vision can be used to track people and research their behavior storing big amounts of tracking data may allow to make predictions of many sorts. On the next sections some scenarios are proposed where this could be useful.
+Computer vision can be used to track people and research their behavior storing big amounts of tracking data may allow to make many types of predictions. In the next sections some scenarios are proposed where this could be useful.
 
-On crowded surfaces such as shopping centers, stadiums, summer festivals may be useful to observe patterns and even detect or predict dangerous situations. This is an interesting research topic and could be a continuation of this final year project.
+On crowded surfaces such as shopping centers, stadiums and summer festivals it may be useful to observe patterns and even detect or predict dangerous situations. This is an interesting research topic and could be a continuation of this final year project.
 
 
 \section{Use in Health Care}
-In this section different uses in health care of the sensor communication channel will be discussed. As mentioned on the introduction chapter~\ref{sec:introduction} these sensors do not capture light but heat, thus making patients impossible to recognize from a distance, this can be considered an advantage since most of the people do not feel comfortable with the idea of being watched or video-recorded. Also when using Computer Vision techniques an \gls{ir} image can be easier for a computer to "understand" in other words to analyze especially when it is possible to add limits to the maximum and minimum temperature so that a range of temperature can be interesting while the rest is removed. figure~\ref{fig:setminimum}.
+In this section different uses in the health care field of the sensor communication channel will be discussed. The sensors do not capture light but heat, thus making it impossible to recognize patients from a distance This can be considered an advantage since most people do not feel comfortable with the idea of being watched or video-recorded.
+
+ By using Computer Vision techniques a thermal image can be easier for a computer to "understand", in other words, to analyze especially when it is possible to add limits to the maximum and minimum temperature so that a range of temperature can be interesting while the rest is removed, as illustrated in figure~\ref{fig:setminimum}.
     
     \putimage{setminimum}{Minimum set to human temperature}
 
-On table~\ref{table:commands} in chapter~\ref{sec:methods-and-materials} the available commands to the sensor are shown, we can set maximum and minimum temperatures or make it back to automatic.
+In addition, to set the minimum and maximum temperatures it is possible to change the bit density of the image, so we get less data and probably make the image analysis a little easier, as shown in figure~\ref{fig:2bit}.
 
     \putimage{2bit}{2bit version of the image}
 
-In addiction to set the minimums and maximums it is possible to change the bit density of the image so we get less data and probably making the image analysis a little easier as it is shown in figure~\ref{fig:2bit}.
+Another approach could be to use thermal image to see things that usually are not visible at a glance like for example veins and arteries as seen in figure~\ref{fig:vein}.
 
-Another approach could be use \gls{ir} image to see things that usually are not visible at a glance like for example veins and arteries as seen in figure~\ref{fig:vein}.
-
-	\putimage{vein}{arteries and veins in human arm}
+	\putimage{vein}{Arteries and veins in the human arm}
 	
-Unfortunately on this thesis it were not enough time to do a proper research of health care uses. Nevertheless on the next sections there is some propositions to for further investigation.
+Unfortunately a proper research of health care uses was beyond the scope of this thesis. Nevertheless In the following sections there are some propositions for further investigation.
 
 \subsection{Use in Bed Patient Care}
-A use case may be for monitoring patients on bed, either hospital or home bed. Using image analysis software nurses or doctor could obtain data from multiple patients at the same time. since the sensors can detect heat this could trigger some alarm on high temperature or if the patient is missing for a long period of time.
+A use case may be for monitoring patients in bed, either hospital or home bed. Using image analysis software nurses or doctors could obtain data from multiple patients at the same time. Since the sensors can detect heat, this could trigger some alarm on a high temperature or if the patient is missing for a long period of time.
 
-Also as discussed in previous sections it may be interesting to seek patterns how a patients moves through time and even how long patients are not in bed.
+Also, as discussed in previous sections it may be interesting to seek for patterns how a patients moves through time and even how long patients are not in bed.
 
-    \putimage{fiber-detector-prototype}{Analysis program prototype}
-    
-In the figure~\ref{fig:fiber-detector-prototype} we can see a prototype with temperature graphics and other indicators.
     
 \subsection{Use in Nursing Homes and Psychiatric Hospitals}
 
-The same principle discussed in section~\ref{sec:use-in-the-nokia-innovation-platform} may be applied to nursing or residential homes where there is a number of people inside a room or outside in a backyard. Then trough Computer Vision it can be detected how many persons there are, if someone is too still or passed out, etc. This detection could trigger certain alarms which will warn the caretakers in the facility
+The same principle discussed in section~\ref{sec:use-in-the-nokia-innovation-platform} may be applied to nursing or residential homes where there is a number of people inside a room or outside in a backyard. Then trough Computer Vision it can be detected how many persons there are. If someone is too still or passed out. This detection could trigger certain alarms which will warn the caretakers in the facility.
 
-As in nursing homes, psychiatric hospitals could have this kind of system. It could detect potential dangerous situations in this case.
+As nursing homes, psychiatric hospitals could have this kind of system. It could detect potential dangerous situations in this case.
 
 
 \section{Other Uses}
 \subsection{Self-driven Vehicles}
-Self-driven public transport vehicles could benefit with this system too, since that there is no driver nor any other worker on the vehicle, accessible remotely \gls{ir} sensor can give valuable data to an hypothetically station in charge of the security of such vehicles and trigger an alarm in case of any dangerous situation.
-
+Self-driven public transport vehicles could also benefit from this system, since there is no driver nor any other worker on the vehicle. Accessible remote thermal sensor can give valuable data to a hypothetical station in charge of the security of such vehicles and trigger an alarm in case of any dangerous situation.
+    \clearpage
     \putimage{robo-bussi}{self-driven bus in Otaniemi}
     
-On figure~\ref{fig:robo-bussi} is the "Robot bus" moving around Otaniemi campus in Espoo.
+Figure~\ref{fig:robo-bussi} displays the "Robot bus" moving around the Otaniemi campus in Espoo without driver.
 
 \subsection{General Surveillance}
-Surveillance is usually help by regular light based cameras plus sometimes some \gls{ir} LEDs which allows them see during night time, However since humans emit heat they can be easily spotted with \gls{ir} sensors instead.
+Surveillance is usually carried out by regular light-based cameras plus sometimes some IR LEDs which allow cameras to see during night time. However since humans emit heat they can be easily spotted with thermal sensors instead.
 
 \section{Possible Additions in the Future}
 \subsection*{3D Heat Map Using Multiple Sensors}
-When using several sensors, it could be possible to create 3D heat map with all the data similar to figure~\ref{fig:heatmap}.
-
+When using several sensors, it could be possible to create a 3D heat map with all the data similar to figure~\ref{fig:heatmap}.
+    \clearpage
     \putimage[10]{heatmap}{Heat map concept}
     
-This can be used to have a better understanding of how heat behaves in a particular area.
+Heat maps can be used to have a better understanding of how heat behaves in a particular area.
 
 \subsection*{HTML5 Application}
-Since this project uses already web technologies such as \gls{ws} it will not difficult to create an \gls{html}5 client application for connecting to the different sensors able to do the same as the python client, however the user does not need to install anything to make it work, only an up to day Internet browser.
+Since this project already uses web technologies such as \gls{ws} it will not be difficult to create an \gls{html}5 client application for connecting to the different sensors able to do the same as the Python client. However the user does not need to install anything to make it work, only an up-to-date Internet browser.
 
 \subsection*{Using RTP to Broadcast Video to Clients}
-The server-side application could be extended to support \gls{udp} protocols as \gls{rtp} which can be used to multi-cast video stream to a big number of clients that for example need the video image but no control the sensor~\cite[298]{hardy2013networks}. Commands can be still sent through \gls{ws} 
+The server-side application could be extended to support \gls{udp} protocols as \gls{rtp} which can be used to multi-cast video streams to a big number of clients that for example need the video image but have no control of the sensor~\cite[298]{hardy2013networks}. Commands can be still sent through \gls{ws}.
 
 \clearpage\chapter{Conclusions}
 %This section usually begins with a restatement of the goal of the project, and includes
@@ -1487,19 +1492,19 @@ The server-side application could be extended to support \gls{udp} protocols as 
 %further action, such as further study, if relevant.
 %Keep this section short (a few paragraphs, no subheadings), tie in and highlight the
 %main points of the project and its results and draw a clear conclusion.
-As an \gls{iot} project the purpose of this thesis was to find an effective communication channel between \gls{ir} sensors and clients, in other words, to create a system where clients can control these sensors and receive data simultaneously. The result was a complete communication system:
+As an \gls{iot} project the purpose of this thesis was to find an effective communication channel between thermal sensors and clients, in other words, to create a system where clients can control these sensors and receive data simultaneously. The result was a complete communication system:
 \begin{itemize}
-	\item A sensor-side: which includes a Python application to read the sensor in a Raspberry Pi and service scripts to keep alive the connection to both the network and the Sensor.
-	\item A server-side: that uses cloud technologies offered by Nokia and also includes a Node.js application that keeps sensors and clients connected.
-	\item A client-side: which includes a Python client application and an Android application able to connect to online sensors and control them.
+	\item A sensor-side: includes a Python application to read the sensor in a Raspberry Pi and service scripts to keep alive the connection to both the network and the Sensor.
+	\item A server-side: uses cloud technologies offered by Nokia and also includes a Node.js application that keeps sensors and clients connected.
+	\item A client-side: includes a Python client application and an Android application able to connect to online sensors and control them.
 \end{itemize}
- So far there are some sensors running on Nokia headquarters to test their usability.
+ So far there are some sensors running in the Nokia headquarters to test their usability.
  
- Either LeViteZer and Nokia members have shown quite satisfied with the results and willing to continue working on this project beyond the scope of this thesis.
+ Either LeViteZer and Nokia participants on the project have been quite satisfied with the results and are willing to continue working on this project beyond the scope of this thesis.
  
- One of the distinctive things about the communication protocol on this project is the use of \gls{ws} outside a web browser which has been proven to work exceptionally good, better than expected. Also with this comes some limitations since \gls{ws} is not the best way to broadcast image from sensors to big sets of clients and that is something to be improved.
+ One of the distinctive features about the communication protocol in this project is the use of \gls{ws} outside a web browser which has been proven to work exceptionally well, better than expected. Also with this come some limitations since \gls{ws} is not the best way to broadcast images from sensors to big sets of clients and that is something to be improved.
 
- It was intended to deepen more on the use cases especially on well-being services, unfortunately there was no time for more research on this. Perhaps other students' thesis might continue this part.
+ It was intended to deepen more on the use cases especially on well-being services. But unfortunately there was no time for more research on this. Perhaps other students' thesis projects continue this part.
 
 
 
@@ -1520,7 +1525,7 @@ As an \gls{iot} project the purpose of this thesis was to find an effective comm
 %   ACKNOWLEDGMENTS 
 %----------------------------------------------------------------------------------------
 \clearpage\chapter*{Acknowledgments}
-I want to thank to Jukka Honkaniemi and Tero Nurminen (Metropolia) for let me be part of this project and their guidance. Also I want to Thanks to Kim Janson (LeViteZer) for all I learn during last months in this project.
+I want to thank for Jukka Honkaniemi and Tero Nurminen (Metropolia) for letting me be part of this project and for their guidance. Also I want to thanks Kim Janson (LeViteZer) for all I learned during this project.
 
 %for conting the pages
 \label{LastPage}~
