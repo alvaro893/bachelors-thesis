@@ -697,7 +697,7 @@ The communication must be bidirectional since clients can send commands to senso
     \item Client side: software that connects the user with the server side to access a sensor.
 \end{itemize}
 
-Figure~\ref{fig:communication-channel} illustrates this idea.
+figure~\ref{fig:communication-channel} illustrates this idea.
 
 \putimage{communication-channel}{A communication channel}
 
@@ -726,7 +726,7 @@ As equation~\ref{eq:metadata-row} shows, the 240th (F0 in hexadecimal) and the l
 \label{eq:metadata-row}
 \dots \text {FF FF FF F0} \left\lbrace metadata \right\rbrace
 \end{equation}
-Table~\ref{table:metadata-row} lists all information contained in the meta-data.
+table~\ref{table:metadata-row} lists all information contained in the meta-data.
 
 \subsubsection{Meta-Data}
 Every frame comes with valuable data about its state and the sensor itself such as configuration, temperature parameters, etc.
@@ -1049,7 +1049,7 @@ Note that the file to be executed is defined by \texttt{ExecStart} and it is exe
 On this section it will be described different methods to create a client able to connect to the cloud thus the sensor, present the data to the user and send commands to the sensor.
 
 \subsubsection{Porting the LabVIEW Application}
-At the beginning of the project LeViteZer provided an example application to read the sensor from a laptop made in LabVIEW. Although it works, it is not an idea platform to develop since it is strictly close-sourced software and in order to work with it an expensive license has to be paid. Then it was agreed that a ported python version would be made from the LabVIEW client extending its capabilities beyond the laptop-sensor \gls{usb} connection.
+At the beginning of the project LeViteZer provided an example application to read the sensor from a laptop made in LabVIEW. Although it works, it is not an idea platform to develop since it is strictly close-sourced software and in order to work with it an expensive license has to be paid. Then it was agreed that a ported Python version would be made from the LabVIEW client extending its capabilities beyond the laptop-sensor \gls{usb} connection.
 
     \putimage{labview}{LabView implementation}
     
@@ -1062,7 +1062,7 @@ Although there was no intention to use LabVIEW for the purposes of this thesis, 
 
 %\subsection{\gls{udp} Java client}
 \subsection{Websocket Python Client}\label{sec:websocket-python-client}
-The websocket python client application was intended to have the characteristics of the LabVIEW's mentioned on the previous section and provide it with connectivity to a cloud service for remote communication. The application was written in python taking advantage of the multiple libraries that the community offers for free as open source.
+The websocket Python client application was intended to have the characteristics of the LabVIEW's mentioned on the previous section and provide it with connectivity to a cloud service for remote communication. The application was written in Python taking advantage of the multiple libraries that the community offers for free as open source.
 
 \subsubsection{Design}
 In a relatively complex application as this one  \gls{oop} is the most convenient way to go when designing the application.
@@ -1071,10 +1071,10 @@ In a relatively complex application as this one  \gls{oop} is the most convenien
     
 In order to make a more flexible application, source of data (thermal image) can be either from \gls{usb} or from  a network, for those purposes the class "SerialConnection" will be in charge of communicate with a thermal sensor connected to the computer directly over \gls{usb} (see listing~\ref{listing:serial-reader} in appendix~\ref{appx:reader}). This class is the same that is used on the Raspberry Pi to read the sensor. On the other hand "WebsocketConnection" mimics roughly the behavior of "SerialConnection". However it makes the connection over the Internet using the \gls{ws} protocol.
     
-Figure~\ref{fig:python-uml}  shows the most important components of the application and its relations. It can be noticed that there is a separation between \gls{ui} components and logical ones.
+figure~\ref{fig:python-uml}  shows the most important components of the application and its relations. It can be noticed that there is a separation between \gls{ui} components and logical ones.
 
 \subsubsection{User Interface}
-The user interface is implemented using the known Qt framework which is uses \gls{cpp} but there is a python bindings package to use in a Python application without writing a single line of \gls{cpp} code~\cite{riverbank}.
+The user interface is implemented using the known Qt framework which is uses \gls{cpp} but there is a Python bindings package to use in a Python application without writing a single line of \gls{cpp} code~\cite{riverbank}.
 
 Advantages of using qt are among others:
 \begin{itemize}
@@ -1111,7 +1111,7 @@ As in the Python client, it is necessary to code:
     \item allow to choose which camera to connect to.
 \end{itemize}
 
-Android applications are divided on different screens called Activities which contain \gls{ui} elements that the user can interact. In this case there is an activity for choosing the camera to connect, see figure~\ref{fig:android-client3}.
+Android applications are divided on different screens called Activities which contain \gls{ui} elements that the user can interact with. In this case there is an activity for choosing the camera to connect, see figure~\ref{fig:android-client3}.
 
     \putimage[16]{android-client3}{Android Client}
 
@@ -1273,9 +1273,9 @@ The library provides keywords like the ones in listing~\ref{listing:robot-exampl
 
 After the execution of tests an \gls{html} report file will be generated (figure~\ref{fig:test-report}) along with a log one (figure~\ref{fig:test-log}).
 
-    \putimage{test-report}{Test Report}
+    \putimage{test-report}{Test report}
      
-The Report is a general view of what happened during the test execution.
+The report is a general view of what happened during the test execution.
      
     \putimage{test-log}{Test Logs}
     
@@ -1289,7 +1289,7 @@ While the Server Side methods (section~\ref{sec:server-side-methods}) describes 
 "The cloud" is quite a broad concept which usually includes different service models known as \gls{saas}, \gls{paas} and \gls{iaas}. 
 
 
- \gls{saas} are hosted applications accessible from client applications. On the other hand \gls{paas}  provides services for developers to create applications such as \gls{saas} ones, however the developer do not have access to the cloud infrastructure like the servers or the network. \gls{iaas} is similar to \gls{paas} but with more control over the platform~\cite{petermelltimothygrance2011}.
+ \gls{saas} are hosted applications accessible from client applications. On the other hand \gls{paas}  provides services for developers to create applications such as \gls{saas} ones. However the developer does not have access to the cloud infrastructure like the servers or the network. \gls{iaas} is similar to \gls{paas} but with more control over the platform~\cite{petermelltimothygrance2011}.
 %\subsection{Google Cloud}
 
 \subsection*{OpenShift and Docker}
@@ -1328,7 +1328,7 @@ The result of this thesis is a set of pieces of software which together form the
 
 
 \section{Software}\label{sec:software}
-After solving some bugs on the server-side and the Raspberry Pi part the communication system can work continuously 24 hours a day with several cameras. As of 5.4.2017 the longest test in a sensor in the system has been 4 days and 19 hours. In Figure~\ref{fig:multi-camera} a client application with sensors on different locations.
+After solving some bugs on the server-side and the Raspberry Pi part the communication system can work continuously 24 hours a day with several cameras. As of 5.4.2017 the longest test in a sensor in the system has been 4 days and 19 hours. In figure~\ref{fig:multi-camera} a client application with sensors on different locations.
 
      \putimage{multi-camera}{Multiple sensors connected to a single client}
 
@@ -1460,7 +1460,7 @@ As nursing homes, psychiatric hospitals could have this kind of system. It could
 
 \section{Other Uses}
 \subsection{Self-driven Vehicles}
-Self-driven public transport vehicles could also benefit from this system, since there is no driver nor any other worker on the vehicle. Accessible remote thermal sensor can give valuable data to a hypothetical station in charge of the security of such vehicles and trigger an alarm in case of any dangerous situation.
+Self-driven public transport vehicles could also benefit from this system, since there is no driver nor any other worker on the vehicle. Accessible remote thermal sensor can give valuable data to a hypothetical location in charge of the security of such vehicles and trigger an alarm in case of any dangerous situation.
     \clearpage
     \putimage{robo-bussi}{self-driven bus in Otaniemi}
     
@@ -1500,11 +1500,11 @@ As an \gls{iot} project the purpose of this thesis was to find an effective comm
 \end{itemize}
  So far there are some sensors running in the Nokia headquarters to test their usability.
  
- Either LeViteZer and Nokia participants on the project have been quite satisfied with the results and are willing to continue working on this project beyond the scope of this thesis.
+ Both LeViteZer and Nokia participants in the project have been satisfied with the results and are willing to continue working on this project beyond the scope of this thesis.
  
  One of the distinctive features about the communication protocol in this project is the use of \gls{ws} outside a web browser which has been proven to work exceptionally well, better than expected. Also with this come some limitations since \gls{ws} is not the best way to broadcast images from sensors to big sets of clients and that is something to be improved.
 
- It was intended to deepen more on the use cases especially on well-being services. But unfortunately there was no time for more research on this. Perhaps other students' thesis projects continue this part.
+ It was intended to deepen more on the use cases especially on well-being services. But unfortunately there was no time for more research on this. Perhaps other students' thesis projects will continue this part.
 
 
 
@@ -1525,7 +1525,7 @@ As an \gls{iot} project the purpose of this thesis was to find an effective comm
 %   ACKNOWLEDGMENTS 
 %----------------------------------------------------------------------------------------
 \clearpage\chapter*{Acknowledgments}
-I want to thank for Jukka Honkaniemi and Tero Nurminen (Metropolia) for letting me be part of this project and for their guidance. Also I want to thanks Kim Janson (LeViteZer) for all I learned during this project.
+I want to thank Jukka Honkaniemi and Tero Nurminen (Metropolia) for letting me be part of this project and for their guidance. Also I want to thanks Kim Janson (LeViteZer) for all I learned during this project.
 
 %for conting the pages
 \label{LastPage}~
